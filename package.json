@@ -1,0 +1,12 @@
+{
+  "name": "foundation",
+  "version": "0.1.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Keith J. Grant",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

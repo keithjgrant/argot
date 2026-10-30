@@ -1,0 +1,103 @@
+:root {
+  /* backgrounds */
+  --bg-body: ;
+  --bg-main: ;
+  --bg-deep: ;
+  --bg-deeper: ;
+  --bg-shallow: ;
+  --bg-shallower: ;
+
+  /* text */
+  --text-primary: ;
+  --text-secondary: ;
+  --text-subtle: ;
+  --text-accent: ;
+  --text-inverse: ;
+
+  --text-interactive: ;
+  --text-interactive-hover: ;
+
+  /* accent & links */
+  --accent-brand: ;
+  --accent-brand-secondary: ;
+  --bg-brand: ;
+  --bg-brand-secondary: ;
+  --text-brand: ;
+  --text-brand-secondary: ;
+
+  /* status */
+  --accent-success: ;
+  --accent-warning: ;
+  --accent-danger: ;
+  --accent-info: ;
+  --bg-success: ;
+  --bg-warning: ;
+  --bg-danger: ;
+  --bg-info: ;
+  --bg-disabled: ;
+  --text-success: ;
+  --text-warning: ;
+  --text-danger: ;
+  --text-info: ;
+  --text-disabled: ;
+
+  /* font families */
+  --font-body: ;
+  --font-display: ;
+  --font-mono: ;
+
+  /* font sizes */
+  --font-size-xs: ;
+  --font-size-sm: ;
+  --font-size-md: ;
+  --font-size-lg: ;
+  --font-size-xl: ;
+
+  /* line heights */
+  --line-height: ;
+  --line-height-tight: ;
+  --line-height-loose: ;
+
+  /* font weights */
+  --font-weight-normal: ;
+  --font-weight-light: ;
+  --font-weight-bold: ;
+
+  /* spacing */
+  --space-xs: ;
+  --space-sm: ;
+  --space-md: ;
+  --space-lg: ;
+  --space-xl: ;
+
+  /* borders */
+  --border-color: ;
+  --border-color-subtle: ;
+  --border-color-accent: ;
+
+  --border-radius: ;
+  --border-radius-sm: ;
+  --border-radius-lg: ;
+
+  /* shadow */
+  --box-shadow: ;
+
+  /* focus */
+  --focus-ring: ;
+
+  /* motion */
+  --ease-in: ;
+  --ease-out: ;
+  --ease-linear: linear;
+
+  --duration-fast: ;
+  --duration-normal: ;
+
+  /* charts */
+  --chart-color-1: ;
+  --chart-color-2: ;
+  --chart-color-3: ;
+  --chart-color-4: ;
+  --chart-color-5: ;
+  --chart-color-6: ;
+}

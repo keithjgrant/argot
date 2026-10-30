@@ -1,0 +1,123 @@
+/* Global Tokens */
+
+$dusk: #273843;
+$eclipse: #003e5a;
+$glass: #8fd8f3;
+$sand: #f5ecc2;
+$ember: #f99d1a;
+$oak: #6f3e10;
+
+$white: #ffffff;
+$black: #000000;
+$neutral-800: #1f2a30;
+$neutral-600: #4d5f66;
+$neutral-400: #d6dde1;
+$neutral-200: #d4d4d4;
+$neutral-100: #f7f6f1;
+
+$green-light: #dcfce7;
+$green-dark: #166534;
+
+$font-family-body: 'Atkinson Hyperlegible', sans-serif;
+$font-family-heading: 'Quilon', serif;
+$font-family-monospace: 'Monaspace Argon', monospace;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.5rem;
+$font-size-xl: 2rem;
+$font-size-xxl: 3rem;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-black: 900;
+
+$line-height-body: 1.5;
+$line-height-tight: 1.3;
+
+$letter-spacing-uppercase: 0.08em;
+
+$spacing-2: 0.125rem;
+$spacing-4: 0.25rem;
+$spacing-8: 0.5rem;
+$spacing-12: 0.75rem;
+$spacing-16: 1rem;
+$spacing-24: 1.5rem;
+$spacing-32: 2rem;
+$spacing-48: 3rem;
+
+$radius-sm: 0.125rem;
+$radius-md: 0.25rem;
+$radius-lg: 0.5rem;
+
+$border-width: 1px;
+
+$content-max-inline-size: 960px;
+$container-md: 760px;
+$breakpoint-md: 600px;
+
+$shadow: url('/assets/images/shadow-pattern.svg') repeat center center / 25px
+  auto;
+
+/* Contextual/Semantic Tokens */
+
+$color-brand-primary: $eclipse;
+$color-brand-accent: $glass;
+$color-brand-highlight: $ember;
+
+$color-text-body: light-dark(#{$neutral-800}, #{$neutral-100});
+$color-text-inverse: light-dark(#{$neutral-100}, #{$neutral-800});
+$color-text-brand: light-dark(#{$eclipse}, #{$glass});
+$color-text-strong: light-dark(#{$black}, #{$white});
+$color-text-interactive: $ember;
+$color-text-interactive-brand: light-dark(#{$eclipse}, #{$sand});
+$color-text-subdued: light-dark(#{$neutral-600}, #{$neutral-200});
+$color-text-success: $green-dark;
+
+$color-surface-body: light-dark(#{$neutral-100}, #{$neutral-800});
+$color-surface-inverse: light-dark(#{$neutral-800}, #{$neutral-100});
+$color-surface-elevated: light-dark(#{$white}, #{$dusk});
+$color-surface-elevated-inverse: light-dark(#{$dusk}, #{$white});
+$color-surface-accent: light-dark(#{$neutral-100}, #{$oak});
+$color-surface-accent-inverse: light-dark(#{$oak}, #{$neutral-100});
+$color-surface-neutral: light-dark(#{$neutral-200}, #{$neutral-600});
+$color-surface-brand: light-dark(#{$eclipse}, #{$glass});
+$color-surface-brand-accent: light-dark(#{$glass}, #{$eclipse});
+$color-surface-subdued: light-dark(#{$neutral-200}, #{$neutral-600});
+$color-surface-highlight: light-dark(#{$glass}, #{$oak});
+$color-surface-success: $green-light;
+
+$color-border: light-dark(#{$ember}, #{$eclipse});
+$color-border-interactive: $ember;
+$color-border-subdued: light-dark(#{$neutral-200}, #{$neutral-600});
+$color-border-dark: $neutral-800;
+
+/* Component Tokens */
+
+$heading-font-weight: $font-weight-bold;
+$heading-line-height: 1.1;
+
+$rating-icon-color: $color-brand-highlight;
+
+$modal-max-inline-size: 600px;
+$modal-margin-block-start: 100px;
+$modal-radius: $radius-lg;
+$modal-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+$modal-backdrop: rgba($neutral-800, 0.6);
+
+$input-background: $color-surface-elevated;
+$input-border-color: $color-border-subdued;
+$input-border-radius: $radius-md;
+$input-placeholder-color: $color-text-subdued;
+
+$code-background-color: $dusk;
+$code-text-color: $white;
+$code-highlight: $black;
+$code-subdued: $green-light;
+$code-brand: $glass;
+$code-punctuation: $sand;
+$code-selector: $glass;
