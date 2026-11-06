@@ -69,7 +69,9 @@ Help is welcome — especially bikeshedding names, deciding what belongs in the
 “core” set vs. project-specific extras, and comparing against real design
 systems.
 
-Open a [GitHub issue](./issues) or discussion. Useful feedback includes:
+Open a [GitHub issue](https://github.com/keithjgrant/foundation/issues) or
+[discussion](https://github.com/keithjgrant/foundation/discussions). Useful
+feedback includes:
 
 - Tokens that are missing for common UI needs
 - Tokens that feel too vague, redundant, or framework-specific
