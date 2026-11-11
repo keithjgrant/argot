@@ -1,8 +1,8 @@
 # Foundation (absolutely a placeholder name -- already taken by another css framework)
 
 A standardized set of **semantic design token names**, packaged as CSS custom
-properties. These are designed to provide a common foundation that can be used
-as a starting point for any CSS project.
+properties. These are designed to provide a common foundation, a shared
+dictionary that can be used as a starting point for any CSS project.
 
 This is an early starting point, not a finished standard. The list of tokens,
 their naming, and structure are all open for discussion.

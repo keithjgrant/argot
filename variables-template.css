@@ -17,6 +17,29 @@
   --text-interactive: ;
   --text-interactive-hover: ;
 
+  /* font families */
+  --font-body: ;
+  --font-display: ;
+  --font-mono: ;
+
+  /* font sizes */
+  --font-size-xs: ;
+  --font-size-sm: ;
+  --font-size-md: ;
+  --font-size-lg: ;
+  --font-size-xl: ;
+
+  /* font weights */
+  --font-weight-light: ;
+  --font-weight-normal: ;
+  --font-weight-bold: ;
+
+  /* line heights, letter spacing */
+  --line-height: ;
+  --line-height-tight: ;
+
+  --letter-spacing-uppercase: ;
+
   /* accent & links */
   --accent-brand: ;
   --accent-brand-secondary: ;
@@ -41,28 +64,6 @@
   --text-info: ;
   --text-disabled: ;
 
-  /* font families */
-  --font-body: ;
-  --font-display: ;
-  --font-mono: ;
-
-  /* font sizes */
-  --font-size-xs: ;
-  --font-size-sm: ;
-  --font-size-md: ;
-  --font-size-lg: ;
-  --font-size-xl: ;
-
-  /* line heights */
-  --line-height: ;
-  --line-height-tight: ;
-  --line-height-loose: ;
-
-  /* font weights */
-  --font-weight-normal: ;
-  --font-weight-light: ;
-  --font-weight-bold: ;
-
   /* spacing */
   --space-xs: ;
   --space-sm: ;
@@ -75,8 +76,8 @@
   --border-color-subtle: ;
   --border-color-accent: ;
 
-  --border-radius: ;
   --border-radius-sm: ;
+  --border-radius: ;
   --border-radius-lg: ;
 
   /* shadow */
