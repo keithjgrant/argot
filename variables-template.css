@@ -2,10 +2,12 @@
   /* color — surfaces */
   --bg-body: ;
   --bg-main: ;
-  --bg-deep: ;
-  --bg-deeper: ;
-  --bg-shallow: ;
-  --bg-shallower: ;
+  --bg-raised: ;
+  --bg-inset: ;
+  /*
+  --bg-raised-strong: ;
+  --bg-inset-strong: ;
+  */
 
   --bg-brand: ;
   --bg-brand-secondary: ;
@@ -15,13 +17,12 @@
   --bg-danger: ;
   --bg-info: ;
   --bg-disabled: ;
+  --bg-inverse: ;
 
   /* color — text */
   --text-primary: ;
   --text-secondary: ;
   --text-subtle: ;
-  --text-accent: ;
-  --text-inverse: ;
 
   --text-interactive: ;
   --text-interactive-hover: ;
@@ -35,20 +36,19 @@
   --text-danger: ;
   --text-info: ;
   --text-disabled: ;
-
-  /* color — accent */
-  --accent-brand: ;
-  --accent-brand-secondary: ;
-
-  --accent-success: ;
-  --accent-warning: ;
-  --accent-danger: ;
-  --accent-info: ;
+  --text-inverse: ;
 
   /* color — borders */
   --border-color: ;
-  --border-color-subtle: ;
-  --border-color-accent: ;
+  --border-subtle: ;
+
+  --border-brand: ;
+  --border-brand-secondary: ;
+
+  --border-success: ;
+  --border-warning: ;
+  --border-danger: ;
+  --border-info: ;
 
   /* color — charts */
   --chart-color-1: ;
@@ -73,7 +73,7 @@
   --font-weight-normal: ;
   --font-weight-bold: ;
 
-  --line-height: ;
+  --line-height-normal: ;
   --line-height-tight: ;
 
   --letter-spacing-uppercase: ;
@@ -88,7 +88,7 @@
 
   /* shape */
   --border-radius-sm: ;
-  --border-radius: ;
+  --border-radius-md: ;
   --border-radius-lg: ;
 
   --box-shadow: ;
@@ -106,5 +106,5 @@
 
   /* layout */
   --content-max-width: ;
-  --modal-max-width: ;
+  --overlay-max-width: ;
 }
