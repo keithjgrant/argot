@@ -4,7 +4,7 @@
   --bg-main: ;
   --bg-raised: ;
   --bg-inset: ;
-  /*
+  /* (extended):
   --bg-raised-strong: ;
   --bg-inset-strong: ;
   */
@@ -40,7 +40,7 @@
 
   /* color — borders */
   --border-color: ;
-  --border-subtle: ;
+  --border-color-subtle: ;
 
   --border-brand: ;
   --border-brand-secondary: ;
@@ -50,13 +50,26 @@
   --border-danger: ;
   --border-info: ;
 
-  /* color — charts */
+  /* color — icons (extended) */
+  /*
+  --icon-primary: ;
+  --icon-success: ;
+  --icon-warning: ;
+  --icon-danger: ;
+  --icon-info: ;
+  --icon-disabled: ;
+  --icon-inverse: ;
+  */
+
+  /* color — charts (extended) */
+  /*
   --chart-color-1: ;
   --chart-color-2: ;
   --chart-color-3: ;
   --chart-color-4: ;
   --chart-color-5: ;
   --chart-color-6: ;
+  */
 
   /* typography */
   --font-body: ;
@@ -68,6 +81,9 @@
   --font-size-md: ;
   --font-size-lg: ;
   --font-size-xl: ;
+  /* (extended): 
+  --font-size-xxl: ;
+  */
 
   --font-weight-light: ;
   --font-weight-normal: ;
@@ -93,6 +109,11 @@
 
   --box-shadow: ;
 
+  /* (extended):
+  --border-width: ;
+  --border-width-thick: ;
+  */
+
   /* focus */
   --focus-ring: ;
 
@@ -107,4 +128,13 @@
   /* layout */
   --content-max-width: ;
   --overlay-max-width: ;
+
+  --z-menu: 100;
+  --z-sticky: 110;
+  --z-fixed: 120;
+  --z-drawer: 130;
+  --z-dialog: 140;
+  --z-popover: 150;
+  --z-tooltip: 160;
+  --z-toast: 170;
 }
