@@ -1,5 +1,5 @@
 :root {
-  /* backgrounds */
+  /* color — surfaces */
   --bg-body: ;
   --bg-main: ;
   --bg-deep: ;
@@ -7,7 +7,16 @@
   --bg-shallow: ;
   --bg-shallower: ;
 
-  /* text */
+  --bg-brand: ;
+  --bg-brand-secondary: ;
+
+  --bg-success: ;
+  --bg-warning: ;
+  --bg-danger: ;
+  --bg-info: ;
+  --bg-disabled: ;
+
+  /* color — text */
   --text-primary: ;
   --text-secondary: ;
   --text-subtle: ;
@@ -16,53 +25,58 @@
 
   --text-interactive: ;
   --text-interactive-hover: ;
+  --text-interactive-active: ;
 
-  /* font families */
+  --text-brand: ;
+  --text-brand-secondary: ;
+
+  --text-success: ;
+  --text-warning: ;
+  --text-danger: ;
+  --text-info: ;
+  --text-disabled: ;
+
+  /* color — accent */
+  --accent-brand: ;
+  --accent-brand-secondary: ;
+
+  --accent-success: ;
+  --accent-warning: ;
+  --accent-danger: ;
+  --accent-info: ;
+
+  /* color — borders */
+  --border-color: ;
+  --border-color-subtle: ;
+  --border-color-accent: ;
+
+  /* color — charts */
+  --chart-color-1: ;
+  --chart-color-2: ;
+  --chart-color-3: ;
+  --chart-color-4: ;
+  --chart-color-5: ;
+  --chart-color-6: ;
+
+  /* typography */
   --font-body: ;
   --font-display: ;
   --font-mono: ;
 
-  /* font sizes */
   --font-size-xs: ;
   --font-size-sm: ;
   --font-size-md: ;
   --font-size-lg: ;
   --font-size-xl: ;
 
-  /* font weights */
   --font-weight-light: ;
   --font-weight-normal: ;
   --font-weight-bold: ;
 
-  /* line heights, letter spacing */
   --line-height: ;
   --line-height-tight: ;
 
   --letter-spacing-uppercase: ;
-
-  /* accent & links */
-  --accent-brand: ;
-  --accent-brand-secondary: ;
-  --bg-brand: ;
-  --bg-brand-secondary: ;
-  --text-brand: ;
-  --text-brand-secondary: ;
-
-  /* status */
-  --accent-success: ;
-  --accent-warning: ;
-  --accent-danger: ;
-  --accent-info: ;
-  --bg-success: ;
-  --bg-warning: ;
-  --bg-danger: ;
-  --bg-info: ;
-  --bg-disabled: ;
-  --text-success: ;
-  --text-warning: ;
-  --text-danger: ;
-  --text-info: ;
-  --text-disabled: ;
 
   /* spacing */
   --space-xs: ;
@@ -70,17 +84,13 @@
   --space-md: ;
   --space-lg: ;
   --space-xl: ;
+  --space-xxl: ;
 
-  /* borders */
-  --border-color: ;
-  --border-color-subtle: ;
-  --border-color-accent: ;
-
+  /* shape */
   --border-radius-sm: ;
   --border-radius: ;
   --border-radius-lg: ;
 
-  /* shadow */
   --box-shadow: ;
 
   /* focus */
@@ -94,14 +104,7 @@
   --duration-fast: ;
   --duration-normal: ;
 
-  /* charts */
-  --chart-color-1: ;
-  --chart-color-2: ;
-  --chart-color-3: ;
-  --chart-color-4: ;
-  --chart-color-5: ;
-  --chart-color-6: ;
-
   /* layout */
   --content-max-width: ;
+  --modal-max-width: ;
 }
