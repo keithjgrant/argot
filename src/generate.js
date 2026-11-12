@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { loadTokens } = require('./load-tokens');
+import fs from 'node:fs';
+import path from 'node:path';
+import { loadTokens } from './load-tokens.js';
 
 /**
  * Write the CSS template to disk.
@@ -64,8 +64,4 @@ function formatDeclaration(token) {
   return `  ${token.name}:${value};`;
 }
 
-module.exports = {
-  generateCss,
-  renderCss,
-  writeTemplate,
-};
+export { generateCss, renderCss, writeTemplate };

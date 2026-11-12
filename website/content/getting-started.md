@@ -17,6 +17,8 @@ and use the shared names in your stylesheets.
 
 ## 1. Generate a template
 
+The CLI requires Node.js 22.16 or newer.
+
 Run this from your project directory:
 
 ```sh

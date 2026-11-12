@@ -1,4 +1,4 @@
-const stylelint = require('stylelint');
+import stylelint from 'stylelint';
 
 const {
   createPlugin,
@@ -41,4 +41,4 @@ ruleFunction.ruleName = ruleName;
 ruleFunction.messages = messages;
 ruleFunction.meta = meta;
 
-module.exports = createPlugin(ruleName, ruleFunction);
+export default createPlugin(ruleName, ruleFunction);

@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 /** Ordered token groups shared by CSS generation and documentation. */
 const SECTIONS = [
@@ -46,7 +46,7 @@ function loadTokens(options = {}) {
   });
 }
 
-function getTokensDir(packageRoot = path.join(__dirname, '..')) {
+function getTokensDir(packageRoot = path.join(import.meta.dirname, '..')) {
   return path.join(packageRoot, 'tokens');
 }
 
@@ -79,8 +79,4 @@ function isToken(node) {
   );
 }
 
-module.exports = {
-  SECTIONS,
-  loadTokens,
-  tokensDir,
-};
+export { SECTIONS, loadTokens, getTokensDir };

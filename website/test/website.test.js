@@ -1,14 +1,15 @@
-const assert = require('node:assert/strict');
-const { test } = require('node:test');
-const fs = require('node:fs');
-const path = require('node:path');
-const { execFileSync } = require('node:child_process');
-const { pathToFileURL } = require('node:url');
-const { buildReference } = require('../lib/reference.cjs');
-const { generateCss } = require('../../src/generate');
-const { SECTIONS, loadTokens, tokensDir } = require('../../src/load-tokens');
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import fs from 'node:fs';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { buildReference } from '../lib/reference.js';
+import { generateCss } from '../../src/generate.js';
+import { SECTIONS, loadTokens, getTokensDir } from '../../src/load-tokens.js';
+import { matchesToken, initializeSearch } from '../assets/token-search.js';
 
-const root = path.resolve(__dirname, '../..');
+const root = path.resolve(import.meta.dirname, '../..');
 const reference = buildReference();
 
 function sourceTokens() {
@@ -59,9 +60,9 @@ test('reference preserves every source token and its metadata in source order', 
 test('shared loader preserves core filtering and resolves token directories', () => {
   const all = loadTokens({ extended: true });
   const core = loadTokens();
-  assert.equal(tokensDir(), path.join(root, 'tokens'));
+  assert.equal(getTokensDir(), path.join(root, 'tokens'));
   assert.equal(
-    tokensDir(path.join(root, 'example-package')),
+    getTokensDir(path.join(root, 'example-package')),
     path.join(root, 'example-package/tokens'),
   );
   assert.deepEqual(
@@ -109,10 +110,10 @@ for (const prefix of ['/', '/argot/']) {
       process.execPath,
       [
         path.resolve(
-          path.dirname(require.resolve('@11ty/eleventy')),
+          path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
           '../cmd.cjs',
         ),
-        '--config=website/eleventy.config.cjs',
+        '--config=website/eleventy.config.js',
         `--output=${output}`,
         `--pathprefix=${prefix}`,
       ],
@@ -187,10 +188,7 @@ for (const prefix of ['/', '/argot/']) {
   });
 }
 
-test('search matches names, descriptions, usage, case, words, and tiers', async () => {
-  const { matchesToken } = await import(
-    pathToFileURL(path.join(root, 'website/assets/token-search.mjs'))
-  );
+test('search matches names, descriptions, usage, case, words, and tiers', () => {
   const text = '--text-secondary Supporting copy. Usage: subtitles, metadata';
   assert.ok(matchesToken(text, 'core', 'TEXT-secondary', 'all'));
   assert.ok(matchesToken(text, 'core', 'supporting metadata', 'core'));
@@ -199,10 +197,7 @@ test('search matches names, descriptions, usage, case, words, and tiers', async 
   assert.ok(!matchesToken(text, 'core', 'chart', 'all'));
 });
 
-test('filter UI hides empty groups, reports results, and resets', async () => {
-  const { initializeSearch } = await import(
-    pathToFileURL(path.join(root, 'website/assets/token-search.mjs'))
-  );
+test('filter UI hides empty groups, reports results, and resets', () => {
   const query = { value: '' };
   const tier = { value: 'all' };
   const listeners = {};

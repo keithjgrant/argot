@@ -1,4 +1,4 @@
-const validToken = require('./rules/valid-token');
+import validToken from './rules/valid-token.js';
 
 /** Stylelint plugins shipped by Argot. */
-module.exports = [validToken];
+export default [validToken];

@@ -45,6 +45,9 @@ template.
 
 ## How to use the template (for now)
 
+The CLI requires Node.js 22.16 or newer. Argot uses native ES modules; no
+CommonJS build is provided.
+
 1. Emit a template into your project:
 
    ```bash
@@ -61,9 +64,12 @@ template.
 
 Noop lint rule for now. Functionality remains TODO.
 
+Requires Stylelint 16. This example uses an ESM configuration (a `.js` file in a
+project with `"type": "module"`, or a `stylelint.config.mjs` file).
+
 ```js
 // stylelint.config.js
-module.exports = {
+export default {
   extends: ['@keithjgrant/argot/stylelint/config'],
 };
 ```
@@ -87,8 +93,7 @@ Example shape:
 
 The Eleventy site lives in `website/`. Token reference pages are generated at
 build time from `tokens/*.json`, using the same loader as the CSS generator.
-Group introductions and CSS examples live separately in
-`website/lib/guides.cjs`.
+Group introductions and CSS examples live separately in `website/lib/guides.js`.
 
 - `npm run website:dev` — serve locally with live reload, including token edits.
 - `npm run website:build` — build static files into `website/_site/`.

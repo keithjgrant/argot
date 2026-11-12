@@ -1,5 +1,5 @@
-const { loadTokens } = require('../../src/load-tokens');
-const guides = require('./guides.cjs');
+import { loadTokens } from '../../src/load-tokens.js';
+import guides from './guides.js';
 
 function buildReference() {
   const sections = loadTokens({ extended: true }).map((section) => {
@@ -36,4 +36,4 @@ function buildReference() {
   };
 }
 
-module.exports = { buildReference };
+export { buildReference };

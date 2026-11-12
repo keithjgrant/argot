@@ -1,6 +1,6 @@
-const { buildReference } = require('./lib/reference.cjs');
+import { buildReference } from './lib/reference.js';
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
   eleventyConfig.addGlobalData('reference', () => buildReference());
   eleventyConfig.addWatchTarget('./tokens/');
   eleventyConfig.addWatchTarget('./src/load-tokens.js');
@@ -21,4 +21,4 @@ module.exports = function (eleventyConfig) {
     htmlTemplateEngine: 'njk',
     pathPrefix: process.env.WEBSITE_PATH_PREFIX || '/',
   };
-};
+}

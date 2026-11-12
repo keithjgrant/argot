@@ -1,14 +1,16 @@
+import { fileURLToPath } from 'node:url';
+
 /**
  * Shareable Stylelint config for Argot token usage.
  *
  * @example
  * // stylelint.config.js
- * module.exports = {
+ * export default {
  *   extends: ['@keithjgrant/argot/stylelint/config'],
  * };
  */
-module.exports = {
-  plugins: [require.resolve('./index.js')],
+export default {
+  plugins: [fileURLToPath(new URL('./index.js', import.meta.url))],
   rules: {
     'argot/valid-token': true,
   },

@@ -11,7 +11,10 @@
   "bugs": {
     "url": "https://github.com/keithjgrant/argot/issues"
   },
-  "type": "commonjs",
+  "type": "module",
+  "engines": {
+    "node": ">=22.16.0"
+  },
   "bin": {
     "argot": "./bin/argot.js"
   },
@@ -34,15 +37,15 @@
   },
   "scripts": {
     "build:template": "node bin/argot.js generate ./templates/semantics.css && node bin/argot.js generate --extended ./templates/semantics-extended.css",
-    "test": "node scripts/test-stylelint.js",
-    "website:dev": "eleventy --config=website/eleventy.config.cjs --serve",
-    "website:build": "eleventy --config=website/eleventy.config.cjs",
-    "website:test": "node --test website/test/*.test.cjs",
+    "test": "node scripts/test-stylelint.js && node --test scripts/test-modules.js",
+    "website:dev": "eleventy --config=website/eleventy.config.js --serve",
+    "website:build": "eleventy --config=website/eleventy.config.js",
+    "website:test": "node --test website/test/*.test.js",
     "website:format": "prettier --write website --ignore-unknown",
     "website:format:check": "prettier --check website --ignore-unknown"
   },
   "peerDependencies": {
-    "stylelint": "^15.0.0 || ^16.0.0"
+    "stylelint": "^16.0.0"
   },
   "peerDependenciesMeta": {
     "stylelint": {

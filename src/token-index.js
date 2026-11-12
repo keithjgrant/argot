@@ -1,4 +1,4 @@
-const { loadTokens } = require('./load-tokens');
+import { loadTokens } from './load-tokens.js';
 
 /**
  * Build lookup data from packaged token JSON.
@@ -37,7 +37,4 @@ function looksLikeArgotToken(name, prefixes) {
   );
 }
 
-module.exports = {
-  getTokenIndex,
-  looksLikeArgotToken,
-};
+export { getTokenIndex, looksLikeArgotToken };

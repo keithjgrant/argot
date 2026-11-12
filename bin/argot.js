@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require('../src/cli').run();
+import { run } from '../src/cli.js';
+
+run();

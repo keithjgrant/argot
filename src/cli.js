@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { writeTemplate } = require('./generate');
+import fs from 'node:fs';
+import path from 'node:path';
+import { writeTemplate } from './generate.js';
 
 const USAGE = `Usage:
   argot generate [path] [--extended]   Write semantic CSS template (default: ./semantics.css)
@@ -73,4 +73,4 @@ function printError(message) {
   console.error(`argot: ${message}`);
 }
 
-module.exports = { run, USAGE };
+export { run, USAGE };
