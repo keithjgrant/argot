@@ -1,0 +1,59 @@
+{
+  "border": {
+    "color": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Default border and divider color.",
+      "tier": "core",
+      "usage": "cards, inputs, separators",
+      "related": ["bg-main", "bg-raised", "bg-inset"]
+    },
+    "color-subtle": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Quieter border for low-emphasis dividers.",
+      "tier": "core",
+      "related": ["bg-main", "bg-raised", "bg-inset"]
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Border accent using the primary brand color.",
+      "tier": "core"
+    },
+    "brand-secondary": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Border accent using a secondary brand color.",
+      "tier": "core"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Border for success state outlines.",
+      "tier": "core",
+      "related": ["bg-success", "text-success"]
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Border for warning state outlines.",
+      "tier": "core",
+      "related": ["bg-warning", "text-warning"]
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Border for danger/error state outlines.",
+      "tier": "core",
+      "related": ["bg-danger", "text-danger"]
+    },
+    "info": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Border for informational state outlines.",
+      "tier": "core",
+      "related": ["bg-info", "text-info"]
+    }
+  }
+}

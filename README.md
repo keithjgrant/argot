@@ -27,14 +27,15 @@ changing per design.
 
 ## What’s in this repo
 
-| Path                                                 | Purpose                                                                   |
-| ---------------------------------------------------- | ------------------------------------------------------------------------- |
-| [`variables-template.css`](./variables-template.css) | Draft semantic token names (empty values — fill them per project)         |
-| [`examples/`](./examples/)                           | Variable names pulled from existing frameworks for comparison/inspiration |
+| Path                                                 | Purpose                                                                                          |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [`tokens/`](./tokens/)                               | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
+| [`variables-template.css`](./variables-template.css) | CSS template derived from those tokens (transitional until `argot generate` is supporteds)       |
+| [`examples/`](./examples/)                           | Variable names pulled from existing frameworks for comparison/inspiration                        |
 
-The template currently groups tokens for backgrounds, text, brand/accent,
-status, typography, spacing, borders, shadow, focus, motion, and charts. Expect
-names to move, merge, or disappear as this gets refined.
+Tokens are grouped for backgrounds, text, brand/accent, status, typography,
+spacing, borders, shadow, focus, motion, layout, and charts. Tokens are marked
+with either "core" or "extended" tier.
 
 The examples are **reference material only** — Bootstrap, Bulma, PatternFly,
 Materialize, and others — to see how established systems name similar concepts.
@@ -69,9 +70,9 @@ Help is welcome — especially bikeshedding names, deciding what belongs in the
 “core” set vs. project-specific extras, and comparing against real design
 systems.
 
-Open a [GitHub issue](https://github.com/keithjgrant/foundation/issues) or
-[discussion](https://github.com/keithjgrant/foundation/discussions). Useful
-feedback includes:
+Open a [GitHub issue](https://github.com/keithjgrant/argot/issues) or
+[discussion](https://github.com/keithjgrant/argot/discussions). Useful feedback
+includes:
 
 - Tokens that are missing for common UI needs
 - Tokens that feel too vague, redundant, or framework-specific

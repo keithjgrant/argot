@@ -1,0 +1,66 @@
+{
+  "content-max-width": {
+    "$type": "dimension",
+    "$value": "",
+    "$description": "Max width for primary page content.",
+    "tier": "core",
+    "usage": "main layout container, nav header"
+  },
+  "overlay-max-width": {
+    "$type": "dimension",
+    "$value": "",
+    "$description": "Max width for overlays such as dialogs.",
+    "tier": "core",
+    "usage": "modals, dialogs"
+  },
+  "z": {
+    "menu": {
+      "$type": "number",
+      "$value": 100,
+      "$description": "Z-index for menus and dropdowns.",
+      "tier": "core"
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 110,
+      "$description": "Z-index for sticky headers or bars.",
+      "tier": "core"
+    },
+    "fixed": {
+      "$type": "number",
+      "$value": 120,
+      "$description": "Z-index for fixed-position chrome.",
+      "tier": "core"
+    },
+    "drawer": {
+      "$type": "number",
+      "$value": 130,
+      "$description": "Z-index for drawers and side panels.",
+      "tier": "core"
+    },
+    "dialog": {
+      "$type": "number",
+      "$value": 140,
+      "$description": "Z-index for modal dialogs.",
+      "tier": "core"
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 150,
+      "$description": "Z-index for tooltips and popovers.",
+      "tier": "core"
+    },
+    "tooltip": {
+      "$type": "number",
+      "$value": 160,
+      "$description": "Z-index for tooltips.",
+      "tier": "core"
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 170,
+      "$description": "Z-index for toasts and global notifications.",
+      "tier": "core"
+    }
+  }
+}

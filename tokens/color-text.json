@@ -1,0 +1,107 @@
+{
+  "text": {
+    "primary": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Main body and default copy text.",
+      "tier": "core",
+      "usage": "body, headings by default",
+      "pairsWith": ["bg-main", "bg-raised", "bg-inset"]
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Supporting copy with less emphasis than primary.",
+      "tier": "core",
+      "usage": "subtitles, metadata, secondary labels",
+      "pairsWith": ["bg-main", "bg-raised", "bg-inset"]
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Quietest text for hints, captions, and de-emphasized content.",
+      "tier": "core",
+      "usage": "captions, placeholder-adjacent hints",
+      "pairsWith": ["bg-main", "bg-inset"]
+    },
+    "interactive": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Default color for text links and text-styled controls. Hover/active use text-interactive-hover and text-interactive-active.",
+      "tier": "core",
+      "usage": "links, text buttons",
+      "pairsWith": ["bg-main", "bg-raised", "bg-inset"]
+    },
+    "interactive-hover": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Hover state for interactive text.",
+      "tier": "core"
+    },
+    "interactive-active": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Active/pressed state for interactive text.",
+      "tier": "core"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text colored with the primary brand accent.",
+      "pairsWith": ["bg-main", "bg-raised", "bg-inset"],
+      "tier": "core"
+    },
+    "brand-secondary": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text colored with a secondary brand accent.",
+      "tier": "core"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text for success messaging and status.",
+      "tier": "core",
+      "pairsWith": ["bg-success"],
+      "related": ["border-success"]
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text for warning messaging and status.",
+      "tier": "core",
+      "pairsWith": ["bg-warning"],
+      "related": ["border-warning"]
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text for danger/error messaging and status.",
+      "tier": "core",
+      "pairsWith": ["bg-danger"],
+      "related": ["border-danger"]
+    },
+    "info": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text for informational messaging and status.",
+      "tier": "core",
+      "pairsWith": ["bg-info"],
+      "related": ["border-info"]
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text on disabled controls or unavailable actions.",
+      "tier": "core",
+      "pairsWith": ["bg-disabled"]
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Text intended for inverse or high-contrast surfaces.",
+      "tier": "core",
+      "pairsWith": ["bg-inverse", "bg-brand"]
+    }
+  }
+}

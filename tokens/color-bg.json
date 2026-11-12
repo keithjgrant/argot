@@ -1,0 +1,103 @@
+{
+  "bg": {
+    "body": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Page or application canvas behind main content.",
+      "tier": "core",
+      "usage": "html/body background"
+    },
+    "main": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Primary content surface.",
+      "tier": "core",
+      "usage": "main column, article, panel",
+      "pairsWith": ["text-primary", "text-secondary", "text-interactive"]
+    },
+    "raised": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Surface elevated above the main background.",
+      "tier": "core",
+      "usage": "cards, menus, dropdowns, raised panels",
+      "pairsWith": ["text-primary", "border-color"]
+    },
+    "inset": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Recessed surface below the main background.",
+      "tier": "core",
+      "usage": "asides, wells, form fields, inputs",
+      "pairsWith": ["text-primary", "border-color"]
+    },
+    "raised-strong": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Stronger elevation than raised when two raised levels are needed.",
+      "tier": "extended"
+    },
+    "inset-strong": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Deeper inset than inset when two recessed levels are needed.",
+      "tier": "extended"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background filled with the primary brand color.",
+      "tier": "core",
+      "pairsWith": ["text-inverse", "text-brand"]
+    },
+    "brand-secondary": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background filled with a secondary brand color.",
+      "tier": "core"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background for success state regions.",
+      "tier": "core",
+      "usage": "banners, badges",
+      "pairsWith": ["text-success", "border-success"]
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background for warning state regions.",
+      "tier": "core",
+      "pairsWith": ["text-warning", "border-warning"]
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background for danger/error state regions.",
+      "tier": "core",
+      "pairsWith": ["text-danger", "border-danger"]
+    },
+    "info": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background for informational state regions.",
+      "tier": "core",
+      "pairsWith": ["text-info", "border-info"]
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Background for disabled controls or inert regions.",
+      "tier": "core",
+      "pairsWith": ["text-disabled"]
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Contrasting surface inverted from the current theme (e.g. dark on light themes).",
+      "tier": "core",
+      "pairsWith": ["text-inverse"]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "border-radius": {
+    "sm": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Small corner radius.",
+      "tier": "core",
+      "usage": "chips, dense controls"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Default corner radius.",
+      "tier": "core",
+      "usage": "buttons, inputs, cards"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Large corner radius.",
+      "tier": "core",
+      "usage": "panels, hero media"
+    }
+  },
+  "border-width": {
+    "$type": "dimension",
+    "$value": "",
+    "$description": "Default border width.",
+    "tier": "extended"
+  },
+  "border-width-thick": {
+    "$type": "dimension",
+    "$value": "",
+    "$description": "Thicker border width for emphasis or stylistic variety.",
+    "tier": "extended"
+  }
+}

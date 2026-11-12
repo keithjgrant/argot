@@ -1,0 +1,106 @@
+{
+  "font": {
+    "body": {
+      "$type": "fontFamily",
+      "$value": "",
+      "$description": "Default typeface for body copy and UI text.",
+      "tier": "core"
+    },
+    "display": {
+      "$type": "fontFamily",
+      "$value": "",
+      "$description": "Typeface for titles and display headings.",
+      "tier": "core"
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": "",
+      "$description": "Monospace typeface for code and tabular data.",
+      "tier": "core"
+    },
+    "size": {
+      "xs": {
+        "$type": "dimension",
+        "$value": "",
+        "$description": "Smallest text size.",
+        "tier": "core",
+        "usage": "captions, fine print"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": "",
+        "$description": "Small text size.",
+        "tier": "core",
+        "usage": "secondary labels"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "",
+        "$description": "Default body text size.",
+        "tier": "core"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "",
+        "$description": "Large text size.",
+        "tier": "core",
+        "usage": "lead paragraphs, subheads"
+      },
+      "xl": {
+        "$type": "dimension",
+        "$value": "",
+        "$description": "Extra-large text size.",
+        "tier": "core",
+        "usage": "page titles"
+      },
+      "xxl": {
+        "$type": "dimension",
+        "$value": "",
+        "$description": "Largest display text size when an size is needed.",
+        "tier": "extended"
+      }
+    },
+    "weight": {
+      "light": {
+        "$type": "fontWeight",
+        "$value": "",
+        "$description": "Light font weight.",
+        "tier": "core"
+      },
+      "normal": {
+        "$type": "fontWeight",
+        "$value": "",
+        "$description": "Regular/normal font weight.",
+        "tier": "core"
+      },
+      "bold": {
+        "$type": "fontWeight",
+        "$value": "",
+        "$description": "Bold font weight.",
+        "tier": "core"
+      }
+    }
+  },
+  "line-height": {
+    "normal": {
+      "$type": "number",
+      "$value": "",
+      "$description": "Default line height for body text.",
+      "tier": "core"
+    },
+    "tight": {
+      "$type": "number",
+      "$value": "",
+      "$description": "Tighter line height for headings and compact UI.",
+      "tier": "core"
+    }
+  },
+  "letter-spacing": {
+    "uppercase": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Tracking for uppercase or small-caps labels.",
+      "tier": "core"
+    }
+  }
+}

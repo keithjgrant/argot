@@ -1,0 +1,16 @@
+{
+  "focus-ring": {
+    "$type": "color",
+    "$value": "",
+    "$description": "Focus indicator color or shorthand used for :focus-visible outlines.",
+    "tier": "core",
+    "usage": "keyboard focus rings on interactive elements"
+  },
+  "box-shadow": {
+    "$type": "shadow",
+    "$value": "",
+    "$description": "Default elevation shadow for raised surfaces.",
+    "tier": "core",
+    "related": ["bg-raised"]
+  }
+}

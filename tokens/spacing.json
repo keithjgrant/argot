@@ -1,0 +1,41 @@
+{
+  "space": {
+    "xs": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Tightest spacing step.",
+      "tier": "core",
+      "usage": "icon gaps, dense stacks"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Small spacing step.",
+      "tier": "core"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Default spacing step for common layout padding or gaps.",
+      "tier": "core"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Large spacing step for section padding.",
+      "tier": "core"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Extra-large spacing step.",
+      "tier": "core"
+    },
+    "xxl": {
+      "$type": "dimension",
+      "$value": "",
+      "$description": "Largest spacing step for major layout separation.",
+      "tier": "core"
+    }
+  }
+}

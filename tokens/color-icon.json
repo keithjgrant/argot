@@ -1,0 +1,53 @@
+{
+  "icon": {
+    "primary": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Default icon color.",
+      "tier": "extended",
+      "pairsWith": ["bg-main", "bg-raised", "bg-inset"]
+    },
+    "success": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Icon color for success status.",
+      "tier": "extended",
+      "pairsWith": ["bg-success"]
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Icon color for warning status.",
+      "tier": "extended",
+      "pairsWith": ["bg-warning"]
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Icon color for danger/error status.",
+      "tier": "extended",
+      "pairsWith": ["bg-danger"]
+    },
+    "info": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Icon color for informational status.",
+      "tier": "extended",
+      "pairsWith": ["bg-info"]
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Icon color when the control is disabled.",
+      "tier": "extended",
+      "pairsWith": ["bg-disabled"]
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Icon color on inverse or brand-filled surfaces.",
+      "tier": "extended",
+      "pairsWith": ["bg-inverse"]
+    }
+  }
+}

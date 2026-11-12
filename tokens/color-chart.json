@@ -1,0 +1,40 @@
+{
+  "chart": {
+    "color-1": {
+      "$type": "color",
+      "$value": "",
+      "$description": "First chart series color.",
+      "tier": "extended"
+    },
+    "color-2": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Second chart series color.",
+      "tier": "extended"
+    },
+    "color-3": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Third chart series color.",
+      "tier": "extended"
+    },
+    "color-4": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Fourth chart series color.",
+      "tier": "extended"
+    },
+    "color-5": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Fifth chart series color.",
+      "tier": "extended"
+    },
+    "color-6": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Sixth chart series color.",
+      "tier": "extended"
+    }
+  }
+}

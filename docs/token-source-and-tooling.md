@@ -33,15 +33,22 @@ Define tokens in an easy-to-edit format that can eventually produce:
       "$value": "",
       "$description": "Main body/copy text. Prefer over palette steps like gray-6.",
       "usage": "body, headings by default",
-      "pairsWith": ["bg-body", "bg-main"]
+      "pairsWith": ["bg-main", "bg-raised"],
+      "related": ["border-color"]
     }
   }
 }
 ```
 
-Custom fields (`usage`, `pairsWith`, `group`, etc.) can pass through Style
-Dictionary into whatever doc format we write. `$description` can become CSS
-comments and doc prose.
+Custom field meanings:
+
+| Field       | Use for                                                                    |
+| ----------- | -------------------------------------------------------------------------- |
+| `pairsWith` | Text/background partners. Intended input for a docs-site contrast checker. |
+| `related`   | Other related tokens that might often be used together                     |
+| `usage`     | Example usage modules                                                      |
+
+`$description` can become CSS comments and doc prose.
 
 ## Fit for this project
 
@@ -56,31 +63,26 @@ Until names stabilize, a plain DTCG-shaped JSON/YAML file edited by hand is
 enough. Collaborators can review diffs of names and descriptions without
 learning a build system.
 
-## Integrate now or wait?
+## Current status
 
-**Wait on** Style Dictionary / Terrazzo / a full docs site. Wiring generators
-too early means every rename becomes a config/format fight.
+**Adopted:** DTCG-shaped JSON under [`tokens/`](../tokens/) is the source of
+truth (one file per group). Each token has `$type`, `$value`, `$description`,
+and `tier` (`core` | `extended`). Optional `usage`, `pairsWith` (contrast), and
+`related` (non-contrast links) where helpful.
 
-**Do adopt a single editable source soon** — even if `variables-template.css`
-stays the hand-maintained deliverable for a while:
+**Still waiting on:** Style Dictionary / Terrazzo — a small custom generator is
+enough while names move. CSS custom property name = `--` + path segments joined
+by `-` (e.g. `text.primary` → `--text-primary`).
 
-1. One JSON (or YAML) file per group, or one file with groups
-2. Required: name path, `$description`, category
-3. Optional: `$type`, usage notes, examples, “core vs extended”
-4. Keep the CSS template until updating it by hand is a burden, then add a
-   generate script
-
-That gives documentation content _as we bikeshed_, without committing to
-tooling.
+**Transitional:** [`variables-template.css`](../variables-template.css) mirrors
+the JSON until `argot generate` emits it. Prefer editing `tokens/`.
 
 ## Suggested path
 
-1. **Now:** Move tokens into DTCG-shaped JSON with descriptions; keep
-   generating/updating `variables-template.css` manually (or with a small
-   script).
-2. **When the core list feels ~stable:** Add Style Dictionary (or Terrazzo) →
-   CSS template + Markdown token pages.
-3. **Later:** Host those pages (e.g. GitHub Pages + Eleventy).
+1. **Done:** Tokens live in DTCG-shaped JSON with descriptions.
+2. **Next:** Small generator → CSS template (+ docs data from the same JSON).
+3. **Later:** Docs site; optionally Style Dictionary/Terrazzo if multi-format
+   output or heavier transforms become necessary.
 
 Avoid leading with Figma / Tokens Studio sync for this repo: the product is a
 CSS naming convention, not multi-tool design-system interchange.

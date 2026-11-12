@@ -1,0 +1,40 @@
+{
+  "ease": {
+    "in": {
+      "$type": "cubicBezier",
+      "$value": "ease-in",
+      "$description": "Accelerating easing curve.",
+      "tier": "core",
+      "usage": "system-initiated animations"
+    },
+    "out": {
+      "$type": "cubicBezier",
+      "$value": "ease-out",
+      "$description": "Decelerating easing curve.",
+      "tier": "core",
+      "usage": "user-initiated animations"
+    },
+    "linear": {
+      "$type": "cubicBezier",
+      "$value": "linear",
+      "$description": "Constant-rate easing; defaults to the CSS keyword linear.",
+      "tier": "core",
+      "usage": "fades or color transitions"
+    }
+  },
+  "duration": {
+    "fast": {
+      "$type": "duration",
+      "$value": "",
+      "$description": "Short motion duration.",
+      "tier": "core",
+      "usage": "micro-interactions, hover"
+    },
+    "normal": {
+      "$type": "duration",
+      "$value": "",
+      "$description": "Default motion duration for most UI transitions.",
+      "tier": "core"
+    }
+  }
+}
