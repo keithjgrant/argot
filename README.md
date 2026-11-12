@@ -27,11 +27,11 @@ changing per design.
 
 ## What’s in this repo
 
-| Path                                                 | Purpose                                                                                          |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [`tokens/`](./tokens/)                               | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
-| [`variables-template.css`](./variables-template.css) | CSS template derived from those tokens (transitional until `argot generate` is supporteds)       |
-| [`examples/`](./examples/)                           | Variable names pulled from existing frameworks for comparison/inspiration                        |
+| Path                       | Purpose                                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
+| [`src/`](./src/)           | `argot generate` — builds a CSS custom-property template from `tokens/`                          |
+| [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
 
 Tokens are grouped for backgrounds, text, brand/accent, status, typography,
 spacing, borders, shadow, focus, motion, layout, and charts. Tokens are marked
@@ -44,7 +44,14 @@ template.
 
 ## How to use the template (for now)
 
-1. Copy `variables-template.css` into a project.
+1. Emit a template into your project:
+
+   ```bash
+   npx @keithjgrant/argot generate              # core tokens → ./semantics.css
+   npx @keithjgrant/argot generate --extended   # core + extended
+   npx @keithjgrant/argot generate ./tokens.css # custom output path
+   ```
+
 2. Assign values — typically by mapping to your own primitive palette.
 3. Style with semantic names (`var(--text-primary)`) instead of primitives
    (`var(--gray-6)`).

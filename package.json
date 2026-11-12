@@ -12,18 +12,25 @@
     "url": "https://github.com/keithjgrant/argot/issues"
   },
   "type": "commonjs",
+  "bin": {
+    "argot": "./bin/argot.js"
+  },
   "publishConfig": {
     "access": "public"
   },
   "files": [
+    "bin",
+    "src",
     "tokens",
-    "variables-template.css"
+    "templates"
   ],
   "exports": {
     "./tokens/*": "./tokens/*",
-    "./variables-template.css": "./variables-template.css"
+    "./templates/semantics.css": "./templates/semantics.css",
+    "./generate": "./src/generate.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:template": "node bin/argot.js generate ./templates/semantics.css",
+    "test": "node -e \"require('./src/generate').generateCss(); console.log('ok')\""
   }
 }

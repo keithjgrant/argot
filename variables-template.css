@@ -108,15 +108,10 @@
   --border-radius-md: ;
   --border-radius-lg: ;
 
-  --box-shadow: ;
-
   /* (extended):
   --border-width: ;
   --border-width-thick: ;
   */
-
-  /* focus */
-  --focus-ring: ;
 
   /* motion */
   --ease-in: ;
@@ -138,4 +133,8 @@
   --z-popover: 150;
   --z-tooltip: 160;
   --z-toast: 170;
+
+  /* misc */
+  --focus-ring: ;
+  --box-shadow: ;
 }

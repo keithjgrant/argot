@@ -74,15 +74,15 @@ and `tier` (`core` | `extended`). Optional `usage`, `pairsWith` (contrast), and
 enough while names move. CSS custom property name = `--` + path segments joined
 by `-` (e.g. `text.primary` → `--text-primary`).
 
-**Transitional:** [`variables-template.css`](../variables-template.css) mirrors
-the JSON until `argot generate` emits it. Prefer editing `tokens/`.
+**Generator:** `argot generate [path]` (see `src/generate.js`) reads `tokens/`
+and writes a `:root` CSS template. (`npm run build:template`).
 
 ## Suggested path
 
 1. **Done:** Tokens live in DTCG-shaped JSON with descriptions.
-2. **Next:** Small generator → CSS template (+ docs data from the same JSON).
-3. **Later:** Docs site; optionally Style Dictionary/Terrazzo if multi-format
-   output or heavier transforms become necessary.
+2. **Done:** Small generator → CSS template (`argot generate`).
+3. **Later:** Docs site from the same JSON; optionally Style Dictionary/Terrazzo
+   if multi-format output or heavier transforms become necessary.
 
 Avoid leading with Figma / Tokens Studio sync for this repo: the product is a
 CSS naming convention, not multi-tool design-system interchange.
