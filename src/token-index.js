@@ -1,4 +1,4 @@
-const { loadTokens } = require('./generate');
+const { loadTokens } = require('./load-tokens');
 
 /**
  * Build lookup data from packaged token JSON.
@@ -33,7 +33,7 @@ function getTokenIndex(options = { extended: true }) {
  */
 function looksLikeArgotToken(name, prefixes) {
   return prefixes.some(
-    (prefix) => name === prefix || name.startsWith(`${prefix}-`)
+    (prefix) => name === prefix || name.startsWith(`${prefix}-`),
   );
 }
 

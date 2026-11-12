@@ -5,7 +5,8 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 const { buildReference } = require('../lib/reference.cjs');
-const { generateCss, SECTIONS } = require('../../src/generate');
+const { generateCss } = require('../../src/generate');
+const { SECTIONS, loadTokens, tokensDir } = require('../../src/load-tokens');
 
 const root = path.resolve(__dirname, '../..');
 const reference = buildReference();
@@ -55,7 +56,37 @@ test('reference preserves every source token and its metadata in source order', 
   }
 });
 
-test('CSS generation is unchanged by metadata additions', () => {
+test('shared loader preserves core filtering and resolves token directories', () => {
+  const all = loadTokens({ extended: true });
+  const core = loadTokens();
+  assert.equal(tokensDir(), path.join(root, 'tokens'));
+  assert.equal(
+    tokensDir(path.join(root, 'example-package')),
+    path.join(root, 'example-package/tokens'),
+  );
+  assert.deepEqual(
+    core,
+    all.map((section) => ({
+      ...section,
+      tokens: section.tokens.filter((token) => token.tier === 'core'),
+    })),
+  );
+  assert.ok(
+    all.some((section) => section.tokens.some((t) => t.tier === 'extended')),
+  );
+});
+
+test('website adaptation does not mutate shared token data', () => {
+  const before = loadTokens({ extended: true });
+  buildReference();
+  assert.deepEqual(loadTokens({ extended: true }), before);
+  const primary = before
+    .flatMap((section) => section.tokens)
+    .find((token) => token.name === '--text-primary');
+  assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
+});
+
+test('CSS generation is unchanged by the loader extraction', () => {
   for (const extended of [false, true]) {
     const file = extended ? 'semantics-extended.css' : 'semantics.css';
     assert.equal(

@@ -1,4 +1,4 @@
-const { loadTokens } = require('../../src/generate');
+const { loadTokens } = require('../../src/load-tokens');
 const guides = require('./guides.cjs');
 
 function buildReference() {
