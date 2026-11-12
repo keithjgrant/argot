@@ -1,4 +1,4 @@
-# Foundation (absolutely a placeholder name -- already taken by another css framework)
+# Argot
 
 A standardized set of **semantic design token names**, packaged as CSS custom
 properties. These are designed to provide a common foundation, a shared
