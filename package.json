@@ -1,11 +1,28 @@
 {
-  "name": "Argot",
-  "version": "0.1.0",
-  "description": "",
+  "name": "@keithjgrant/argot",
+  "version": "0.0.1",
+  "description": "Semantic design token names and a modern, lightweight CSS toolchain",
   "license": "MIT",
   "author": "Keith J. Grant",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keithjgrant/argot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/keithjgrant/argot/issues"
+  },
   "type": "commonjs",
-  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "tokens",
+    "variables-template.css"
+  ],
+  "exports": {
+    "./tokens/*": "./tokens/*",
+    "./variables-template.css": "./variables-template.css"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
