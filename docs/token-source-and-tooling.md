@@ -75,7 +75,8 @@ enough while names move. CSS custom property name = `--` + path segments joined
 by `-` (e.g. `text.primary` → `--text-primary`).
 
 **Generator:** `argot generate [path]` (see `src/generate.js`) reads `tokens/`
-and writes a `:root` CSS template. (`npm run build:template`).
+and writes a `:root` CSS template. `npm run build:template` writes
+`templates/semantics.css` (core) and `templates/semantics-extended.css`.
 
 ## Suggested path
 

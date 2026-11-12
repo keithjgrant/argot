@@ -1,18 +1,13 @@
-/* Summary CSS view of tokens/ — edit JSON there; this file will be generated. */
 :root {
   /* color — surfaces */
   --bg-body: ;
   --bg-main: ;
   --bg-raised: ;
   --bg-inset: ;
-  /* (extended):
   --bg-raised-strong: ;
   --bg-inset-strong: ;
-  */
-
   --bg-brand: ;
   --bg-brand-secondary: ;
-
   --bg-success: ;
   --bg-warning: ;
   --bg-danger: ;
@@ -24,14 +19,11 @@
   --text-primary: ;
   --text-secondary: ;
   --text-subtle: ;
-
   --text-interactive: ;
   --text-interactive-hover: ;
   --text-interactive-active: ;
-
   --text-brand: ;
   --text-brand-secondary: ;
-
   --text-success: ;
   --text-warning: ;
   --text-danger: ;
@@ -42,17 +34,14 @@
   /* color — borders */
   --border-color: ;
   --border-color-subtle: ;
-
   --border-brand: ;
   --border-brand-secondary: ;
-
   --border-success: ;
   --border-warning: ;
   --border-danger: ;
   --border-info: ;
 
-  /* color — icons (extended) */
-  /*
+  /* color — icons */
   --icon-primary: ;
   --icon-success: ;
   --icon-warning: ;
@@ -60,39 +49,30 @@
   --icon-info: ;
   --icon-disabled: ;
   --icon-inverse: ;
-  */
 
-  /* color — charts (extended) */
-  /*
+  /* color — charts */
   --chart-color-1: ;
   --chart-color-2: ;
   --chart-color-3: ;
   --chart-color-4: ;
   --chart-color-5: ;
   --chart-color-6: ;
-  */
 
   /* typography */
   --font-body: ;
   --font-display: ;
   --font-mono: ;
-
   --font-size-xs: ;
   --font-size-sm: ;
   --font-size-md: ;
   --font-size-lg: ;
   --font-size-xl: ;
-  /* (extended): 
   --font-size-xxl: ;
-  */
-
   --font-weight-light: ;
   --font-weight-normal: ;
   --font-weight-bold: ;
-
   --line-height-normal: ;
   --line-height-tight: ;
-
   --letter-spacing-uppercase: ;
 
   /* spacing */
@@ -103,28 +83,23 @@
   --space-xl: ;
   --space-xxl: ;
 
-  /* shape */
+  /* borders */
   --border-radius-sm: ;
   --border-radius-md: ;
   --border-radius-lg: ;
-
-  /* (extended):
   --border-width: ;
   --border-width-thick: ;
-  */
 
   /* motion */
-  --ease-in: ;
-  --ease-out: ;
+  --ease-in: ease-in;
+  --ease-out: ease-out;
   --ease-linear: linear;
-
   --duration-fast: ;
   --duration-normal: ;
 
   /* layout */
   --content-max-width: ;
   --overlay-max-width: ;
-
   --z-menu: 100;
   --z-sticky: 110;
   --z-fixed: 120;

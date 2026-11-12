@@ -1,0 +1,93 @@
+:root {
+  /* color — surfaces */
+  --bg-body: ;
+  --bg-main: ;
+  --bg-raised: ;
+  --bg-inset: ;
+  --bg-brand: ;
+  --bg-brand-secondary: ;
+  --bg-success: ;
+  --bg-warning: ;
+  --bg-danger: ;
+  --bg-info: ;
+  --bg-disabled: ;
+  --bg-inverse: ;
+
+  /* color — text */
+  --text-primary: ;
+  --text-secondary: ;
+  --text-subtle: ;
+  --text-interactive: ;
+  --text-interactive-hover: ;
+  --text-interactive-active: ;
+  --text-brand: ;
+  --text-brand-secondary: ;
+  --text-success: ;
+  --text-warning: ;
+  --text-danger: ;
+  --text-info: ;
+  --text-disabled: ;
+  --text-inverse: ;
+
+  /* color — borders */
+  --border-color: ;
+  --border-color-subtle: ;
+  --border-brand: ;
+  --border-brand-secondary: ;
+  --border-success: ;
+  --border-warning: ;
+  --border-danger: ;
+  --border-info: ;
+
+  /* typography */
+  --font-body: ;
+  --font-display: ;
+  --font-mono: ;
+  --font-size-xs: ;
+  --font-size-sm: ;
+  --font-size-md: ;
+  --font-size-lg: ;
+  --font-size-xl: ;
+  --font-weight-light: ;
+  --font-weight-normal: ;
+  --font-weight-bold: ;
+  --line-height-normal: ;
+  --line-height-tight: ;
+  --letter-spacing-uppercase: ;
+
+  /* spacing */
+  --space-xs: ;
+  --space-sm: ;
+  --space-md: ;
+  --space-lg: ;
+  --space-xl: ;
+  --space-xxl: ;
+
+  /* borders */
+  --border-radius-sm: ;
+  --border-radius-md: ;
+  --border-radius-lg: ;
+
+  /* motion */
+  --ease-in: ease-in;
+  --ease-out: ease-out;
+  --ease-linear: linear;
+  --duration-fast: ;
+  --duration-normal: ;
+
+  /* layout */
+  --content-max-width: ;
+  --overlay-max-width: ;
+  --z-menu: 100;
+  --z-sticky: 110;
+  --z-fixed: 120;
+  --z-drawer: 130;
+  --z-dialog: 140;
+  --z-popover: 150;
+  --z-tooltip: 160;
+  --z-toast: 170;
+
+  /* misc */
+  --focus-ring: ;
+  --box-shadow: ;
+}
