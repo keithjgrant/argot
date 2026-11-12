@@ -1,0 +1,51 @@
+---
+layout: base.njk
+title: A shared vocabulary for CSS
+description: Semantic design token names for any CSS project. Bring your own values and build with a shared vocabulary.
+---
+<section class="hero">
+  <p class="eyebrow">Semantic design tokens for CSS</p>
+  <h1>Your design.<br>Shared vocabulary.</h1>
+  <p class="lede">Argot gives your CSS custom properties names that mean something.
+    A common foundation for color, typography, spacing, and more—not another visual style to adopt.</p>
+  <div class="actions">
+    <a class="button" href="{{ '/getting-started/' | url }}">Get started</a>
+    <a href="{{ '/tokens/' | url }}">Explore the {{ reference.total }} tokens →</a>
+  </div>
+</section>
+<section class="home-section">
+  <h2>Name the intent, not the value.</h2>
+  <p>A palette step tells you what a color is. A semantic token tells you what it’s for.
+    Change your palette or switch themes without rewriting every component.</p>
+  <pre><code class="language-css">:root {
+  /* Your primitives */
+  --neutral-950: #18242b;
+  --neutral-50: #f7fafb;
+
+  /* Shared semantic names */
+  --text-primary: var(--neutral-950);
+  --bg-main: var(--neutral-50);
+}
+
+.card {
+  color: var(--text-primary);
+  background: var(--bg-main);
+}</code></pre>
+  <p class="note">Values shown here are illustrative. Argot supplies the vocabulary; you supply the design.</p>
+</section>
+<section class="home-section">
+  <h2>One layer of your design system.</h2>
+  <div class="tier-grid">
+    <article><p class="eyebrow">01 / Primitive</p><h3>The raw materials</h3><p>Your palette, font families, and static values. <code>--neutral-950</code></p></article>
+    <article><p class="eyebrow">02 / Semantic</p><h3>Where Argot fits</h3><p>Shared roles for those values, independent of components. <code>--text-primary</code></p></article>
+    <article><p class="eyebrow">03 / Component</p><h3>The local decisions</h3><p>Optional properties scoped to individual components. <code>--card-color</code></p></article>
+  </div>
+</section>
+<section class="home-section">
+  <h2>Ready for real projects. In beta.</h2>
+  <p>The token set is deliberately defined and ready to use. Real-world adoption will help prove it out and refine it.
+    Start with {{ reference.core }} core tokens, or include {{ reference.extended }} extended tokens for additional roles.</p>
+  <p><a href="{{ '/getting-started/' | url }}">Try Argot in your project</a>, then
+    <a href="https://github.com/keithjgrant/argot/issues">tell us what worked and what didn’t</a>.
+    Names may change during beta as that experience informs the library.</p>
+</section>

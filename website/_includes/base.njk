@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description or 'A shared vocabulary for semantic CSS custom properties. Your design, with names that mean something.' }}">
+    <meta name="generator" content="{{ eleventy.generator }}">
+    <title>{{ title }} · Argot</title>
+    <link rel="stylesheet" href="{{ '/assets/site.css' | url }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="{{ '/' | url }}">Argot<span class="badge">Beta</span></a>
+      <nav aria-label="Primary">
+        <a href="{{ '/getting-started/' | url }}"{% if page.url == '/getting-started/' %} aria-current="page"{% endif %}>Getting started</a>
+        <a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% elif section %} aria-current="true"{% endif %}>Token reference</a>
+        <a href="https://github.com/keithjgrant/argot">GitHub</a>
+      </nav>
+    </header>
+    <div class="site-body{% if referenceLayout %} reference-layout{% endif %}">
+      {% if referenceLayout %}
+      <nav class="sidebar" aria-label="Token groups">
+        <a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% endif %}>All tokens</a>
+        <ul>
+          {% for group in reference.sections %}
+          <li><a href="{{ group.url | url }}"{% if page.url == group.url %} aria-current="page"{% endif %}>{{ group.title }} <span>{{ group.tokens.length }}</span></a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+      <main id="main" tabindex="-1">{{ content | safe }}</main>
+    </div>
+    <footer class="site-footer">
+      <p>Shared names. Your design.</p>
+      <p>Argot is in beta. <a href="https://github.com/keithjgrant/argot/issues">Share feedback from your projects.</a></p>
+    </footer>
+    {% if tokenSearch %}<script type="module" src="{{ '/assets/token-search.js' | url }}"></script>{% endif %}
+  </body>
+</html>

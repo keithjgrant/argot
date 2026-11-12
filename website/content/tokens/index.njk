@@ -1,0 +1,37 @@
+---
+layout: base.njk
+title: Token reference
+description: Browse every Argot semantic token by group, name, purpose, and tier.
+referenceLayout: true
+tokenSearch: true
+---
+<p class="eyebrow">The shared dictionary</p>
+<h1>Token reference</h1>
+<p class="lede">{{ reference.total }} semantic tokens. {{ reference.core }} core, {{ reference.extended }} extended.
+  Choose names by their purpose, then assign values from your own design.</p>
+<form class="filters" data-token-filters hidden role="search" aria-label="Find tokens">
+  <label>Find a token
+    <input type="search" name="query" placeholder="Name, purpose, or usage…" autocomplete="off">
+  </label>
+  <label>Tier
+    <select name="tier"><option value="all">All tokens</option><option value="core">Core</option><option value="extended">Extended</option></select>
+  </label>
+</form>
+<p data-result-count role="status" aria-live="polite" aria-atomic="true">{{ reference.total }} tokens</p>
+<p data-no-results hidden>No matching tokens. Try a different name or choose another tier.</p>
+{% for group in reference.sections %}
+<section class="token-group" data-token-group>
+  <h2><a href="{{ group.url | url }}">{{ group.title }}</a></h2>
+  <p>{{ group.intro }}</p>
+  <ul class="token-directory">
+    {% for token in group.tokens %}
+    <li data-token-entry data-tier="{{ token.tier }}">
+      <a href="{{ token.url | url }}"><code>{{ token.name }}</code></a>
+      <span class="badge">{{ token.tier }}</span>
+      <p>{{ token.description }}</p>
+      {% if token.usage %}<span class="search-usage">Usage: {{ token.usage }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}

@@ -1,0 +1,50 @@
+---
+layout: base.njk
+referenceLayout: true
+pagination:
+  data: reference.sections
+  size: 1
+  alias: section
+permalink: "/tokens/{{ section.slug }}/index.html"
+eleventyComputed:
+  title: "{{ section.title }}"
+  description: "{{ section.intro }}"
+---
+<p class="eyebrow">Token reference / {{ section.tokens.length }} tokens</p>
+<h1>{{ section.title }}</h1>
+<p class="lede">{{ section.intro }}</p>
+<h2>In use</h2>
+<pre><code class="language-css">{{ section.example }}</code></pre>
+<p class="note">These examples show how to consume the tokens. Assign values before using them.</p>
+<nav class="on-this-page" aria-label="On this page">
+  <h2>On this page</h2>
+  <ul>{% for token in section.tokens %}<li><a href="#{{ token.id }}"><code>{{ token.name }}</code></a></li>{% endfor %}</ul>
+</nav>
+{% for token in section.tokens %}
+<article class="token-detail" id="{{ token.id }}">
+  <h2><a href="#{{ token.id }}"><code>{{ token.name }}</code></a></h2>
+  <div class="token-meta"><span class="badge">{{ token.tier }}</span><span>Type: <code>{{ token.type }}</code></span></div>
+  <p>{{ token.description }}</p>
+  {% if token.usage %}<p><strong>Use for:</strong> {{ token.usage }}</p>{% endif %}
+  {% if token.hasValue %}<p><strong>Starter value:</strong> <code>{{ token.value }}</code></p>
+  {% else %}<p class="note">Value: supplied by your design.</p>{% endif %}
+  {% if token.pairsWith.length %}
+  <h3>Pairs with</h3>
+  <ul class="related-tokens">
+    {% for partner in token.pairsWith %}
+    <li>{% if partner.url %}<a href="{{ partner.url | url }}"><code>{{ partner.name }}</code></a>{% else %}<code>{{ partner.name }}</code>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  <p class="note">Check contrast using your assigned values. These relationships do not guarantee a passing contrast ratio.</p>
+  {% endif %}
+  {% if token.related.length %}
+  <h3>Related tokens</h3>
+  <ul class="related-tokens">
+    {% for partner in token.related %}
+    <li>{% if partner.url %}<a href="{{ partner.url | url }}"><code>{{ partner.name }}</code></a>{% else %}<code>{{ partner.name }}</code>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</article>
+{% endfor %}
+<p><a href="{{ '/tokens/' | url }}">← All tokens</a></p>

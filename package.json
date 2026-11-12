@@ -34,7 +34,12 @@
   },
   "scripts": {
     "build:template": "node bin/argot.js generate ./templates/semantics.css && node bin/argot.js generate --extended ./templates/semantics-extended.css",
-    "test": "node scripts/test-stylelint.js"
+    "test": "node scripts/test-stylelint.js",
+    "website:dev": "eleventy --config=website/eleventy.config.cjs --serve",
+    "website:build": "eleventy --config=website/eleventy.config.cjs",
+    "website:test": "node --test website/test/*.test.cjs",
+    "website:format": "prettier --write website --ignore-unknown",
+    "website:format:check": "prettier --check website --ignore-unknown"
   },
   "peerDependencies": {
     "stylelint": "^15.0.0 || ^16.0.0"
@@ -45,6 +50,8 @@
     }
   },
   "devDependencies": {
+    "@11ty/eleventy": "^3.1.8",
+    "prettier": "^3.10.1",
     "stylelint": "^16.0.0"
   }
 }

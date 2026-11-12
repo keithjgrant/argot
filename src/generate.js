@@ -79,6 +79,10 @@ function walk(node, parts, out) {
       value: node.$value === undefined || node.$value === '' ? '' : node.$value,
       description: node.$description || '',
       tier: node.tier === 'extended' ? 'extended' : 'core',
+      type: node.$type || '',
+      usage: node.usage || '',
+      pairsWith: node.pairsWith || [],
+      related: node.related || [],
     });
     return;
   }
