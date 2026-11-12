@@ -30,8 +30,9 @@ changing per design.
 | Path                       | Purpose                                                                                          |
 | -------------------------- | ------------------------------------------------------------------------------------------------ |
 | [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
-| [`src/`](./src/)           | `argot generate` — builds a CSS custom-property template from `tokens/`                          |
+| [`src/`](./src/)           | `argot generate` (+ Stylelint plugin under `src/stylelint/`)                                     |
 | [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
+| [`docs/`](./docs/)         | Planning notes, including [product scope](./docs/product-scope.md)                               |
 
 Tokens are grouped for backgrounds, text, brand/accent, status, typography,
 spacing, borders, shadow, focus, motion, layout, and charts. Tokens are marked
@@ -55,6 +56,17 @@ template.
 2. Assign values — typically by mapping to your own primitive palette.
 3. Style with semantic names (`var(--text-primary)`) instead of primitives
    (`var(--gray-6)`).
+
+### Stylelint (optional)
+
+Noop lint rule for now. Functionality remains TODO.
+
+```js
+// stylelint.config.js
+module.exports = {
+  extends: ['@keithjgrant/argot/stylelint/config'],
+};
+```
 
 Example shape:
 

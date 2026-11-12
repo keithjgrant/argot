@@ -1,7 +1,7 @@
 {
   "name": "@keithjgrant/argot",
   "version": "0.0.1",
-  "description": "Semantic design token names and a modern, lightweight CSS toolchain",
+  "description": "Semantic CSS custom property names, template generation, and Stylelint rules",
   "license": "MIT",
   "author": "Keith J. Grant",
   "repository": {
@@ -27,10 +27,23 @@
   "exports": {
     "./tokens/*": "./tokens/*",
     "./templates/semantics.css": "./templates/semantics.css",
-    "./generate": "./src/generate.js"
+    "./generate": "./src/generate.js",
+    "./stylelint": "./src/stylelint/index.js",
+    "./stylelint/config": "./src/stylelint/config.js"
   },
   "scripts": {
     "build:template": "node bin/argot.js generate ./templates/semantics.css",
-    "test": "node -e \"require('./src/generate').generateCss(); console.log('ok')\""
+    "test": "node scripts/test-stylelint.js"
+  },
+  "peerDependencies": {
+    "stylelint": "^15.0.0 || ^16.0.0"
+  },
+  "peerDependenciesMeta": {
+    "stylelint": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "stylelint": "^16.0.0"
   }
 }

@@ -39,7 +39,7 @@ function generateCss(options = {}) {
 
 /**
  * Load all token files into ordered sections of flat token records.
- * @param {{ tier?: string }} [options]
+ * @param {{ extended?: boolean }} [options]
  */
 function loadTokens(options = {}) {
   const dir = tokensDir();

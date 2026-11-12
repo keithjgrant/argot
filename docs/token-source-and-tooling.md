@@ -81,8 +81,9 @@ and writes a `:root` CSS template. (`npm run build:template`).
 
 1. **Done:** Tokens live in DTCG-shaped JSON with descriptions.
 2. **Done:** Small generator → CSS template (`argot generate`).
-3. **Later:** Docs site from the same JSON; optionally Style Dictionary/Terrazzo
-   if multi-format output or heavier transforms become necessary.
+3. **Next:** Stylelint plugin/config driven by the same token metadata.
+4. **Later:** Docs website (token reference from JSON); optionally Style
+   Dictionary/Terrazzo if multi-format output becomes necessary.
 
 Avoid leading with Figma / Tokens Studio sync for this repo: the product is a
 CSS naming convention, not multi-tool design-system interchange.
