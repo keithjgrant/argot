@@ -1,7 +1,9 @@
 ---
 layout: base.njk
 title: Getting started
-description: Generate a semantic token template, assign your own values, and use Argot in your CSS.
+description:
+  Generate a semantic token template, assign your own values, and use Argot in
+  your CSS.
 permalink: /getting-started/
 ---
 
@@ -55,8 +57,8 @@ levels, already have starter values in the generated template.
 }
 ```
 
-These values are examples, not Argot defaults. Assign every token you use:
-an empty custom property is not a useful design value. Check contrast for your
+These values are examples, not Argot defaults. Assign every token you use: an
+empty custom property is not a useful design value. Check contrast for your
 actual foreground/background combinations, including hover and focus states.
 
 ## 3. Style with semantic names
@@ -64,8 +66,8 @@ actual foreground/background combinations, including hover and focus states.
 Load your filled-in stylesheet before the styles that consume it.
 
 ```html
-<link rel="stylesheet" href="/styles/semantics.css">
-<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/semantics.css" />
+<link rel="stylesheet" href="/styles/components.css" />
 ```
 
 ```css

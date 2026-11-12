@@ -4,8 +4,8 @@ A standardized set of **semantic design token names**, packaged as CSS custom
 properties. These are designed to provide a common foundation, a shared
 dictionary that can be used as a starting point for any CSS project.
 
-This is an early starting point, not a finished standard. The list of tokens,
-their naming, and structure are all open for discussion.
+Argot is ready for beta use. The token set is deliberately defined; real-world
+adoption will help prove it out and refine it. Names may change during beta.
 
 ## Why this exists
 
@@ -83,6 +83,28 @@ Example shape:
 }
 ```
 
+## Documentation website
+
+The Eleventy site lives in `website/`. Token reference pages are generated at
+build time from `tokens/*.json`, using the same loader as the CSS generator.
+Group introductions and CSS examples live separately in
+`website/lib/guides.cjs`.
+
+- `npm run website:dev` — serve locally with live reload, including token edits.
+- `npm run website:build` — build static files into `website/_site/`.
+- `npm run website:test` — check metadata, token coverage, links, URL prefixes,
+  filtering behavior, and unchanged generated CSS.
+- `npm run website:format` — format supported website files with Prettier.
+
+To build for hosting under `/argot/`, run
+`npm run website:build -- --pathprefix=/argot/`. This prefixes internal URLs;
+place the contents of `website/_site/` in the host's `argot/` directory.
+`WEBSITE_PATH_PREFIX` can also supply the prefix in build environments.
+
+The reference works without JavaScript; JavaScript adds search and tier
+filtering. Website files and dependencies are not included in the published
+library package.
+
 ## Contributing / discussion
 
 Help is welcome — especially bikeshedding names, deciding what belongs in the
@@ -99,5 +121,4 @@ includes:
 - Gaps revealed by comparing against the files in `examples/`
 
 The aim is a list general enough for many projects, not tailored to one person’s
-stylesheet. I hope to build more comprehensive documentation of the tokens as
-the list begins to take shape.
+stylesheet. Feedback grounded in real-world use is especially helpful.
