@@ -1,0 +1,17 @@
+:root {
+  color-scheme: light;
+  --bg-body: #f9f8f4;
+  --bg-main: #fff;
+  --bg-inset: #efeee8;
+  --text-primary: #24352e;
+  --text-secondary: #526159;
+  --text-interactive: #245b46;
+  --border-color: #d2d8cf;
+  --focus-ring: #a23d18;
+  --font-body: system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --content-max-width: 80rem;
+}

@@ -1,0 +1,88 @@
+.site-header,
+.site-body,
+.site-footer {
+  width: min(var(--content-max-width), calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.65rem;
+  font-weight: 750;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+}
+
+.site-header nav,
+.actions,
+.token-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+[aria-current] {
+  font-weight: 700;
+  text-decoration-thickness: 0.15em;
+}
+
+.site-body {
+  padding-block: 3rem 5rem;
+}
+
+main {
+  min-width: 0;
+  max-width: 55rem;
+  margin-inline: auto;
+}
+
+main:focus {
+  outline: none;
+}
+
+.reference-layout {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.reference-layout main {
+  width: 100%;
+}
+
+.sidebar {
+  align-self: start;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.sidebar ul,
+.token-directory,
+.related-tokens {
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar a {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-block: 0.35rem;
+}
+
+.sidebar a span {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}

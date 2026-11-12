@@ -138,6 +138,16 @@ for (const prefix of ['/', '/argot/']) {
       }
     }
     readPages(output);
+    const css = fs.readFileSync(path.join(output, 'assets/site.css'), 'utf8');
+    assert.doesNotMatch(css, /@import\b/);
+    assert.match(css, /--bg-body:/);
+    assert.ok(!fs.existsSync(path.join(output, 'styles')));
+    assert.deepEqual(
+      fs
+        .readdirSync(path.join(output, 'assets'))
+        .filter((file) => file.endsWith('.css')),
+      ['site.css'],
+    );
     assert.equal(pages.size, reference.sections.length + 3);
     for (const section of reference.sections) {
       const file = path.join(output, 'tokens', section.slug, 'index.html');

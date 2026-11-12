@@ -100,6 +100,24 @@ Group introductions and CSS examples live separately in `website/lib/guides.js`.
 - `npm run website:test` — check metadata, token coverage, links, URL prefixes,
   filtering behavior, and unchanged generated CSS.
 - `npm run website:format` — format supported website files with Prettier.
+- `npm run website:lint` — check website CSS with Stylelint.
+- `npm run website:lint:fix` — apply available Stylelint fixes.
+
+Edit CSS in `website/content/assets/`. The entrypoint, `site.css`, imports
+underscore-prefixed partials such as `_theme.css` and `_base.css` in cascade
+order. Add a partial with a local import such as `@import './_buttons.css';`.
+The PostCSS plugin recognizes the underscore prefix and does not emit partials
+as separate stylesheets.
+
+`@jgarber/eleventy-plugin-postcss` processes the CSS entrypoint using the root
+`postcss.config.js` and `postcss-import`, producing a single `assets/site.css`.
+Partial edits rebuild automatically during `website:dev`; missing imports fail
+the CSS build. Restart the dev server after changing the PostCSS config.
+
+Stylelint runs separately via `website:lint`, and automatically before
+`npm run website:build` using an npm pre-script. Dev builds do not run lint on
+every save. Prettier handles formatting; CSS is otherwise left native, without
+prefixing, transpilation, or minification.
 
 To build for hosting under `/argot/`, run
 `npm run website:build -- --pathprefix=/argot/`. This prefixes internal URLs;

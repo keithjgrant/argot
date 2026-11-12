@@ -39,8 +39,11 @@
     "build:template": "node bin/argot.js generate ./templates/semantics.css && node bin/argot.js generate --extended ./templates/semantics-extended.css",
     "test": "node scripts/test-stylelint.js && node --test scripts/test-modules.js",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",
+    "prewebsite:build": "npm run website:lint",
     "website:build": "eleventy --config=website/eleventy.config.js",
     "website:test": "node --test website/test/*.test.js",
+    "website:lint": "stylelint \"website/content/assets/**/*.css\" --config website/stylelint.config.js --max-warnings=0",
+    "website:lint:fix": "npm run website:lint -- --fix",
     "website:format": "prettier --write website --ignore-unknown",
     "website:format:check": "prettier --check website --ignore-unknown"
   },
@@ -54,7 +57,11 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.8",
+    "@jgarber/eleventy-plugin-postcss": "^3.0.1",
+    "postcss": "^8.5.32",
+    "postcss-import": "^17.0.1",
     "prettier": "^3.10.1",
-    "stylelint": "^16.0.0"
+    "stylelint": "^16.0.0",
+    "stylelint-config-recommended": "^16.0.0"
   }
 }

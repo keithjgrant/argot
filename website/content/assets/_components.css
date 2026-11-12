@@ -1,0 +1,160 @@
+.hero {
+  padding-block: 2rem 3rem;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 5.25rem);
+}
+
+.eyebrow {
+  color: var(--text-interactive);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lede {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.actions {
+  margin-top: 2rem;
+}
+
+.button {
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.3rem;
+  background: var(--text-interactive);
+  color: #fff;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.home-section {
+  padding-block: var(--space-lg) 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.note,
+.search-usage,
+.token-meta {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1em 0.65em;
+  border: 1px solid var(--border-color);
+  border-radius: 2rem;
+  background: var(--bg-inset);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  vertical-align: middle;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: 2rem;
+}
+
+.filters label {
+  display: grid;
+  gap: 0.3rem;
+  font-weight: 600;
+}
+
+.filters label:first-child {
+  flex: 1 1 15rem;
+}
+
+input,
+select {
+  min-width: 0;
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid var(--text-secondary);
+  border-radius: 0.25rem;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.token-directory li {
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.token-directory p {
+  margin-block: 0.4rem 0;
+}
+
+.token-directory .badge {
+  margin-inline-start: var(--space-sm);
+}
+
+.token-group {
+  margin-bottom: 3rem;
+}
+
+.token-detail {
+  padding-block: var(--space-lg);
+  border-top: 1px solid var(--border-color);
+  scroll-margin-top: 2rem;
+}
+
+.token-detail h2 {
+  margin-top: 0;
+}
+
+.related-tokens,
+.on-this-page ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-lg);
+  row-gap: 0.4rem;
+}
+
+.on-this-page {
+  margin-block: 2rem 3rem;
+}
+
+.on-this-page ul {
+  padding-inline-start: var(--space-lg);
+}
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-lg);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-main);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
