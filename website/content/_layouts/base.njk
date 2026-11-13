@@ -11,14 +11,15 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <a class="wordmark" href="{{ '/' | url }}">Argot<span class="badge">Beta</span></a>
+      <a class="wordmark" href="{{ '/' | url }}">Argot</a>
+      <p class="site-header__tagline">Semantic design tokens for CSS</p>
       <nav aria-label="Primary">
         <a href="{{ '/getting-started/' | url }}"{% if page.url == '/getting-started/' %} aria-current="page"{% endif %}>Getting started</a>
         <a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% elif section %} aria-current="true"{% endif %}>Token reference</a>
         <a href="https://github.com/keithjgrant/argot">GitHub</a>
       </nav>
     </header>
-    <div class="site-body{% if referenceLayout %} reference-layout{% endif %}">
+    <div class="site-body{% if referenceLayout %} site-body__two-column{% endif %}">
       {% if referenceLayout %}
       <nav class="sidebar" aria-label="Token groups">
         <a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% endif %}>All tokens</a>
@@ -29,11 +30,11 @@
         </ul>
       </nav>
       {% endif %}
-      <main id="main" tabindex="-1">{{ content | safe }}</main>
+      <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
     </div>
-    <footer class="site-footer">
-      <p>Shared names. Your design.</p>
+    <footer class="site-footer prose">
       <p>Argot is in beta. <a href="https://github.com/keithjgrant/argot/issues">Share feedback from your projects.</a></p>
+      <p>Created by <a href="https://keithjgrant.com">Keith J. Grant</a></p>
     </footer>
     {% if tokenSearch %}<script type="module" src="{{ '/assets/token-search.js' | url }}"></script>{% endif %}
   </body>

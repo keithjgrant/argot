@@ -1,0 +1,16 @@
+@layer modules {
+  .button-cta {
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-brand-inverse);
+    background-color: var(--bg-brand);
+    color: var(--text-brand-inverse);
+    color: var(--text-inverse);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+
+    &:hover {
+      background: color-mix(var(--bg-brand) 85%, var(--bg-main) 15%);
+    }
+  }
+}

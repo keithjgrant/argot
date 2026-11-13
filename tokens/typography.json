@@ -51,13 +51,14 @@
         "$value": "",
         "$description": "Extra-large text size.",
         "tier": "core",
-        "usage": "page titles"
+        "usage": "section headings"
       },
       "xxl": {
         "$type": "dimension",
         "$value": "",
         "$description": "Largest display text size when an size is needed.",
-        "tier": "extended"
+        "tier": "core",
+        "usage": "page titles"
       }
     },
     "weight": {

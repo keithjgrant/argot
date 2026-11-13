@@ -82,7 +82,6 @@ test(
       'src',
       'tokens',
       'website/content',
-      'website/_includes',
       'website/assets',
       'website/lib',
       'website/stylelint.config.js',

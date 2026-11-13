@@ -1,0 +1,17 @@
+@layer modules {
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: 2rem;
+
+    & label {
+      display: grid;
+      gap: 0.3rem;
+      font-weight: var(--font-weight-bold);
+    }
+    & label:first-child {
+      flex: 1 1 15rem;
+    }
+  }
+}

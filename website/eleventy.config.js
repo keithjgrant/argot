@@ -15,7 +15,8 @@ export default function (eleventyConfig) {
   return {
     dir: {
       input: 'website/content',
-      includes: '../_includes',
+      includes: '_includes',
+      layouts: '_layouts',
       output: 'website/_site',
     },
     templateFormats: ['njk', 'md'],

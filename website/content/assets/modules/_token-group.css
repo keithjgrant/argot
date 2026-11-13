@@ -1,0 +1,41 @@
+@layer modules {
+  .token-group {
+    margin-block-end: var(--space-xxl);
+  }
+
+  .token-directory {
+    padding: 0;
+    list-style: none;
+
+    & li {
+      padding-block: var(--space-md);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    & p {
+      margin-block-start: var(--space-md);
+    }
+  }
+
+  .token-use-example {
+    & pre {
+      margin-block-start: var(--space-md);
+    }
+  }
+
+  .token-list-nav {
+    margin-block: var(--space-xxl) var(--space-xl);
+
+    & ul {
+      margin-block-start: var(--space-sm);
+      padding-inline-start: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs) var(--space-xl);
+    }
+
+    & li {
+      padding-block-start: unset;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+@layer modules {
+  .token-detail {
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+    scroll-margin-top: 2rem;
+
+    background-color: var(--bg-raised);
+    border-radius: 10px;
+    padding-inline: var(--space-lg);
+
+    & h2 a {
+      text-decoration: none;
+    }
+  }
+
+  .token-meta {
+    margin-block-start: var(--space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: baseline;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .related-tokens {
+    background: var(--bg-main);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid var(--border-color-subtle);
+
+    & h3 {
+      font-size: var(--font-size-md);
+    }
+
+    & ul {
+      margin-block-start: var(--space-sm);
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: var(--space-lg);
+      row-gap: 0.4rem;
+    }
+
+    & p {
+      margin-block-start: var(--space-md);
+    }
+  }
+}

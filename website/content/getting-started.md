@@ -7,8 +7,6 @@ description:
 permalink: /getting-started/
 ---
 
-<p class="eyebrow">Bring your own design</p>
-
 # Getting started
 
 Argot is a set of semantic CSS custom property names—not a component library,

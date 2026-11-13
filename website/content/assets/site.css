@@ -1,5 +1,9 @@
-@import './_theme.css';
+@layer reset, theme, base, layout, modules, utilities;
+
+@import './_reset.css';
+@import './_theme-primitive.css';
+@import './_theme-semantic.css';
 @import './_base.css';
 @import './_layout.css';
-@import './_components.css';
-@import './_responsive.css';
+@import './_modules.css';
+/* @import './_responsive.css'; */

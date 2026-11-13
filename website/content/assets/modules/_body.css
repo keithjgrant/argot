@@ -1,0 +1,64 @@
+@layer modules {
+  .site-body {
+    inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding-block: 3rem 5rem;
+
+    & > main {
+      max-inline-size: var(--main-max-width);
+      margin-inline: auto;
+    }
+  }
+
+  .site-body__two-column {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+
+    & > main {
+      width: 100%;
+      max-inline-size: revert;
+    }
+  }
+
+  .sidebar {
+    align-self: start;
+    position: sticky;
+    top: var(--space-xl);
+  }
+
+  .sidebar ul {
+    padding: unset;
+    list-style: none;
+  }
+
+  .sidebar a {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-block: var(--space-sm);
+  }
+
+  .sidebar a span {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+  }
+
+  .site-footer {
+    inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding-block: var(--space-lg);
+    border-block-start: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    text-align: end;
+
+    & a:any-link {
+      color: inherit;
+    }
+    & a:hover {
+      color: var(--text-brand);
+    }
+  }
+}

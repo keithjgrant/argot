@@ -1,0 +1,100 @@
+@layer theme {
+  :root {
+    /* color — surfaces */
+    --bg-body: light-dark(var(--gray-1), var(--gray-15));
+    --bg-main: light-dark(var(--gray-2), var(--gray-15));
+    --bg-raised: light-dark(var(--gray-3), var(--gray-14));
+    --bg-inset: light-dark(var(--gray-1), var(--gray-16));
+    --bg-brand: light-dark(var(--green-9), var(--green-6));
+    --bg-brand-secondary: ;
+    --bg-success: ;
+    --bg-warning: ;
+    --bg-danger: ;
+    --bg-info: ;
+    --bg-disabled: ;
+    --bg-inverse: ;
+
+    /* color — text */
+    --text-primary: light-dark(var(--green-13), var(--gray-4));
+    --text-secondary: light-dark(var(--gray-10), var(--gray-6));
+    --text-subtle: light-dark(var(--gray-12), var(--gray-4));
+    --text-interactive: light-dark(var(--green-11), var(--green-4));
+    --text-interactive-hover: var(--text-primary);
+    --text-interactive-active: light-dark(var(--purple-11), var(--purple-6));
+    --text-brand: light-dark(var(--green-11), var(--green-6));
+    --text-brand-secondary: light-dark(var(--green-13), var(--green-7));
+    --text-success: ;
+    --text-warning: ;
+    --text-danger: ;
+    --text-info: ;
+    --text-disabled: ;
+    --text-inverse: light-dark(var(--green-1), var(--green-13));
+
+    /* color — borders */
+    --border-color: light-dark(var(--gray-4), var(--gray-13));
+    --border-color-subtle: light-dark(var(--gray-3), var(--gray-14));
+    --border-brand: ;
+    --border-brand-secondary: ;
+    --border-success: ;
+    --border-warning: ;
+    --border-danger: ;
+    --border-info: ;
+
+    /* typography */
+    --font-body: system-ui, sans-serif;
+    --font-display: var(--font-body);
+    --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+    --font-size-xs: 0.7rem;
+    --font-size-sm: 0.833rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5625rem;
+    --font-size-xxl: 4rem;
+
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+    --font-weight-black: 800;
+
+    --line-height-normal: 1.5;
+    --line-height-tight: 1.2;
+    --letter-spacing-uppercase: ;
+
+    /* spacing */
+    --space-xs: 0.128em;
+    --space-sm: 0.272em;
+    --space-md: 0.618em;
+    --space-lg: 1em;
+    --space-xl: 1.618em;
+    --space-xxl: 2.618em;
+
+    /* borders */
+    --border-radius-sm: 5px;
+    --border-radius-md: 10px;
+    --border-radius-lg: ;
+
+    /* motion */
+    --ease-in: ease-in;
+    --ease-out: ease-out;
+    --ease-linear: linear;
+    --duration-fast: ;
+    --duration-normal: ;
+
+    /* layout */
+    --content-max-width: min(80rem, calc(100% - 3rem));
+    --main-max-width: 55rem;
+    --overlay-max-width: ;
+    --z-menu: 100;
+    --z-sticky: 110;
+    --z-fixed: 120;
+    --z-drawer: 130;
+    --z-dialog: 140;
+    --z-popover: 150;
+    --z-tooltip: 160;
+    --z-toast: 170;
+
+    /* misc */
+    --focus-ring: light-dark(var(--purple-8), var(--purple-7));
+    --box-shadow: ;
+  }
+}

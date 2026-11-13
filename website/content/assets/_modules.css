@@ -1,0 +1,24 @@
+@import './modules/_typography.css';
+@import './modules/_header.css';
+@import './modules/_body.css';
+@import './modules/_homepage.css';
+@import './modules/_token-group.css';
+@import './modules/_token-detail.css';
+@import './modules/_button.css';
+@import './modules/_badge.css';
+@import './modules/_search.css';
+
+/* homescreen 3-col tier-grid */
+.eyebrow {
+  color: var(--text-brand);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+}

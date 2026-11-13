@@ -48,7 +48,8 @@
       "$value": "",
       "$description": "Background filled with the primary brand color.",
       "tier": "core",
-      "pairsWith": ["text-inverse", "text-brand"]
+      "pairsWith": ["text-inverse", "text-brand"],
+      "usage": "call-to-action buttons"
     },
     "brand-secondary": {
       "$type": "color",
