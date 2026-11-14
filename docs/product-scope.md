@@ -1,34 +1,58 @@
 # Argot product scope
 
-Argot is an **opinionated semantic custom-property convention**, not a general
-CSS build tool.
+Argot is a **modular, modern CSS starter toolkit** built around an opinionated
+semantic custom-property convention. Its intended workflow is to select colors,
+generate primitives and semantic properties, scaffold a small CSS architecture,
+and process its imports into deployable CSS.
+
+This is the agreed product direction, not a claim that all capabilities exist.
+It supersedes the earlier decision to keep Argot and the PostCSS pipeline as
+separate products, including the split described in
+`../postcss-preset/PLAN.md`. That sibling currently contains planning guidance,
+not a pipeline implementation.
 
 ## In scope
 
-| Piece                   | Role                                                                    |
-| ----------------------- | ----------------------------------------------------------------------- |
-| [`tokens/`](../tokens/) | DTCG-shaped source of truth (names, descriptions, tiers, pairsWith)     |
-| `argot generate`        | Emit a CSS `:root` template from those tokens                           |
-| Stylelint plugin/config | Shareable `@keithjgrant/argot/stylelint/config` (rules stubbed for now) |
-| Docs site (planned)     | Token reference generated from the same JSON                            |
+- **Semantic vocabulary:** DTCG-shaped token JSON, metadata, and CSS template
+  generation. Preserve the existing template-only use case.
+- **Primitive palettes:** headless color-scale generation extracted from the
+  relevant parts of Theme Machine in `../tools`.
+- **Scaffolding:** primitives, semantic properties, explicit cascade layers,
+  an entrypoint stylesheet, a reset, and minimal base styles.
+- **CSS processing:** a small, token-agnostic PostCSS preset/API and a thin build
+  runner for imports and optional minification.
+- **Optional linting:** Stylelint plugin/config, without mandatory lint-on-build.
+  The existing rule is currently a placeholder.
+- **Website:** expand and refine the existing Eleventy site and metadata-driven
+  token reference. Full alignment and publishing readiness belong to the final
+  roadmap phase unless publication becomes a nearer-term priority.
 
 ## Out of scope
 
-| Piece                                          | Where it lives instead                                                              |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------- |
-| PostCSS `@import` / minify preset or CLI       | Sibling package `@keithjgrant/postcss-preset` (local checkout: `../postcss-preset`) |
-| HMR / dev server                               | Host tools (Vite, 11ty/BrowserSync)                                                 |
-| Primitive palettes / multi-platform token sync | Consumer projects (and optionally Style Dictionary later)                           |
+- Theme Machine's interactive application: color wheel, previews, Lit
+  components, and browser/URL state remain in `../tools`.
+- A development server or HMR: host tools such as Vite and Eleventy own these.
+- A component framework or substantial utility library.
+- Broad CSS transpilation or automatic prefixing as implicit defaults.
+- Figma integration and multi-platform token synchronization.
 
-## Dependency rule
+## Independence and packaging
 
 Applications may use:
 
-1. Argot alone (`generate` + Stylelint), or
-2. The PostCSS preset alone (token-agnostic pipeline), or
-3. Both together
+1. Semantic templates, with or without Stylelint.
+2. Palette generation or scaffolding without Argot's processor.
+3. The processor without adopting Argot's token vocabulary.
+4. The complete workflow.
 
-The PostCSS preset **must not** hard-require Argot. Argot **must not** ship
-`argot run` or a default PostCSS pipeline that implies token lint-on-build.
+Generation creates project source; processing builds existing CSS. Neither
+silently invokes the other. Processing must not depend on token metadata,
+palette generation, or Stylelint.
 
-See also: [token-source-and-tooling.md](./token-source-and-tooling.md).
+Start with one repository and one npm package, using independent internal
+modules and public entrypoints. Subpath exports separate APIs, not installation
+size. Revisit package extraction if dependency weight or a distinct audience
+justifies it; a workspace monorepo is not a prerequisite.
+
+See [architecture](./architecture.md), [roadmap](./roadmap.md), and
+[token source and tooling](./token-source-and-tooling.md).
