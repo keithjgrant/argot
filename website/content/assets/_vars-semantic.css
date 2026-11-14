@@ -1,9 +1,9 @@
 @layer theme {
   :root {
     /* color — surfaces */
-    --bg-body: light-dark(var(--gray-1), var(--gray-15));
-    --bg-main: light-dark(var(--gray-2), var(--gray-15));
-    --bg-raised: light-dark(var(--gray-3), var(--gray-14));
+    --bg-body: light-dark(var(--gray-1), var(--gray-14));
+    --bg-main: light-dark(var(--gray-1), var(--gray-14));
+    --bg-raised: light-dark(var(--gray-3), var(--gray-13));
     --bg-inset: light-dark(var(--gray-1), var(--gray-16));
     --bg-brand: light-dark(var(--green-9), var(--green-6));
     --bg-brand-secondary: ;
