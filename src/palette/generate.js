@@ -19,27 +19,34 @@ function generatePalette(definition) {
   const { lightnessCurve, chromaCurve } = normalized.options;
   const colors = normalized.colors.map(({ name, color }) => {
     const seed = parseSeed(color);
-    const anchor = lightnessCurve === 'centered' ? 8 : findTargetIndex(seed.l);
+    const index = findTargetIndex(seed.l);
+    const chromaScale =
+      chromaCurve === 'weighted' ? buildChromaScale(index, seed.c) : CHROMA;
+    const anchor = lightnessCurve === 'centered' ? 8 : index;
+    // Centered lightness rescales the original chroma curve at step 9; it does
+    // not rebuild the weighted curve around that step.
+    const chromaMultiplier =
+      lightnessCurve === 'centered'
+        ? seed.c / chromaScale[8]
+        : chromaCurve === 'weighted'
+          ? 1
+          : seed.c / chromaScale[index];
+    if (!Number.isFinite(chromaMultiplier)) {
+      throw new Error(
+        `Palette "${name}": the selected curves produce an undefined chroma multiplier`,
+      );
+    }
     const lightness =
       lightnessCurve === 'uniform'
         ? LIGHTNESS
-        : interpolateScale(
-            seed.l,
-            anchor,
-            Math.max(seed.l, LIGHTNESS[0]),
-            Math.min(seed.l, LIGHTNESS[15]),
-          );
-    const chroma =
-      chromaCurve === 'weighted'
-        ? interpolateScale(seed.c, anchor, seed.c < 0.04 ? 0 : 0.01)
-        : CHROMA.map((weight) => weight * (seed.c / CHROMA[anchor]));
+        : buildInclusiveLightness(seed.l, anchor);
     return {
       name,
       baseStep: anchor + 1,
       steps: lightness.map((l, index) => ({
         step: index + 1,
         l,
-        c: chroma[index],
+        c: chromaScale[index] * chromaMultiplier,
         h: seed.h,
       })),
     };
@@ -48,27 +55,48 @@ function generatePalette(definition) {
 }
 
 function findTargetIndex(lightness) {
-  return LIGHTNESS.reduce(
-    (closest, value, index) =>
-      Math.abs(value - lightness) <= Math.abs(LIGHTNESS[closest] - lightness)
-        ? index
-        : closest,
-    0,
-  );
+  const after = LIGHTNESS.findIndex((value) => value < lightness);
+  const before = after !== -1 ? after - 1 : 15;
+  if (after === -1) return before;
+  if (before === -1) return after;
+  const beforeDiff = LIGHTNESS[before] - lightness;
+  const afterDiff = lightness - LIGHTNESS[after];
+  return beforeDiff < afterDiff ? before : after;
 }
 
-/**
- * Interpolate both sides independently; never divide by a missing side.
- * Endpoint seeds outside the usual lightness range remain monotonic.
- */
-function interpolateScale(peak, anchor, start, end = start) {
-  return Array.from({ length: 16 }, (_, index) => {
-    if (index === anchor) return peak;
-    if (index < anchor) {
-      return start + (peak - start) * (index / anchor);
-    }
-    return peak + (end - peak) * ((index - anchor) / (15 - anchor));
-  });
+function buildChromaScale(index, peakValue) {
+  const endValue = peakValue < 0.04 ? 0 : 0.01;
+  const beforeSteps = index;
+  const afterSteps = 15 - index;
+  const beforeInterval = (peakValue - endValue) / beforeSteps;
+  const afterInterval = (peakValue - endValue) / afterSteps;
+  const scale = [];
+  for (let i = beforeSteps; i > 0; i--) {
+    scale.push(peakValue - i * beforeInterval);
+  }
+  scale.push(peakValue);
+  for (let i = 1; i <= afterSteps; i++) {
+    scale.push(peakValue - i * afterInterval);
+  }
+  return scale;
+}
+
+function buildInclusiveLightness(lightness, index) {
+  const maxLightness = LIGHTNESS[0];
+  const minLightness = LIGHTNESS[15];
+  const lSteps = index;
+  const dSteps = 15 - index;
+  const lInterval = (maxLightness - lightness) / lSteps;
+  const dInterval = (lightness - minLightness) / dSteps;
+  const scale = [];
+  for (let i = 0; i < lSteps; i++) {
+    scale.push(maxLightness - i * lInterval);
+  }
+  scale.push(lightness);
+  for (let i = 1; i <= dSteps; i++) {
+    scale.push(lightness - i * dInterval);
+  }
+  return scale;
 }
 
 export { generatePalette };

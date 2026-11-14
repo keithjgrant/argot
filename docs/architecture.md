@@ -158,6 +158,12 @@ Ownership rules:
 
 ## Theme Machine boundary
 
+Preserve Theme Machine's tuned curves and calculations, including fixed
+endpoints and the interaction between centered lightness and weighted chroma.
+Keep full precision through calculations and gamut mapping; round only when
+serializing CSS to limit output size. Curve changes require separate review,
+not incidental changes during extraction.
+
 Extract algorithms from `../tools/src/js/theme-machine/common/paletteUtil.ts`
 into a headless API with independent input types. Do not carry over its
 application context or its older semantic vocabulary. Its interactive
