@@ -7,8 +7,8 @@ below are provisional. See the [roadmap](./roadmap.md) for sequencing.
 
 ## Current foundation
 
-`tokens/` defines the semantic vocabulary. `src/load-tokens.js` loads it for CSS
-generation and the existing Eleventy website. `src/generate.js` already
+`tokens/` defines the semantic vocabulary. `src/load-tokens.ts` loads it for CSS
+generation and the existing Eleventy website. `src/generate.ts` already
 separates rendering from writing files. The CLI currently generates semantic
 templates; Stylelint entrypoints exist, but the token rule is a placeholder.
 
@@ -16,6 +16,20 @@ The PostCSS sibling contains a proposed pipeline, not an implementation. Theme
 Machine contains reusable palette algorithms, but its current palette module
 imports browser-oriented application context and uses different semantic names
 from Argot.
+
+## TypeScript development and distribution
+
+Use strict TypeScript for `src/`, with native Node 22.18+ type stripping during
+development. Source imports use `.ts` extensions and erasable syntax. Tests and
+the website remain JavaScript; the website consumes the native TypeScript token
+loader without a build step.
+
+Typechecking is separate from execution. Plain `tsc` emits ESM JavaScript,
+declarations, and source maps into `dist/`, rewriting relative runtime imports
+to `.js`. Published entrypoints and the executable use this compiled output,
+not TypeScript under `node_modules`. Package tests exercise compiled exports
+and declarations; native-development tests check source execution separately.
+Do not add a bundler, CommonJS build, or runtime TypeScript loader.
 
 ## Module boundaries
 

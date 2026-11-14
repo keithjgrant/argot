@@ -1,11 +1,11 @@
-import { loadTokens } from './load-tokens.js';
+import { loadTokens } from './load-tokens.ts';
+import type { TokenOptions } from './load-tokens.ts';
 
 /**
  * Build lookup data from packaged token JSON.
- * @param {{ extended?: boolean }} [options]
  */
-function getTokenIndex(options = { extended: true }) {
-  const names = new Set();
+function getTokenIndex(options: TokenOptions = { extended: true }) {
+  const names = new Set<string>();
 
   for (const section of loadTokens(options)) {
     for (const token of section.tokens) {
@@ -13,7 +13,7 @@ function getTokenIndex(options = { extended: true }) {
     }
   }
 
-  const prefixes = new Set();
+  const prefixes = new Set<string>();
   for (const name of names) {
     const dash = name.indexOf('-');
     prefixes.add(dash === -1 ? name : name.slice(0, dash));
@@ -28,10 +28,8 @@ function getTokenIndex(options = { extended: true }) {
 /**
  * True when a custom-property name (without leading --) sits in an Argot
  * namespace prefix (e.g. text-*, bg-*, space-*), whether or not it is known.
- * @param {string} name
- * @param {string[]} prefixes
  */
-function looksLikeArgotToken(name, prefixes) {
+function looksLikeArgotToken(name: string, prefixes: readonly string[]): boolean {
   return prefixes.some(
     (prefix) => name === prefix || name.startsWith(`${prefix}-`),
   );

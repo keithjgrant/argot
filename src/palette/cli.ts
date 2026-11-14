@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { loadPaletteDefinition, writePalette } from './node.js';
+import { loadPaletteDefinition, writePalette } from './node.ts';
 
-function runPalette(args) {
+function runPalette(args: string[]): void {
   const { values, positionals } = parseArgs({
     args,
     allowPositionals: true,

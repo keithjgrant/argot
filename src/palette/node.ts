@@ -1,20 +1,32 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { normalizePaletteDefinition } from './definition.js';
-import { generatePaletteCss } from './render.js';
+import { normalizePaletteDefinition } from './definition.ts';
+import { generatePaletteCss } from './render.ts';
+import type { NormalizedPaletteDefinition, PaletteDefinition } from './types.ts';
+
+export interface WritePaletteOptions {
+  force?: boolean;
+  dryRun?: boolean;
+}
+
+export interface WritePaletteResult {
+  path: string;
+  css: string;
+  written: boolean;
+}
 
 /** Load and validate a portable JSON definition, resolving paths only in Node. */
-function loadPaletteDefinition(filename) {
+function loadPaletteDefinition(filename: string): NormalizedPaletteDefinition {
   const resolved = path.resolve(filename);
   let source;
   try {
     source = fs.readFileSync(resolved, 'utf8');
   } catch (error) {
     throw new Error(
-      `Cannot read palette definition "${resolved}": ${error.code}`,
+      `Cannot read palette definition "${resolved}": ${(error as NodeJS.ErrnoException).code}`,
     );
   }
-  let definition;
+  let definition: unknown;
   try {
     definition = JSON.parse(source);
   } catch {
@@ -24,7 +36,7 @@ function loadPaletteDefinition(filename) {
     return normalizePaletteDefinition(definition);
   } catch (error) {
     throw new Error(
-      `Invalid palette definition "${resolved}": ${error.message}`,
+      `Invalid palette definition "${resolved}": ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }
@@ -35,17 +47,17 @@ function loadPaletteDefinition(filename) {
  * and non-regular files rather than following them.
  */
 function writePalette(
-  outPath,
-  definition,
-  { force = false, dryRun = false } = {},
-) {
+  outPath: string,
+  definition: PaletteDefinition,
+  { force = false, dryRun = false }: WritePaletteOptions = {},
+): WritePaletteResult {
   const resolved = path.resolve(outPath);
   const css = generatePaletteCss(definition);
   let stat;
   try {
     stat = fs.lstatSync(resolved);
   } catch (error) {
-    if (error.code !== 'ENOENT') throw error;
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
   }
   if (stat && (!stat.isFile() || stat.isSymbolicLink())) {
     throw new Error(`Refusing to overwrite non-regular file: ${resolved}`);
@@ -63,7 +75,12 @@ function writePalette(
         fs.constants.O_TRUNC |
         fs.constants.O_NOFOLLOW
       : 'wx';
-    fs.writeFileSync(resolved, css, { encoding: 'utf8', flag: flags });
+    const descriptor = fs.openSync(resolved, flags);
+    try {
+      fs.writeFileSync(descriptor, css, 'utf8');
+    } finally {
+      fs.closeSync(descriptor);
+    }
   }
   return { path: resolved, css, written: !dryRun };
 }

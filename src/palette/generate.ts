@@ -1,4 +1,5 @@
-import { normalizePaletteDefinition, parseSeed } from './definition.js';
+import { normalizePaletteDefinition, parseSeed } from './definition.ts';
+import type { Palette, PaletteDefinition } from './types.ts';
 
 // Extracted from Theme Machine's paletteUtil.ts on ../tools main.
 const LIGHTNESS = Object.freeze([
@@ -14,7 +15,7 @@ const CHROMA = Object.freeze([
  * Generate serializable raw OKLCH scales, before gamut mapping or rounding.
  * Steps and baseStep are one-based; input order is preserved without mutation.
  */
-function generatePalette(definition) {
+function generatePalette(definition: PaletteDefinition): Palette {
   const normalized = normalizePaletteDefinition(definition);
   const { lightnessCurve, chromaCurve } = normalized.options;
   const colors = normalized.colors.map(({ name, color }) => {
@@ -54,7 +55,7 @@ function generatePalette(definition) {
   return { version: 1, options: normalized.options, colors };
 }
 
-function findTargetIndex(lightness) {
+function findTargetIndex(lightness: number): number {
   const after = LIGHTNESS.findIndex((value) => value < lightness);
   const before = after !== -1 ? after - 1 : 15;
   if (after === -1) return before;
@@ -64,7 +65,7 @@ function findTargetIndex(lightness) {
   return beforeDiff < afterDiff ? before : after;
 }
 
-function buildChromaScale(index, peakValue) {
+function buildChromaScale(index: number, peakValue: number): number[] {
   const endValue = peakValue < 0.04 ? 0 : 0.01;
   const beforeSteps = index;
   const afterSteps = 15 - index;
@@ -81,7 +82,7 @@ function buildChromaScale(index, peakValue) {
   return scale;
 }
 
-function buildInclusiveLightness(lightness, index) {
+function buildInclusiveLightness(lightness: number, index: number): number[] {
   const maxLightness = LIGHTNESS[0];
   const minLightness = LIGHTNESS[15];
   const lSteps = index;

@@ -1,12 +1,18 @@
 import Color from 'colorjs.io';
-import { checkName, normalizeOptions } from './definition.js';
-import { generatePalette } from './generate.js';
+import { checkName, normalizeOptions } from './definition.ts';
+import { generatePalette } from './generate.ts';
+import type {
+  NormalizedPaletteOptions,
+  OklchColor,
+  Palette,
+  PaletteDefinition,
+} from './types.ts';
 
 /**
  * Render a model returned by generatePalette without mutating its raw steps.
  * Gamut mapping happens here, independently of CSS output format.
  */
-function renderPaletteCss(palette) {
+function renderPaletteCss(palette: Palette): string {
   const options = normalizeOptions(palette.options);
   const blocks = palette.colors.map(({ name, baseStep, steps }) => {
     checkName(name, 'palette color name');
@@ -31,7 +37,10 @@ function renderPaletteCss(palette) {
   ].join('\n');
 }
 
-function formatColor({ l, c, h }, { format, gamut }) {
+function formatColor(
+  { l, c, h }: OklchColor,
+  { format, gamut }: NormalizedPaletteOptions,
+): string {
   if (![l, c, h].every(Number.isFinite)) {
     throw new Error('palette coordinates: expected finite OKLCH values');
   }
@@ -45,7 +54,7 @@ function formatColor({ l, c, h }, { format, gamut }) {
   return color.to('oklch').toString({ precision: 6 });
 }
 
-function generatePaletteCss(definition) {
+function generatePaletteCss(definition: PaletteDefinition): string {
   return renderPaletteCss(generatePalette(definition));
 }
 

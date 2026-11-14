@@ -30,7 +30,7 @@ changing per design.
 | Path                       | Purpose                                                                                          |
 | -------------------------- | ------------------------------------------------------------------------------------------------ |
 | [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
-| [`src/`](./src/)           | `argot generate` (+ Stylelint plugin under `src/stylelint/`)                                     |
+| [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                 |
 | [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
 | [`docs/`](./docs/)         | Planning notes, including [product scope](./docs/product-scope.md)                               |
 
@@ -45,8 +45,9 @@ template.
 
 ## How to use the template (for now)
 
-The CLI requires Node.js 22.16 or newer. Argot uses native ES modules; no
-CommonJS build is provided.
+The CLI requires Node.js 22.18 or newer. Argot uses native ES modules; no
+CommonJS build is provided. Published entrypoints contain JavaScript and
+TypeScript declarations, so consumers do not need a TypeScript compiler.
 
 1. Emit a template into your project:
 
@@ -89,11 +90,45 @@ Example shape:
 }
 ```
 
+## Development
+
+Library source lives in `src/*.ts` and `src/` subdirectories. Node 22.18+
+executes this source natively by stripping types; it does not check types.
+Use `.ts` extensions for relative source imports, `import type` for type-only
+imports, and erasable syntax (no runtime enums or parameter properties).
+
+- `npm run dev -- help` — run the CLI from TypeScript source, without a build.
+- `npm run dev -- generate ./semantics.css` — generate a semantic template
+  directly from source.
+- `npm run typecheck` — strictly check the library without emitting files.
+- `npm run build` — emit ESM JavaScript, declarations, and source maps into
+  ignored `dist/`. Relative runtime imports are rewritten to `.js`.
+- `npm test` — build, check public declarations, and run runtime and
+  packed-package tests, including the palette curve regressions.
+- `npm run test:types` — check Node and browser consumer types against an
+  existing build.
+- `npm run test:package` — build through the pack hook and check the archive
+  outside the checkout; no publishing or registry access is involved.
+- `npm run build:template` — regenerate checked-in semantic CSS using native
+  TypeScript execution.
+- `npm run prettier` / `npm run prettier:fix` — check or apply formatting.
+
+`npm pack` and publishing run the build automatically through `prepack`.
+Published exports and `bin/argot.js` use `dist/`; run the build before invoking
+that executable directly from a checkout. For normal development use
+`npm run dev -- ...` instead. Tests and website files remain JavaScript.
+The `./palette` entrypoint is browser-safe and exports its public types;
+filesystem adapters live separately at `./palette/node`.
+
 ## Documentation website
 
 The Eleventy site lives in `website/`. Token reference pages are generated at
 build time from `tokens/*.json`, using the same loader as the CSS generator.
 Group introductions and CSS examples live separately in `website/lib/guides.js`.
+The site imports the token loader directly from TypeScript source: website
+development, tests, and builds do not require `dist/` or a compiler-watch
+process. An explicit watch hook reloads the native token loader when TypeScript
+source changes, avoiding Eleventy's JavaScript-only dependency parser.
 
 - `npm run website:dev` — serve locally with live reload, including token edits.
 - `npm run website:build` — build static files into `website/_site/`.

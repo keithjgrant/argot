@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import stylelint from 'stylelint';
-import { generateCss } from '../src/generate.js';
-import { getTokenIndex } from '../src/token-index.js';
-import config from '../src/stylelint/config.js';
+import { generateCss } from '@keithjgrant/argot/generate';
+import { getTokenIndex } from '../dist/token-index.js';
+import config from '@keithjgrant/argot/stylelint/config';
 
 async function main() {
   generateCss();
