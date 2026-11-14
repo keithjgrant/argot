@@ -65,5 +65,8 @@
     "prettier": "^3.10.1",
     "stylelint": "^16.0.0",
     "stylelint-config-recommended": "^16.0.0"
+  },
+  "dependencies": {
+    "colorjs.io": "0.7.1"
   }
 }
