@@ -45,12 +45,12 @@
     --font-display: var(--font-body);
     --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
 
-    --font-size-xs: 0.7rem;
-    --font-size-sm: 0.833rem;
-    --font-size-md: 1rem;
-    --font-size-lg: 1.25rem;
-    --font-size-xl: 1.5625rem;
-    --font-size-xxl: 4rem;
+    --font-size-xs: clamp(0.7rem, 0.75vw, 0.833rem);
+    --font-size-sm: clamp(0.833rem, 0.9vw, 1rem);
+    --font-size-md: clamp(1rem, 1vw, 1.25rem);
+    --font-size-lg: clamp(1.25rem, 1.25vw, 1.5625rem);
+    --font-size-xl: clamp(1.5625rem, 1.5vw, 4rem);
+    --font-size-xxl: clamp(4rem, 2.5vw, 6rem);
 
     --font-weight-normal: 400;
     --font-weight-bold: 700;
