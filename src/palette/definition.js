@@ -54,7 +54,9 @@ function normalizeOptions(options = {}) {
     format: 'oklch',
     ...options,
   };
-  result.gamut ??= result.format === 'hex' ? 'srgb' : 'p3';
+  if (!Object.hasOwn(options, 'gamut')) {
+    result.gamut = result.format === 'hex' ? 'srgb' : 'p3';
+  }
   for (const [key, values] of Object.entries(OPTION_VALUES)) {
     if (!values.includes(result[key])) {
       throw new Error(
@@ -85,7 +87,10 @@ function checkObject(value, field, keys) {
 }
 
 function checkName(name, field) {
-  if (typeof name !== 'string' || !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(name)) {
+  if (
+    typeof name !== 'string' ||
+    !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(name)
+  ) {
     throw new Error(
       `${field}: expected a lowercase name such as "blue" or "brand-primary"`,
     );

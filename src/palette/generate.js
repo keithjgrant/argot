@@ -2,12 +2,12 @@ import { normalizePaletteDefinition, parseSeed } from './definition.js';
 
 // Extracted from Theme Machine's paletteUtil.ts on ../tools main.
 const LIGHTNESS = Object.freeze([
-  0.98, 0.97, 0.93, 0.84, 0.8, 0.71, 0.66, 0.58,
-  0.53, 0.49, 0.42, 0.35, 0.27, 0.2, 0.16, 0.1,
+  0.98, 0.97, 0.93, 0.84, 0.8, 0.71, 0.66, 0.58, 0.53, 0.49, 0.42, 0.35, 0.27,
+  0.2, 0.16, 0.1,
 ]);
 const CHROMA = Object.freeze([
-  0.14, 0.29, 0.48, 0.57, 0.76, 0.9, 0.95, 1,
-  0.95, 0.9, 0.81, 0.71, 0.57, 0.43, 0.33, 0.24,
+  0.14, 0.29, 0.48, 0.57, 0.76, 0.9, 0.95, 1, 0.95, 0.9, 0.81, 0.71, 0.57, 0.43,
+  0.33, 0.24,
 ]);
 
 /**
@@ -23,7 +23,12 @@ function generatePalette(definition) {
     const lightness =
       lightnessCurve === 'uniform'
         ? LIGHTNESS
-        : interpolateScale(seed.l, anchor, LIGHTNESS[0], LIGHTNESS[15]);
+        : interpolateScale(
+            seed.l,
+            anchor,
+            Math.max(seed.l, LIGHTNESS[0]),
+            Math.min(seed.l, LIGHTNESS[15]),
+          );
     const chroma =
       chromaCurve === 'weighted'
         ? interpolateScale(seed.c, anchor, seed.c < 0.04 ? 0 : 0.01)

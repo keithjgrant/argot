@@ -4,6 +4,8 @@ import { writeTemplate } from './generate.js';
 
 const USAGE = `Usage:
   argot generate [path] [--extended]   Write semantic CSS template (default: ./semantics.css)
+  argot palette <definition.json> [output.css] [--force] [--dry-run]
+                                       Write primitive CSS (default: ./primitives.css)
   argot help                           Show this help
 
 Options:
@@ -26,6 +28,15 @@ function run(argv = process.argv.slice(2)) {
   ) {
     process.stdout.write(USAGE);
     return;
+  }
+
+  if (command === 'palette') {
+    return import('./palette/cli.js')
+      .then(({ runPalette }) => runPalette(rest))
+      .catch((error) => {
+        printError(error.message);
+        process.exitCode = 1;
+      });
   }
 
   if (command === 'generate') {
