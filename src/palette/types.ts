@@ -12,10 +12,9 @@ export interface PaletteOptions {
 
 export type NormalizedPaletteOptions = Required<PaletteOptions>;
 
-export interface PaletteColorDefinition {
+/** Numeric OKLCH seed coordinates, matching Theme Machine's data model. */
+export interface PaletteColorDefinition extends OklchColor {
   name: string;
-  /** Standalone opaque CSS color; no browser context or variable references. */
-  color: string;
 }
 
 export interface PaletteDefinition {
@@ -31,8 +30,11 @@ export interface NormalizedPaletteDefinition {
 }
 
 export interface OklchColor {
+  /** Lightness from 0 through 1, not a percentage from 0 through 100. */
   l: number;
+  /** Finite, nonnegative chroma; gamut mapping happens only during output. */
   c: number;
+  /** Finite hue angle in degrees; stored without wrapping or rounding. */
   h: number;
 }
 

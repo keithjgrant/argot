@@ -90,6 +90,44 @@ Example shape:
 }
 ```
 
+## Primitive palette definitions
+
+Palette inputs use numeric OKLCH coordinates, matching Theme Machine's data
+model. Each color has a required name and `l`, `c`, `h`:
+
+- `l`: finite lightness from 0 through 1, not 0 through 100.
+- `c`: finite, nonnegative chroma.
+- `h`: a finite hue angle in degrees, including for neutral colors.
+
+Coordinates are retained as supplied, without hue wrapping, chroma thresholding,
+or rounding. Gamut mapping and final precision limiting happen during CSS output.
+
+```json
+{
+  "version": 1,
+  "colors": [
+    { "name": "brand", "l": 0.6, "c": 0.2, "h": 250 }
+  ],
+  "options": {
+    "lightnessCurve": "inclusive",
+    "chromaCurve": "weighted"
+  }
+}
+```
+
+In a checkout, try
+`npm run dev -- palette scripts/fixtures/palette.json ./primitives.css` using
+the [sample definition](./scripts/fixtures/palette.json). Existing output requires
+`--force` to replace; `--dry-run` validates without writing.
+
+The browser-safe `@keithjgrant/argot/palette` entrypoint exports
+`PaletteColorDefinition`, `OklchColor`, `PaletteDefinition`, and the generation
+functions. If an input interface accepts CSS strings, call the separate
+`parseCssColor()` helper and compose a numeric seed such as
+`{ name: 'brand', ...parseCssColor('#663399') }`. Definitions themselves do not
+accept CSS strings. JSON loading and serialization preserve numeric generation
+inputs rather than converting them to CSS and reparsing them.
+
 ## Development
 
 Library source lives in `src/*.ts` and `src/` subdirectories. Node 22.18+

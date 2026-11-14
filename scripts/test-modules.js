@@ -69,7 +69,7 @@ test('native TypeScript development entrypoints match compiled output', async (t
   const { generatePalette } = await import('@keithjgrant/argot/palette');
   const input = {
     version: 1,
-    colors: [{ name: 'brand', color: 'oklch(60% 0.2 250)' }],
+    colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
     options: { lightnessCurve: 'centered', chromaCurve: 'weighted' },
   };
   assert.equal(nativeCss(), generateCss());

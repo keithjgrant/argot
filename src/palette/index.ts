@@ -5,6 +5,7 @@ export {
 } from './definition.ts';
 export { generatePalette } from './generate.ts';
 export { renderPaletteCss, generatePaletteCss } from './render.ts';
+export { parseCssColor } from './parse.ts';
 export type {
   ChromaCurve,
   ColorFormat,

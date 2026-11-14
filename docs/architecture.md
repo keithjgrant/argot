@@ -115,8 +115,12 @@ Use small, independently usable data contracts so browser interfaces, files, and
 library callers can exchange generation inputs without sharing application
 state. Exact schemas and import/export command syntax remain provisional.
 
-- **Palette definition:** named seed colors, scale options, and output color
-  space/gamut choices.
+- **Palette definition:** named numeric OKLCH seeds (`name`, `l`, `c`, `h`),
+  scale options, and output color space/gamut choices. Require finite `l` from
+  0 through 1, finite nonnegative `c`, and finite `h` in degrees. Preserve the
+  supplied coordinates without hue wrapping, chroma thresholding, or rounding.
+  CSS strings belong to an optional `parseCssColor()` input adapter, not the
+  canonical definition or curve-calculation path.
 - **Semantic definition:** mappings from semantic names to primitive references
   or literal values. Start with Argot's vocabulary; creating or extending the
   vocabulary is a separate future decision.

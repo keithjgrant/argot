@@ -1,4 +1,4 @@
-import { normalizePaletteDefinition, parseSeed } from './definition.ts';
+import { normalizePaletteDefinition } from './definition.ts';
 import type { Palette, PaletteDefinition } from './types.ts';
 
 // Extracted from Theme Machine's paletteUtil.ts on ../tools main.
@@ -18,8 +18,7 @@ const CHROMA = Object.freeze([
 function generatePalette(definition: PaletteDefinition): Palette {
   const normalized = normalizePaletteDefinition(definition);
   const { lightnessCurve, chromaCurve } = normalized.options;
-  const colors = normalized.colors.map(({ name, color }) => {
-    const seed = parseSeed(color);
+  const colors = normalized.colors.map(({ name, ...seed }) => {
     const index = findTargetIndex(seed.l);
     const chromaScale =
       chromaCurve === 'weighted' ? buildChromaScale(index, seed.c) : CHROMA;

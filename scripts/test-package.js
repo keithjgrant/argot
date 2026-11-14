@@ -52,12 +52,13 @@ import assert from 'node:assert/strict';
 import stylelint from 'stylelint';
 import { generateCss } from '@keithjgrant/argot/generate';
 import {
-  generatePalette, generatePaletteCss, serializePaletteDefinition,
+  generatePalette, generatePaletteCss, parseCssColor, serializePaletteDefinition,
 } from '@keithjgrant/argot/palette';
 import { loadPaletteDefinition, writePalette } from '@keithjgrant/argot/palette/node';
 import plugins from '@keithjgrant/argot/stylelint';
 import config from '@keithjgrant/argot/stylelint/config';
-const definition = { version: 1, colors: [{ name: 'brand', color: '#663399' }] };
+const definition = { version: 1, colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }] };
+assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), { l: 0.6, c: 0.2, h: 250 });
 const palette = generatePalette(definition);
 assert.equal(palette.colors[0].steps.length, 16);
 assert.match(generatePaletteCss(definition), /--brand-16:/);
@@ -120,7 +121,7 @@ test('native development commands work with no dist directory', (t) => {
     cwd, stdio: 'pipe',
   });
   fs.writeFileSync(path.join(cwd, 'palette.json'), JSON.stringify({
-    version: 1, colors: [{ name: 'brand', color: '#663399' }],
+    version: 1, colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
   }));
   execFileSync(process.execPath, ['scripts/dev.js', 'palette', 'palette.json'], {
     cwd, stdio: 'pipe',

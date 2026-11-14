@@ -1,4 +1,3 @@
-import Color from 'colorjs.io';
 import type {
   NormalizedPaletteDefinition,
   NormalizedPaletteOptions,
@@ -30,8 +29,9 @@ function normalizePaletteDefinition(definition: unknown): NormalizedPaletteDefin
   const entries: unknown[] = definition.colors;
   const colors = Array.from(entries, (entry, index) => {
     const field = `definition.colors[${index}]`;
-    checkObject(entry, field, ['name', 'color']);
+    checkObject(entry, field, ['name', 'l', 'c', 'h']);
     checkName(entry.name, `${field}.name`);
+    checkCoordinates(entry, field);
     for (const name of [
       entry.name,
       ...Array.from({ length: 16 }, (_, i) => `${entry.name}-${i + 1}`),
@@ -41,11 +41,7 @@ function normalizePaletteDefinition(definition: unknown): NormalizedPaletteDefin
       }
       names.add(name);
     }
-    if (typeof entry.color !== 'string') {
-      throw new Error(`${field}.color: expected an opaque CSS color string`);
-    }
-    parseSeed(entry.color, `${field}.color`);
-    return { name: entry.name, color: entry.color.trim() };
+    return { name: entry.name, l: entry.l, c: entry.c, h: entry.h };
   });
 
   return {
@@ -116,37 +112,21 @@ function checkName(name: unknown, field: string): asserts name is string {
   }
 }
 
-/** Parse a standalone opaque CSS color into finite, normalized OKLCH values. */
-function parseSeed(value: unknown, field = 'color'): OklchColor {
-  if (typeof value !== 'string' || value.trim() === '') {
-    throw new Error(`${field}: expected an opaque CSS color string`);
-  }
-  let color;
-  try {
-    color = new Color(value.trim()).to('oklch');
-  } catch {
-    throw new Error(`${field}: invalid or context-dependent CSS color`);
-  }
-  if (color.alpha !== 1) {
-    throw new Error(`${field}: expected an opaque color (alpha must be 1)`);
-  }
-  let [l, c, h] = color.coords;
-  // Conversions of white can be a fraction above 1 due to floating-point error.
-  if (typeof l !== 'number' || !Number.isFinite(l) || l < -1e-12 || l > 1 + 1e-12) {
-    throw new Error(`${field}: OKLCH lightness must be between 0 and 1`);
+/** Validate numeric seeds without conversion, wrapping, clamping, or rounding. */
+function checkCoordinates(
+  value: Record<string, unknown>,
+  field: string,
+): asserts value is Record<string, unknown> & OklchColor {
+  const { l, c, h } = value;
+  if (typeof l !== 'number' || !Number.isFinite(l) || l < 0 || l > 1) {
+    throw new Error(`${field}.l: expected finite lightness between 0 and 1`);
   }
   if (typeof c !== 'number' || !Number.isFinite(c) || c < 0) {
-    throw new Error(`${field}: OKLCH chroma must be finite and nonnegative`);
-  }
-  if (c <= 1e-12) {
-    c = 0;
-    h = 0;
+    throw new Error(`${field}.c: expected finite, nonnegative chroma`);
   }
   if (typeof h !== 'number' || !Number.isFinite(h)) {
-    throw new Error(`${field}: a chromatic color requires a finite hue`);
+    throw new Error(`${field}.h: expected a finite hue angle in degrees`);
   }
-  l = Math.min(1, Math.max(0, l));
-  return { l, c, h: ((h % 360) + 360) % 360 };
 }
 
 /** Serialize generation inputs, not generated CSS or browser application state. */
@@ -159,5 +139,5 @@ export {
   serializePaletteDefinition,
   normalizeOptions,
   checkName,
-  parseSeed,
+  checkCoordinates,
 };
