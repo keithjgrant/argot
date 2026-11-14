@@ -2,8 +2,8 @@
 
 Deliver independently useful capabilities toward the expanded
 [product scope](./product-scope.md), following the boundaries in
-[architecture](./architecture.md). These are deliverables and exit criteria,
-not a fixed task backlog. New command names are provisional.
+[architecture](./architecture.md). These are deliverables and exit criteria, not
+a fixed task backlog. New command names are provisional.
 
 Throughout implementation, preserve existing generation and package entrypoints,
 keep the website build working, and maintain shared token-data compatibility.
@@ -46,8 +46,8 @@ depend on the processing runner.
 **Deliverable:** A standalone preset/processing API and thin build command.
 
 Support import resolution, explicit input/output paths, source maps, useful
-diagnostics, and optional minification. Leave watch, dev servers, and HMR to host
-tools initially. Do not implicitly run generation or Stylelint.
+diagnostics, and optional minification. Leave watch, dev servers, and HMR to
+host tools initially. Do not implicitly run generation or Stylelint.
 
 **Exit criterion:** Both an Argot scaffold and unrelated handwritten CSS build
 successfully without requiring token metadata, palette generation, or Stylelint.
@@ -100,5 +100,5 @@ Cover:
 
 **Exit criterion:** The site matches supported behavior, its tests/lint/build
 pass, and it is ready to publish. Publishing itself remains a separate decision.
-If publication is desired earlier, pull this work forward and document only
-the capabilities available at that point.
+If publication is desired earlier, pull this work forward and document only the
+capabilities available at that point.

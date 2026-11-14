@@ -7,9 +7,9 @@ and process its imports into deployable CSS.
 
 This is the agreed product direction, not a claim that all capabilities exist.
 It supersedes the earlier decision to keep Argot and the PostCSS pipeline as
-separate products, including the split described in
-`../postcss-preset/PLAN.md`. That sibling currently contains planning guidance,
-not a pipeline implementation.
+separate products, including the split described in `../postcss-preset/PLAN.md`.
+That sibling currently contains planning guidance, not a pipeline
+implementation.
 
 ## In scope
 
@@ -17,12 +17,12 @@ not a pipeline implementation.
   generation. Preserve the existing template-only use case.
 - **Primitive palettes:** headless color-scale generation extracted from the
   relevant parts of Theme Machine in `../tools`.
-- **Scaffolding:** primitives, semantic properties, explicit cascade layers,
-  an entrypoint stylesheet, a reset, and minimal base styles.
-- **CSS processing:** a small, token-agnostic PostCSS preset/API and a thin build
-  runner for imports and optional minification.
-- **Optional linting:** Stylelint plugin/config, without mandatory lint-on-build.
-  The existing rule is currently a placeholder.
+- **Scaffolding:** primitives, semantic properties, explicit cascade layers, an
+  entrypoint stylesheet, a reset, and minimal base styles.
+- **CSS processing:** a small, token-agnostic PostCSS preset/API and a thin
+  build runner for imports and optional minification.
+- **Optional linting:** Stylelint plugin/config, without mandatory
+  lint-on-build. The existing rule is currently a placeholder.
 - **Website:** expand and refine the existing Eleventy site and metadata-driven
   token reference. Full alignment and publishing readiness belong to the final
   roadmap phase unless publication becomes a nearer-term priority.

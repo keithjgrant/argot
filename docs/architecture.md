@@ -8,14 +8,14 @@ below are provisional. See the [roadmap](./roadmap.md) for sequencing.
 ## Current foundation
 
 `tokens/` defines the semantic vocabulary. `src/load-tokens.js` loads it for CSS
-generation and the existing Eleventy website. `src/generate.js` already separates
-rendering from writing files. The CLI currently generates semantic templates;
-Stylelint entrypoints exist, but the token rule is a placeholder.
+generation and the existing Eleventy website. `src/generate.js` already
+separates rendering from writing files. The CLI currently generates semantic
+templates; Stylelint entrypoints exist, but the token rule is a placeholder.
 
-The PostCSS sibling contains a proposed pipeline, not an implementation.
-Theme Machine contains reusable palette algorithms, but its current palette
-module imports browser-oriented application context and uses different semantic
-names from Argot.
+The PostCSS sibling contains a proposed pipeline, not an implementation. Theme
+Machine contains reusable palette algorithms, but its current palette module
+imports browser-oriented application context and uses different semantic names
+from Argot.
 
 ## Module boundaries
 
@@ -27,14 +27,14 @@ names from Argot.
   filesystem dependency in the calculation layer.
 - **Scaffold:** compose palette output, semantic mappings, and static templates;
   handle safe source-file creation.
-- **PostCSS:** expose a token-agnostic preset and processing API. Start with import
-  resolution and optional minification; lint remains separate.
-- **Build:** adapt the processing API to input/output paths, source maps, errors,
-  and CLI exit status.
-- **Stylelint:** optional integration that can use token metadata without becoming
-  a dependency of generation or processing.
-- **Website:** consume shared token data and eventually document all capabilities;
-  it is not a dependency of the published runtime.
+- **PostCSS:** expose a token-agnostic preset and processing API. Start with
+  import resolution and optional minification; lint remains separate.
+- **Build:** adapt the processing API to input/output paths, source maps,
+  errors, and CLI exit status.
+- **Stylelint:** optional integration that can use token metadata without
+  becoming a dependency of generation or processing.
+- **Website:** consume shared token data and eventually document all
+  capabilities; it is not a dependency of the published runtime.
 
 Keep the CLI thin. Library consumers should not have to invoke a subprocess.
 Token/template consumers should not load processing or lint modules merely by
@@ -50,8 +50,8 @@ Preserve two use cases:
 
 - **Template mode:** emit semantic names with empty values for consumers to fill
   in, as the current generator does.
-- **Starter mode:** provide usable primitives and semantic values for the included
-  base styles. It need not populate every extended token.
+- **Starter mode:** provide usable primitives and semantic values for the
+  included base styles. It need not populate every extended token.
 
 Retain the current lightweight token tooling. Style Dictionary or Terrazzo is
 worth revisiting only if additional output formats justify it.
@@ -65,11 +65,13 @@ metadata; it must not imply a blanket accessibility guarantee.
 Evolve the existing package incrementally rather than reorganizing everything
 before the first feature:
 
-- `src/tokens/`: existing loading, indexing, and template-rendering responsibilities.
+- `src/tokens/`: existing loading, indexing, and template-rendering
+  responsibilities.
 - `src/palette/`: scale calculations, gamut handling, and CSS serialization.
 - `src/scaffold/`: preset composition and safe file creation.
 - `src/postcss/` and `src/build/`: processing and filesystem/CLI adaptation.
-- `src/cli/` and `src/stylelint/`: command dispatch and optional lint integration.
+- `src/cli/` and `src/stylelint/`: command dispatch and optional lint
+  integration.
 - `tokens/`: existing vocabulary JSON.
 - `presets/`: starter values and semantic mappings.
 - `templates/project/`: entrypoint, reset, and minimal base templates.
@@ -106,8 +108,8 @@ so consumers can replace Argot's processor.
 
 Ownership rules:
 
-- Initialization copies entrypoint, reset, base, and semantic mappings; consumers
-  own and edit those files thereafter.
+- Initialization copies entrypoint, reset, base, and semantic mappings;
+  consumers own and edit those files thereafter.
 - Explicit palette regeneration owns a clearly marked generated primitive file.
   Its recipe, when present, is the regeneration input.
 - Builds write only designated build output, never source files.
@@ -117,16 +119,16 @@ Ownership rules:
 
 ## Theme Machine boundary
 
-Extract algorithms from
-`../tools/src/js/theme-machine/common/paletteUtil.ts` into a headless API with
-independent input types. Do not carry over its application context or its older
-semantic vocabulary. Its interactive application stays in `../tools` and may
-later consume the extracted engine instead of maintaining duplicate algorithms.
+Extract algorithms from `../tools/src/js/theme-machine/common/paletteUtil.ts`
+into a headless API with independent input types. Do not carry over its
+application context or its older semantic vocabulary. Its interactive
+application stays in `../tools` and may later consume the extracted engine
+instead of maintaining duplicate algorithms.
 
 ## Website during implementation
 
 Keep the existing website build working and preserve shared token-data
 compatibility. Its content and presentation may lag behind implementation:
-per-milestone website completeness or production readiness is not required.
-Full alignment is the final roadmap phase and can be brought forward if
-publication becomes a priority.
+per-milestone website completeness or production readiness is not required. Full
+alignment is the final roadmap phase and can be brought forward if publication
+becomes a priority.

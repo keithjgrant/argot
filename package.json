@@ -36,6 +36,8 @@
     "./stylelint/config": "./src/stylelint/config.js"
   },
   "scripts": {
+    "prettier": "prettier --check . --ignore-unknown",
+    "prettier:fix": "prettier --write . --ignore-unknown",
     "build:template": "node bin/argot.js generate ./templates/semantics.css && node bin/argot.js generate --extended ./templates/semantics-extended.css",
     "test": "node scripts/test-stylelint.js && node --test scripts/test-modules.js",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",

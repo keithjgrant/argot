@@ -72,8 +72,8 @@ truth (one file per group). Each token has `$type`, `$value`, `$description`,
 and `tier` (`core` | `extended`). Optional `usage`, `pairsWith` (contrast), and
 `related` (non-contrast links) where helpful.
 
-**Naming:** CSS custom property name = `--` + path segments joined by `-`
-(e.g. `text.primary` → `--text-primary`).
+**Naming:** CSS custom property name = `--` + path segments joined by `-` (e.g.
+`text.primary` → `--text-primary`).
 
 **Generator:** `argot generate [path]` (see `src/generate.js`) reads `tokens/`
 and writes a `:root` CSS template. `npm run build:template` writes
@@ -81,8 +81,8 @@ and writes a `:root` CSS template. `npm run build:template` writes
 
 **Website:** The Eleventy token reference exists in `website/`. Keep its build
 and shared token-data compatibility working, but defer full content alignment
-and publishing readiness to the final roadmap phase unless publication becomes
-a priority.
+and publishing readiness to the final roadmap phase unless publication becomes a
+priority.
 
 **Stylelint:** Plugin/config entrypoints exist; the current token rule is a
 placeholder. Useful rules remain optional follow-up work rather than a
