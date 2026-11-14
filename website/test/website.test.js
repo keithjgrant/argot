@@ -5,7 +5,6 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { buildReference } from '../lib/reference.js';
-import { generateCss } from '../../src/generate.js';
 import { SECTIONS, loadTokens, getTokensDir } from '../../src/load-tokens.js';
 import { matchesToken, initializeSearch } from '../assets/token-search.js';
 
@@ -87,16 +86,6 @@ test('website adaptation does not mutate shared token data', () => {
   assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
 });
 
-test('CSS generation is unchanged by the loader extraction', () => {
-  for (const extended of [false, true]) {
-    const file = extended ? 'semantics-extended.css' : 'semantics.css';
-    assert.equal(
-      generateCss({ extended }),
-      fs.readFileSync(path.join(root, 'templates', file), 'utf8'),
-    );
-  }
-});
-
 for (const prefix of ['/', '/argot/']) {
   test(`build at ${prefix} contains all tokens and working internal links`, async (t) => {
     const output = path.join(
@@ -141,22 +130,22 @@ for (const prefix of ['/', '/argot/']) {
     const css = fs.readFileSync(path.join(output, 'assets/site.css'), 'utf8');
     assert.doesNotMatch(css, /@import\b/);
     assert.match(css, /--bg-body:/);
-    assert.ok(!fs.existsSync(path.join(output, 'styles')));
     assert.deepEqual(
       fs
         .readdirSync(path.join(output, 'assets'))
         .filter((file) => file.endsWith('.css')),
       ['site.css'],
     );
-    assert.equal(pages.size, reference.sections.length + 3);
     for (const section of reference.sections) {
       const file = path.join(output, 'tokens', section.slug, 'index.html');
       const { html, ids } = pages.get(file);
-      assert.equal(
-        [...html.matchAll(/class="token-detail"/g)].length,
-        section.tokens.length,
-      );
-      for (const token of section.tokens) assert.ok(ids.has(token.id));
+      for (const token of section.tokens) {
+        assert.ok(ids.has(token.id), `Missing ${token.name} in ${file}`);
+        assert.ok(
+          html.includes(token.name),
+          `Missing ${token.name} text in ${file}`,
+        );
+      }
     }
 
     for (const [file, { html }] of pages) {

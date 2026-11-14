@@ -23,6 +23,16 @@ test('public package entrypoints expose native ESM exports', () => {
   assert.equal(config.rules['argot/valid-token'], true);
 });
 
+test('checked-in CSS templates match the current token definitions', () => {
+  for (const extended of [false, true]) {
+    const file = extended ? 'semantics-extended.css' : 'semantics.css';
+    assert.equal(
+      generateCss({ extended }),
+      fs.readFileSync(path.join(root, 'templates', file), 'utf8'),
+    );
+  }
+});
+
 test('CLI generates identical core and extended templates outside the package', (t) => {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-esm-'));
   t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));

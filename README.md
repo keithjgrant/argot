@@ -98,7 +98,7 @@ Group introductions and CSS examples live separately in `website/lib/guides.js`.
 - `npm run website:dev` — serve locally with live reload, including token edits.
 - `npm run website:build` — build static files into `website/_site/`.
 - `npm run website:test` — check metadata, token coverage, links, URL prefixes,
-  filtering behavior, and unchanged generated CSS.
+  and filtering behavior.
 - `npm run website:format` — format supported website files with Prettier.
 - `npm run website:lint` — check website CSS with Stylelint.
 - `npm run website:lint:fix` — apply available Stylelint fixes.
