@@ -20,9 +20,14 @@ serialization and file writing, and choose a small supported set of curve and
 format options. Cover extreme lightness, achromatic inputs, gamut handling, and
 deterministic output with tests.
 
+Establish a small, versioned palette-definition contract with validation and
+file-based loading. Keep it independent of Theme Machine's browser state; adding
+export to that interface is a later integration.
+
 **Exit criterion:** Palettes can be generated in Node without Lit, browser
 globals, or Theme Machine application state, while current semantic generation
-continues to work.
+continues to work. A saved palette definition reproduces the same output, and
+invalid definitions receive useful errors.
 
 ## Phase 2: Useful CSS scaffold
 
@@ -33,6 +38,12 @@ and minimal base styles.
 Start with one usable starter preset and noninteractive options rather than an
 interactive questionnaire. Preserve semantic-template-only generation. Establish
 source-file ownership, dry-run behavior, and explicit overwrite safeguards.
+
+Establish the semantic-mapping contract and explicit composition rules for
+palette definitions, semantic mappings, and starter templates. Start with values
+for Argot's vocabulary rather than custom vocabulary authoring. Keep local paths
+separate from portable data and make generated versus user-owned semantic CSS
+explicit.
 
 **Exit criterion:** A basic HTML page works with the starter values; users can
 process the CSS with other tools; rerunning initialization cannot silently
@@ -74,8 +85,10 @@ capabilities without hidden coupling.
 **Deliverable:** Selected improvements supported by actual use.
 
 Candidates include light/dark mapping presets, contrast reports based on
-semantic mappings, useful Stylelint rules, and adoption of the extracted palette
-engine by Theme Machine.
+semantic mappings, useful Stylelint rules, Theme Machine palette-definition
+export for import into Argot, and adoption of the extracted palette engine by
+Theme Machine. A future interactive semantic editor could use the semantic
+contract; building that editor is not committed work.
 
 This phase is optional, not a release gate or a prerequisite for website
 alignment. Choose its scope after the core workflow has been exercised.

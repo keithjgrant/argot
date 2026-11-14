@@ -92,8 +92,44 @@ additional command responsibilities are:
 
 Expose palette and PostCSS library entrypoints separately from their CLI
 adapters. Exact flags, configuration discovery, and export names remain to be
-designed. Do not introduce a universal configuration format before it is needed;
-a small palette recipe can retain seed colors and scale options.
+designed. Use the portable contracts below rather than introducing a universal
+configuration platform.
+
+## Portable definitions and handoffs
+
+Use small, independently usable data contracts so browser interfaces, files, and
+library callers can exchange generation inputs without sharing application
+state. Exact schemas and import/export command syntax remain provisional.
+
+- **Palette definition:** named seed colors, scale options, and output color
+  space/gamut choices.
+- **Semantic definition:** mappings from semantic names to primitive references
+  or literal values. Start with Argot's vocabulary; creating or extending the
+  vocabulary is a separate future decision.
+- **Scaffold options:** select the definitions and starter templates to compose.
+  Project configuration may reference separate definition files rather than
+  embedding everything in one document.
+
+Start with plain JSON and explicit format versions. Share validation across
+consumers, with useful errors for unsupported versions, invalid values, and
+unresolved references. Validate each contract independently where possible;
+check cross-definition references when definitions are composed.
+
+Portable definitions contain no browser state, executable configuration, or
+filesystem paths. File resolution and output locations belong to a local
+project/CLI adapter, not to exported palette or semantic data. Define
+composition and conflict behavior explicitly rather than relying on implicit
+merging.
+
+Definitions are generation inputs, not a serialization of rendered CSS. Support
+exporting and loading definitions without promising to reconstruct them from
+user-edited CSS. The processor continues to accept CSS without loading or
+understanding these contracts.
+
+An initial handoff is a Theme Machine palette export that Argot validates and
+uses to generate primitive CSS. A future semantic editor could export the
+semantic contract through the same pattern. The contracts do not require
+interactive editors, live synchronization, or arbitrary third-party importers.
 
 ## Generated CSS and file ownership
 
@@ -110,6 +146,9 @@ Ownership rules:
 
 - Initialization copies entrypoint, reset, base, and semantic mappings;
   consumers own and edit those files thereafter.
+- When semantic mappings are supplied as a portable definition, regeneration
+  must target an explicitly designated generated file, not silently replace
+  consumer-owned semantic CSS. Import support does not change ownership.
 - Explicit palette regeneration owns a clearly marked generated primitive file.
   Its recipe, when present, is the regeneration input.
 - Builds write only designated build output, never source files.
@@ -123,7 +162,9 @@ Extract algorithms from `../tools/src/js/theme-machine/common/paletteUtil.ts`
 into a headless API with independent input types. Do not carry over its
 application context or its older semantic vocabulary. Its interactive
 application stays in `../tools` and may later consume the extracted engine
-instead of maintaining duplicate algorithms.
+instead of maintaining duplicate algorithms. Add definition export/import as a
+separate integration using the portable palette contract, not by exposing Theme
+Machine's internal app context.
 
 ## Website during implementation
 

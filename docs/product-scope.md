@@ -17,6 +17,10 @@ implementation.
   generation. Preserve the existing template-only use case.
 - **Primitive palettes:** headless color-scale generation extracted from the
   relevant parts of Theme Machine in `../tools`.
+- **Portable definitions:** small, versioned data contracts for palette inputs,
+  semantic mappings, and handoffs between generators and external authoring
+  interfaces. Exact schemas remain to be designed; interactive editors are not a
+  prerequisite.
 - **Scaffolding:** primitives, semantic properties, explicit cascade layers, an
   entrypoint stylesheet, a reset, and minimal base styles.
 - **CSS processing:** a small, token-agnostic PostCSS preset/API and a thin
@@ -30,7 +34,7 @@ implementation.
 ## Out of scope
 
 - Theme Machine's interactive application: color wheel, previews, Lit
-  components, and browser/URL state remain in `../tools`.
+  components, and browser/URL state remain on https://tools.keithjgrant.com.
 - A development server or HMR: host tools such as Vite and Eleventy own these.
 - A component framework or substantial utility library.
 - Broad CSS transpilation or automatic prefixing as implicit defaults.
@@ -40,10 +44,11 @@ implementation.
 
 Applications may use:
 
-1. Semantic templates, with or without Stylelint.
-2. Palette generation or scaffolding without Argot's processor.
-3. The processor without adopting Argot's token vocabulary.
-4. The complete workflow.
+1. Palette generation (primitive tokens) on its own.
+2. Semantic tokens on their own, with or without Stylelint.
+3. Scaffold generation without Argot's processor.
+4. The processor without Argot's scaffold or token generation.
+5. The complete workflow.
 
 Generation creates project source; processing builds existing CSS. Neither
 silently invokes the other. Processing must not depend on token metadata,
