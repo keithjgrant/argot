@@ -72,10 +72,12 @@ for (const lightnessCurve of ['uniform', 'inclusive', 'centered']) {
 }
 
 test('centered/weighted retains the weighted peak at the original nearest step', () => {
-  const palette = generatePalette(definition(
-    { l: 0.84, c: 0.2, h: 250 },
-    { lightnessCurve: 'centered', chromaCurve: 'weighted' },
-  )).colors[0];
+  const palette = generatePalette(
+    definition(
+      { l: 0.84, c: 0.2, h: 250 },
+      { lightnessCurve: 'centered', chromaCurve: 'weighted' },
+    ),
+  ).colors[0];
   assert.equal(palette.baseStep, 9);
   assert.equal(palette.steps[8].l, 0.84);
   assert.equal(palette.steps[8].c, 0.2);
@@ -84,10 +86,9 @@ test('centered/weighted retains the weighted peak at the original nearest step',
 
 test('centered mode preserves fixed endpoints even outside the usual lightness range', () => {
   for (const l of [0.01, 0.99]) {
-    const palette = generatePalette(definition(
-      { l, c: 0.1, h: 250 },
-      { lightnessCurve: 'centered' },
-    )).colors[0];
+    const palette = generatePalette(
+      definition({ l, c: 0.1, h: 250 }, { lightnessCurve: 'centered' }),
+    ).colors[0];
     assert.equal(palette.steps[0].l, 0.98);
     assert.ok(Math.abs(palette.steps[15].l - 0.1) < 1e-12);
     assert.equal(palette.steps[8].l, l);
@@ -104,7 +105,10 @@ test('numeric definitions preserve precision, tiny chroma and unwrapped hue with
   const input = Object.freeze({
     version: 1,
     colors: Object.freeze([color]),
-    options: Object.freeze({ lightnessCurve: 'inclusive', chromaCurve: 'weighted' }),
+    options: Object.freeze({
+      lightnessCurve: 'inclusive',
+      chromaCurve: 'weighted',
+    }),
   });
   const normalized = normalizePaletteDefinition(input);
   assert.deepEqual(normalized.colors, [color]);
@@ -123,7 +127,18 @@ test('numeric definitions preserve precision, tiny chroma and unwrapped hue with
 
 test('numeric seed validation reports invalid or missing coordinates by field', () => {
   const invalid = {
-    l: [undefined, null, '', '0.6', '60%', NaN, Infinity, -Infinity, -1e-14, 1.00000000000001],
+    l: [
+      undefined,
+      null,
+      '',
+      '0.6',
+      '60%',
+      NaN,
+      Infinity,
+      -Infinity,
+      -1e-14,
+      1.00000000000001,
+    ],
     c: [undefined, null, '0.2', NaN, Infinity, -Infinity, -1e-14],
     h: [undefined, null, '250deg', NaN, Infinity, -Infinity],
   };
@@ -148,7 +163,9 @@ test('numeric seed validation reports invalid or missing coordinates by field', 
       l,
     );
   }
-  const neutral = normalizePaletteDefinition(definition({ l: 0.6, c: 0, h: 250 }));
+  const neutral = normalizePaletteDefinition(
+    definition({ l: 0.6, c: 0, h: 250 }),
+  );
   assert.equal(neutral.colors[0].h, 250);
 });
 
@@ -169,34 +186,69 @@ test('legacy strings and ambiguous or unknown seed fields are rejected', () => {
 
 test('numeric definitions retain name, version and option validation', () => {
   const seed = { l: 0.6, c: 0.2, h: 250 };
-  for (const names of [['brand', 'brand'], ['brand', 'brand-1'], ['brand-16', 'brand']]) {
-    assert.throws(() => normalizePaletteDefinition({
-      version: 1, colors: names.map((name) => ({ name, ...seed })),
-    }), /duplicate custom property/);
+  for (const names of [
+    ['brand', 'brand'],
+    ['brand', 'brand-1'],
+    ['brand-16', 'brand'],
+  ]) {
+    assert.throws(
+      () =>
+        normalizePaletteDefinition({
+          version: 1,
+          colors: names.map((name) => ({ name, ...seed })),
+        }),
+      /duplicate custom property/,
+    );
   }
   assert.throws(
-    () => normalizePaletteDefinition({ version: 2, colors: [{ name: 'brand', ...seed }] }),
+    () =>
+      normalizePaletteDefinition({
+        version: 2,
+        colors: [{ name: 'brand', ...seed }],
+      }),
     /version/,
   );
   assert.throws(
-    () => normalizePaletteDefinition({ version: 1, colors: [{ name: '--brand', ...seed }] }),
+    () =>
+      normalizePaletteDefinition({
+        version: 1,
+        colors: [{ name: '--brand', ...seed }],
+      }),
     /colors\[0\].name/,
   );
-  assert.throws(() => generatePalette(definition(seed, { lightnessCurve: 'custom' })), /lightnessCurve/);
-  assert.throws(() => generatePalette(definition(seed, { format: 'hex', gamut: 'p3' })), /hex output requires srgb/);
+  assert.throws(
+    () => generatePalette(definition(seed, { lightnessCurve: 'custom' })),
+    /lightnessCurve/,
+  );
+  assert.throws(
+    () => generatePalette(definition(seed, { format: 'hex', gamut: 'p3' })),
+    /hex output requires srgb/,
+  );
 });
 
 test('CSS color parsing is an explicit adapter that returns numeric generation inputs', () => {
-  assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), { l: 0.6, c: 0.2, h: 250 });
+  assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), {
+    l: 0.6,
+    c: 0.2,
+    h: 250,
+  });
   for (const value of ['#663399', 'red', 'rgb(50% 0% 50%)']) {
     const parsed = parseCssColor(value);
     const expected = new Color(value).to('oklch').coords;
-    assert.deepEqual(parsed, { l: expected[0], c: expected[1], h: expected[2] });
+    assert.deepEqual(parsed, {
+      l: expected[0],
+      c: expected[1],
+      h: expected[2],
+    });
     const input = definition(parsed);
-    assert.deepEqual(normalizePaletteDefinition(input).colors[0], { name: 'brand', ...parsed });
+    assert.deepEqual(normalizePaletteDefinition(input).colors[0], {
+      name: 'brand',
+      ...parsed,
+    });
     assert.match(generatePaletteCss(input), /--brand-16:/);
     assert.deepEqual(JSON.parse(serializePaletteDefinition(input)).colors[0], {
-      name: 'brand', ...parsed,
+      name: 'brand',
+      ...parsed,
     });
   }
   assert.deepEqual(parseCssColor('black'), { l: 0, c: 0, h: 0 });
@@ -208,9 +260,18 @@ test('CSS color parsing is an explicit adapter that returns numeric generation i
 
 test('CSS parser rejects invalid, transparent, missing-component and context-dependent colors', () => {
   for (const color of [
-    null, 42, '', 'not-a-color', 'transparent', 'rgb(0 0 0 / 50%)',
-    'currentColor', 'var(--brand)', 'oklch(120% 0.2 250)',
-    'oklch(60% -0.1 250)', 'oklch(none 0.2 250)', 'oklch(60% 0.2 none)',
+    null,
+    42,
+    '',
+    'not-a-color',
+    'transparent',
+    'rgb(0 0 0 / 50%)',
+    'currentColor',
+    'var(--brand)',
+    'oklch(120% 0.2 250)',
+    'oklch(60% -0.1 250)',
+    'oklch(none 0.2 250)',
+    'oklch(60% 0.2 none)',
   ]) {
     assert.throws(() => parseCssColor(color), /color[.:]/);
   }
@@ -246,7 +307,10 @@ test('neutral calculations are preserved wherever the original multiplier is def
       if (lightnessCurve === 'centered' && chromaCurve === 'weighted') {
         const [reference] = referencePalette(seed, options);
         assert.ok(reference.every(({ c }) => Number.isNaN(c)));
-        assert.throws(() => generatePalette(input), /undefined chroma multiplier/);
+        assert.throws(
+          () => generatePalette(input),
+          /undefined chroma multiplier/,
+        );
       } else {
         const actual = generatePalette(input).colors[0].steps;
         assert.ok(actual.every(({ c }) => c === 0));

@@ -30,11 +30,11 @@ export interface NormalizedPaletteDefinition {
 }
 
 export interface OklchColor {
-  /** Lightness from 0 through 1, not a percentage from 0 through 100. */
+  /** Lightness from 0 through 1 */
   l: number;
-  /** Finite, nonnegative chroma; gamut mapping happens only during output. */
+  /** Chroma */
   c: number;
-  /** Finite hue angle in degrees; stored without wrapping or rounding. */
+  /** Hue angle in degrees; stored without wrapping or rounding. */
   h: number;
 }
 

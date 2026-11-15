@@ -1,7 +1,6 @@
 import { normalizePaletteDefinition } from './definition.ts';
 import type { Palette, PaletteDefinition } from './types.ts';
 
-// Extracted from Theme Machine's paletteUtil.ts on ../tools main.
 const LIGHTNESS = Object.freeze([
   0.98, 0.97, 0.93, 0.84, 0.8, 0.71, 0.66, 0.58, 0.53, 0.49, 0.42, 0.35, 0.27,
   0.2, 0.16, 0.1,
@@ -25,12 +24,12 @@ function generatePalette(definition: PaletteDefinition): Palette {
     const anchor = lightnessCurve === 'centered' ? 8 : index;
     // Centered lightness rescales the original chroma curve at step 9; it does
     // not rebuild the weighted curve around that step.
-    const chromaMultiplier =
-      lightnessCurve === 'centered'
-        ? seed.c / chromaScale[8]
-        : chromaCurve === 'weighted'
-          ? 1
-          : seed.c / chromaScale[index];
+    let chromaMultiplier = 1;
+    if (lightnessCurve === 'centered') {
+      chromaMultiplier = seed.c / chromaScale[8];
+    } else if (chromaCurve === 'centered') {
+      chromaMultiplier = seed.c / chromaScale[index];
+    }
     if (!Number.isFinite(chromaMultiplier)) {
       throw new Error(
         `Palette "${name}": the selected curves produce an undefined chroma multiplier`,
@@ -84,19 +83,21 @@ function buildChromaScale(index: number, peakValue: number): number[] {
 function buildInclusiveLightness(lightness: number, index: number): number[] {
   const maxLightness = LIGHTNESS[0];
   const minLightness = LIGHTNESS[15];
+
   const lSteps = index;
   const dSteps = 15 - index;
   const lInterval = (maxLightness - lightness) / lSteps;
   const dInterval = (lightness - minLightness) / dSteps;
-  const scale = [];
+
+  const lightnessScale = [];
   for (let i = 0; i < lSteps; i++) {
-    scale.push(maxLightness - i * lInterval);
+    lightnessScale.push(maxLightness - i * lInterval);
   }
-  scale.push(lightness);
+  lightnessScale.push(lightness);
   for (let i = 1; i <= dSteps; i++) {
-    scale.push(lightness - i * dInterval);
+    lightnessScale.push(lightness - i * dInterval);
   }
-  return scale;
+  return lightnessScale;
 }
 
 export { generatePalette };
