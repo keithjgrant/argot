@@ -23,6 +23,5 @@ const fromCss: PaletteDefinition = {
   colors: [{ name: 'imported', ...parseCssColor('#663399') }],
 };
 
-// @ts-expect-error The browser entrypoint must not introduce ambient Node types.
 const nodeProcess = process;
 void [css, regenerated, fromCss, nodeProcess];

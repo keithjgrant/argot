@@ -54,9 +54,9 @@
     }
   },
   "scripts": {
-    "dev": "node scripts/dev.js",
+    "cli": "node scripts/dev.js",
     "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "tsc": "tsc --noEmit",
     "test:types": "tsc --project scripts/types/tsconfig.json && tsc --project scripts/types/tsconfig.browser.json",
     "test:package": "node --test scripts/test-package.js",
     "pretest": "npm run build && npm run test:types",
