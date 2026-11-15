@@ -58,11 +58,17 @@ const generated: string = generatePaletteCss(normalized);
 const serialized: string = serializePaletteDefinition(definition);
 const parsed: OklchColor = parseCssColor('#663399');
 const fromCss: PaletteDefinition = {
-  version: 1, colors: [{ name: 'brand', ...parsed }],
+  version: 1,
+  colors: [{ name: 'brand', ...parsed }],
 };
-const loaded: NormalizedPaletteDefinition = loadPaletteDefinition('palette.json');
+const loaded: NormalizedPaletteDefinition =
+  loadPaletteDefinition('palette.json');
 const writeOptions: WritePaletteOptions = { dryRun: true, force: false };
-const output: WritePaletteResult = writePalette('palette.css', loaded, writeOptions);
+const output: WritePaletteResult = writePalette(
+  'palette.css',
+  loaded,
+  writeOptions,
+);
 
 const tokenOptions: TokenOptions = { extended: true };
 const token: TokenRecord = {
@@ -75,7 +81,11 @@ const token: TokenRecord = {
   pairsWith: [],
   related: [],
 };
-const section: TokenSection = { file: 'text.json', label: 'text', tokens: [token] };
+const section: TokenSection = {
+  file: 'text.json',
+  label: 'text',
+  tokens: [token],
+};
 const semanticCss: string = generateCss(tokenOptions);
 const rendered: string = renderCss([section]);
 const filename: string = writeTemplate('semantics.css', tokenOptions);
@@ -85,11 +95,20 @@ const lintPlugins: Plugin[] = plugins;
 // @ts-expect-error Curve options must be one of the supported named values.
 const invalidOptions: PaletteOptions = { lightnessCurve: 'custom' };
 // @ts-expect-error Seed coordinates must be numbers.
-const invalidSeed: PaletteDefinition = { version: 1, colors: [{ name: 'x', l: '60%', c: 0.2, h: 250 }] };
+const invalidSeed: PaletteDefinition = {
+  version: 1,
+  colors: [{ name: 'x', l: '60%', c: 0.2, h: 250 }],
+};
 // @ts-expect-error CSS strings are not canonical palette definitions.
-const invalidCssSeed: PaletteDefinition = { version: 1, colors: [{ name: 'x', color: '#663399' }] };
+const invalidCssSeed: PaletteDefinition = {
+  version: 1,
+  colors: [{ name: 'x', color: '#663399' }],
+};
 // @ts-expect-error All three coordinates are required, including hue for neutrals.
-const missingCoordinate: PaletteDefinition = { version: 1, colors: [{ name: 'x', l: 0.6, c: 0 }] };
+const missingCoordinate: PaletteDefinition = {
+  version: 1,
+  colors: [{ name: 'x', l: 0.6, c: 0 }],
+};
 // @ts-expect-error CSS parsing takes a string.
 parseCssColor({ l: 0.6, c: 0.2, h: 250 });
 // @ts-expect-error Unsupported definition versions must not typecheck.
@@ -104,8 +123,20 @@ writePalette('palette.css', definition, { force: 'yes' });
 generateCss({ extended: 'yes' });
 
 void [
-  css, generated, serialized, output, semanticCss, rendered, filename,
-  lintConfig, lintPlugins, invalidOptions, invalidSeed, invalidVersion,
+  css,
+  generated,
+  serialized,
+  output,
+  semanticCss,
+  rendered,
+  filename,
+  lintConfig,
+  lintPlugins,
+  invalidOptions,
+  invalidSeed,
+  invalidVersion,
   invalidCoordinate,
-  fromCss, invalidCssSeed, missingCoordinate,
+  fromCss,
+  invalidCssSeed,
+  missingCoordinate,
 ];

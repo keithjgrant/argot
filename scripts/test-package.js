@@ -25,9 +25,11 @@ test('packed package runs as JavaScript and exposes standalone declarations', ()
   // reliance on source files being adjacent to dist in the package under test.
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-packed-'));
   try {
-    const output = execFileSync('npm', [
-      'pack', '--json', '--pack-destination', cwd,
-    ], { cwd: root, encoding: 'utf8' });
+    const output = execFileSync(
+      'npm',
+      ['pack', '--json', '--pack-destination', cwd],
+      { cwd: root, encoding: 'utf8' },
+    );
     const [packed] = JSON.parse(output.slice(output.indexOf('[')));
     const files = packed.files.map(({ path: filename }) => filename);
     assert.ok(files.includes('dist/palette/index.js'));
@@ -36,17 +38,32 @@ test('packed package runs as JavaScript and exposes standalone declarations', ()
     assert.ok(files.includes('tokens/color-text.json'));
     assert.ok(files.includes('templates/semantics.css'));
     assert.ok(files.includes('docs/api.md'));
-    assert.deepEqual(files.filter((file) => file.startsWith('docs/')), ['docs/api.md']);
-    assert.ok(files.every((file) => !file.startsWith('src/') && !file.startsWith('website/')));
-    assert.ok(files.every((file) => !file.endsWith('.ts') || file.endsWith('.d.ts')));
+    assert.deepEqual(
+      files.filter((file) => file.startsWith('docs/')),
+      ['docs/api.md'],
+    );
+    assert.ok(
+      files.every(
+        (file) => !file.startsWith('src/') && !file.startsWith('website/'),
+      ),
+    );
+    assert.ok(
+      files.every((file) => !file.endsWith('.ts') || file.endsWith('.d.ts')),
+    );
     const installed = path.join(cwd, 'node_modules/@keithjgrant/argot');
     fs.mkdirSync(installed, { recursive: true });
     execFileSync('tar', [
-      '-xzf', path.join(cwd, packed.filename),
-      '-C', installed, '--strip-components=1',
+      '-xzf',
+      path.join(cwd, packed.filename),
+      '-C',
+      installed,
+      '--strip-components=1',
     ]);
     fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
-    const apiReference = fs.readFileSync(path.join(installed, 'docs/api.md'), 'utf8');
+    const apiReference = fs.readFileSync(
+      path.join(installed, 'docs/api.md'),
+      'utf8',
+    );
     for (const entrypoint of [
       '@keithjgrant/argot/palette',
       '@keithjgrant/argot/palette/node',
@@ -54,12 +71,17 @@ test('packed package runs as JavaScript and exposes standalone declarations', ()
       '@keithjgrant/argot/stylelint',
       '@keithjgrant/argot/stylelint/config',
     ]) {
-      assert.ok(apiReference.includes(entrypoint), `Missing API reference: ${entrypoint}`);
+      assert.ok(
+        apiReference.includes(entrypoint),
+        `Missing API reference: ${entrypoint}`,
+      );
     }
     for (const dependency of ['colorjs.io', 'stylelint', '@types']) {
       linkDependency(cwd, dependency);
     }
-    fs.writeFileSync(path.join(cwd, 'smoke.js'), `
+    fs.writeFileSync(
+      path.join(cwd, 'smoke.js'),
+      `
 import assert from 'node:assert/strict';
 import stylelint from 'stylelint';
 import { generateCss } from '@keithjgrant/argot/generate';
@@ -88,33 +110,74 @@ const lint = await stylelint.lint({
 });
 assert.equal(lint.errored, false);
 assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
-`);
-    execFileSync(process.execPath, ['--no-experimental-strip-types', 'smoke.js'], {
-      cwd, stdio: 'pipe',
-    });
-    execFileSync(process.execPath, [
-      '--no-experimental-strip-types',
-      path.join(installed, 'bin/argot.js'), 'generate', 'semantics.css',
-    ], { cwd, stdio: 'pipe' });
-    execFileSync(process.execPath, [
-      '--no-experimental-strip-types',
-      path.join(installed, 'bin/argot.js'), 'palette', 'palette.json', 'cli-palette.css',
-    ], { cwd, stdio: 'pipe' });
-    assert.match(fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'), /--text-primary:/);
-    assert.match(fs.readFileSync(path.join(cwd, 'cli-palette.css'), 'utf8'), /--brand-16:/);
-    for (const file of ['consumer.ts', 'tsconfig.json', 'browser.ts', 'tsconfig.browser.json']) {
-      fs.copyFileSync(path.join(root, 'scripts/types', file), path.join(cwd, file));
+`,
+    );
+    execFileSync(
+      process.execPath,
+      ['--no-experimental-strip-types', 'smoke.js'],
+      {
+        cwd,
+        stdio: 'pipe',
+      },
+    );
+    execFileSync(
+      process.execPath,
+      [
+        '--no-experimental-strip-types',
+        path.join(installed, 'bin/argot.js'),
+        'generate',
+        'semantics.css',
+      ],
+      { cwd, stdio: 'pipe' },
+    );
+    execFileSync(
+      process.execPath,
+      [
+        '--no-experimental-strip-types',
+        path.join(installed, 'bin/argot.js'),
+        'palette',
+        'palette.json',
+        'cli-palette.css',
+      ],
+      { cwd, stdio: 'pipe' },
+    );
+    assert.match(
+      fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'),
+      /--text-primary:/,
+    );
+    assert.match(
+      fs.readFileSync(path.join(cwd, 'cli-palette.css'), 'utf8'),
+      /--brand-16:/,
+    );
+    for (const file of [
+      'consumer.ts',
+      'tsconfig.json',
+      'browser.ts',
+      'tsconfig.browser.json',
+    ]) {
+      fs.copyFileSync(
+        path.join(root, 'scripts/types', file),
+        path.join(cwd, file),
+      );
     }
     const compiler = path.join(
-      path.dirname(fileURLToPath(import.meta.resolve('typescript/package.json'))),
+      path.dirname(
+        fileURLToPath(import.meta.resolve('typescript/package.json')),
+      ),
       'bin/tsc',
     );
     execFileSync(process.execPath, [compiler, '--project', 'tsconfig.json'], {
-      cwd, stdio: 'pipe',
+      cwd,
+      stdio: 'pipe',
     });
-    execFileSync(process.execPath, [compiler, '--project', 'tsconfig.browser.json'], {
-      cwd, stdio: 'pipe',
-    });
+    execFileSync(
+      process.execPath,
+      [compiler, '--project', 'tsconfig.browser.json'],
+      {
+        cwd,
+        stdio: 'pipe',
+      },
+    );
   } finally {
     fs.rmSync(cwd, { recursive: true, force: true });
   }
@@ -123,22 +186,47 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
 test('native development commands work with no dist directory', (t) => {
   const cwd = workspace(t);
   for (const directory of ['src', 'tokens']) {
-    fs.cpSync(path.join(root, directory), path.join(cwd, directory), { recursive: true });
+    fs.cpSync(path.join(root, directory), path.join(cwd, directory), {
+      recursive: true,
+    });
   }
   fs.mkdirSync(path.join(cwd, 'scripts'));
-  fs.copyFileSync(path.join(root, 'scripts/dev.js'), path.join(cwd, 'scripts/dev.js'));
+  fs.copyFileSync(
+    path.join(root, 'scripts/dev.js'),
+    path.join(cwd, 'scripts/dev.js'),
+  );
   fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
   linkDependency(cwd, 'colorjs.io');
-  execFileSync(process.execPath, ['scripts/dev.js', 'generate', 'semantics.css'], {
-    cwd, stdio: 'pipe',
-  });
-  fs.writeFileSync(path.join(cwd, 'palette.json'), JSON.stringify({
-    version: 1, colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
-  }));
-  execFileSync(process.execPath, ['scripts/dev.js', 'palette', 'palette.json'], {
-    cwd, stdio: 'pipe',
-  });
+  execFileSync(
+    process.execPath,
+    ['scripts/dev.js', 'generate', 'semantics.css'],
+    {
+      cwd,
+      stdio: 'pipe',
+    },
+  );
+  fs.writeFileSync(
+    path.join(cwd, 'palette.json'),
+    JSON.stringify({
+      version: 1,
+      colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+    }),
+  );
+  execFileSync(
+    process.execPath,
+    ['scripts/dev.js', 'palette', 'palette.json'],
+    {
+      cwd,
+      stdio: 'pipe',
+    },
+  );
   assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
-  assert.match(fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'), /--text-primary:/);
-  assert.match(fs.readFileSync(path.join(cwd, 'primitives.css'), 'utf8'), /--brand-16:/);
+  assert.match(
+    fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'),
+    /--text-primary:/,
+  );
+  assert.match(
+    fs.readFileSync(path.join(cwd, 'primitives.css'), 'utf8'),
+    /--brand-16:/,
+  );
 });

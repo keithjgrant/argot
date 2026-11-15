@@ -16,7 +16,9 @@ const OPTION_VALUES = {
  * Validate a version-1 definition and return a fresh copy with explicit defaults.
  * Color names must also be unique across all emitted step names and aliases.
  */
-function normalizePaletteDefinition(definition: unknown): NormalizedPaletteDefinition {
+function normalizePaletteDefinition(
+  definition: unknown,
+): NormalizedPaletteDefinition {
   checkObject(definition, 'definition', ['version', 'colors', 'options']);
   if (definition.version !== 1) {
     throw new Error('definition.version: expected supported version 1');

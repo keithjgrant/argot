@@ -65,7 +65,8 @@ test('CLI help and error handling still work', () => {
 
 test('native TypeScript development entrypoints match compiled output', async (t) => {
   const { generateCss: nativeCss } = await import('../src/generate.ts');
-  const { generatePalette: nativePalette } = await import('../src/palette/index.ts');
+  const { generatePalette: nativePalette } =
+    await import('../src/palette/index.ts');
   const { generatePalette } = await import('@keithjgrant/argot/palette');
   const input = {
     version: 1,
@@ -76,9 +77,17 @@ test('native TypeScript development entrypoints match compiled output', async (t
   assert.deepEqual(nativePalette(input), generatePalette(input));
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-native-'));
   t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
-  execFileSync(process.execPath, [devCli, 'generate', 'semantics.css'], { cwd });
-  assert.equal(fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'), generateCss());
+  execFileSync(process.execPath, [devCli, 'generate', 'semantics.css'], {
+    cwd,
+  });
+  assert.equal(
+    fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'),
+    generateCss(),
+  );
   fs.writeFileSync(path.join(cwd, 'palette.json'), JSON.stringify(input));
   execFileSync(process.execPath, [devCli, 'palette', 'palette.json'], { cwd });
-  assert.match(fs.readFileSync(path.join(cwd, 'primitives.css'), 'utf8'), /--brand-16:/);
+  assert.match(
+    fs.readFileSync(path.join(cwd, 'primitives.css'), 'utf8'),
+    /--brand-16:/,
+  );
 });

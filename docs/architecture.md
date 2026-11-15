@@ -26,10 +26,10 @@ loader without a build step.
 
 Typechecking is separate from execution. Plain `tsc` emits ESM JavaScript,
 declarations, and source maps into `dist/`, rewriting relative runtime imports
-to `.js`. Published entrypoints and the executable use this compiled output,
-not TypeScript under `node_modules`. Package tests exercise compiled exports
-and declarations; native-development tests check source execution separately.
-Do not add a bundler, CommonJS build, or runtime TypeScript loader.
+to `.js`. Published entrypoints and the executable use this compiled output, not
+TypeScript under `node_modules`. Package tests exercise compiled exports and
+declarations; native-development tests check source execution separately. Do not
+add a bundler, CommonJS build, or runtime TypeScript loader.
 
 ## Module boundaries
 
@@ -116,8 +116,8 @@ library callers can exchange generation inputs without sharing application
 state. Exact schemas and import/export command syntax remain provisional.
 
 - **Palette definition:** named numeric OKLCH seeds (`name`, `l`, `c`, `h`),
-  scale options, and output color space/gamut choices. Require finite `l` from
-  0 through 1, finite nonnegative `c`, and finite `h` in degrees. Preserve the
+  scale options, and output color space/gamut choices. Require finite `l` from 0
+  through 1, finite nonnegative `c`, and finite `h` in degrees. Preserve the
   supplied coordinates without hue wrapping, chroma thresholding, or rounding.
   CSS strings belong to an optional `parseCssColor()` input adapter, not the
   canonical definition or curve-calculation path.
@@ -179,8 +179,8 @@ Ownership rules:
 Preserve Theme Machine's tuned curves and calculations, including fixed
 endpoints and the interaction between centered lightness and weighted chroma.
 Keep full precision through calculations and gamut mapping; round only when
-serializing CSS to limit output size. Curve changes require separate review,
-not incidental changes during extraction.
+serializing CSS to limit output size. Curve changes require separate review, not
+incidental changes during extraction.
 
 Extract algorithms from `../tools/src/js/theme-machine/common/paletteUtil.ts`
 into a headless API with independent input types. Do not carry over its

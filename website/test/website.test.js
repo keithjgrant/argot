@@ -88,61 +88,95 @@ test('website adaptation does not mutate shared token data', () => {
   assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
 });
 
-test('watch mode reloads native TypeScript source without compiling', { timeout: 20000 }, async (t) => {
-  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-website-native-'));
-  t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
-  for (const directory of ['src', 'tokens', 'website']) {
-    fs.cpSync(path.join(root, directory), path.join(cwd, directory), {
-      recursive: true,
-      filter: (source) => !source.split(path.sep).some(
-        (part) => part === '_site' || part === '.test-output',
-      ),
-    });
-  }
-  fs.copyFileSync(path.join(root, 'postcss.config.js'), path.join(cwd, 'postcss.config.js'));
-  fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
-  fs.symlinkSync(path.join(root, 'node_modules'), path.join(cwd, 'node_modules'), 'dir');
-  const child = spawn(process.execPath, [
-    path.resolve(
-      path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
-      '../cmd.cjs',
-    ),
-    '--config=website/eleventy.config.js',
-    '--watch',
-  ], { cwd, stdio: ['ignore', 'pipe', 'pipe'] });
-  let log = '';
-  child.stdout.on('data', (data) => { log += data; });
-  child.stderr.on('data', (data) => { log += data; });
-  let error;
-  child.on('error', (cause) => { error = cause; });
-  const closed = new Promise((resolve) => child.once('close', resolve));
-  try {
-    async function until(predicate) {
-      const deadline = Date.now() + 7000;
-      while (!predicate()) {
-        assert.equal(error, undefined);
-        assert.equal(child.exitCode, null, log);
-        assert.ok(Date.now() < deadline, log);
-        await delay(50);
-      }
+test(
+  'watch mode reloads native TypeScript source without compiling',
+  { timeout: 20000 },
+  async (t) => {
+    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-website-native-'));
+    t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
+    for (const directory of ['src', 'tokens', 'website']) {
+      fs.cpSync(path.join(root, directory), path.join(cwd, directory), {
+        recursive: true,
+        filter: (source) =>
+          !source
+            .split(path.sep)
+            .some((part) => part === '_site' || part === '.test-output'),
+      });
     }
-    await until(() => log.includes('Watching'));
-    const loader = path.join(cwd, 'src/load-tokens.ts');
-    fs.writeFileSync(loader, fs.readFileSync(loader, 'utf8').replace(
-      "description: node.$description || ''",
-      "description: 'Native TypeScript reload verified'",
-    ));
-    const page = path.join(cwd, 'website/_site/tokens/color-text/index.html');
-    await until(() => fs.existsSync(page) && fs.readFileSync(page, 'utf8').includes(
-      'Native TypeScript reload verified',
-    ));
-    assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
-    assert.doesNotMatch(log, /problem was encountered looking for JavaScript dependencies/);
-  } finally {
-    child.kill('SIGTERM');
-    await closed;
-  }
-});
+    fs.copyFileSync(
+      path.join(root, 'postcss.config.js'),
+      path.join(cwd, 'postcss.config.js'),
+    );
+    fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
+    fs.symlinkSync(
+      path.join(root, 'node_modules'),
+      path.join(cwd, 'node_modules'),
+      'dir',
+    );
+    const child = spawn(
+      process.execPath,
+      [
+        path.resolve(
+          path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
+          '../cmd.cjs',
+        ),
+        '--config=website/eleventy.config.js',
+        '--watch',
+      ],
+      { cwd, stdio: ['ignore', 'pipe', 'pipe'] },
+    );
+    let log = '';
+    child.stdout.on('data', (data) => {
+      log += data;
+    });
+    child.stderr.on('data', (data) => {
+      log += data;
+    });
+    let error;
+    child.on('error', (cause) => {
+      error = cause;
+    });
+    const closed = new Promise((resolve) => child.once('close', resolve));
+    try {
+      async function until(predicate) {
+        const deadline = Date.now() + 7000;
+        while (!predicate()) {
+          assert.equal(error, undefined);
+          assert.equal(child.exitCode, null, log);
+          assert.ok(Date.now() < deadline, log);
+          await delay(50);
+        }
+      }
+      await until(() => log.includes('Watching'));
+      const loader = path.join(cwd, 'src/load-tokens.ts');
+      fs.writeFileSync(
+        loader,
+        fs
+          .readFileSync(loader, 'utf8')
+          .replace(
+            "description: node.$description || ''",
+            "description: 'Native TypeScript reload verified'",
+          ),
+      );
+      const page = path.join(cwd, 'website/_site/tokens/color-text/index.html');
+      await until(
+        () =>
+          fs.existsSync(page) &&
+          fs
+            .readFileSync(page, 'utf8')
+            .includes('Native TypeScript reload verified'),
+      );
+      assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
+      assert.doesNotMatch(
+        log,
+        /problem was encountered looking for JavaScript dependencies/,
+      );
+    } finally {
+      child.kill('SIGTERM');
+      await closed;
+    }
+  },
+);
 
 for (const prefix of ['/', '/argot/']) {
   test(`build at ${prefix} contains all tokens and working internal links`, async (t) => {

@@ -1,9 +1,8 @@
 # Argot
 
-A standardized set of **semantic design token names**, plus headless
-**primitive color palette generation**, packaged for modern CSS projects.
-Use either independently, or generate a palette and map semantic properties
-to it.
+A standardized set of **semantic design token names**, plus headless **primitive
+color palette generation**, packaged for modern CSS projects. Use either
+independently, or generate a palette and map semantic properties to it.
 
 See the [public API and CLI reference](./docs/api.md) for package imports,
 portable definitions, options, return values, and file-writing behavior.
@@ -26,17 +25,17 @@ The expectation here is for CSS custom properties to
 3. **Module** — variables scoped to a single component
 
 The semantic layer provides a carefully chosen set of names that could cover
-most of what most projects need, with only the _values_ changing per design.
-The palette engine supplies primitive color scales from numeric OKLCH seeds.
+most of what most projects need, with only the _values_ changing per design. The
+palette engine supplies primitive color scales from numeric OKLCH seeds.
 Scaffold generation and CSS processing are planned, not currently shipped.
 
 ## What’s in this repo
 
-| Path                       | Purpose                                                                                          |
-| -------------------------- | ------------------------------------------------------------------------------------------------ |
-| [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
-| [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                  |
-| [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
+| Path                       | Purpose                                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------------------------- |
+| [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended   |
+| [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                    |
+| [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                          |
 | [`docs/`](./docs/)         | [Public API](./docs/api.md) and planning notes, including [product scope](./docs/product-scope.md) |
 
 Tokens are grouped for backgrounds, text, brand/accent, status, typography,

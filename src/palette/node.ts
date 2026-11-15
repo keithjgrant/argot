@@ -2,7 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { normalizePaletteDefinition } from './definition.ts';
 import { generatePaletteCss } from './render.ts';
-import type { NormalizedPaletteDefinition, PaletteDefinition } from './types.ts';
+import type {
+  NormalizedPaletteDefinition,
+  PaletteDefinition,
+} from './types.ts';
 
 export interface WritePaletteOptions {
   force?: boolean;

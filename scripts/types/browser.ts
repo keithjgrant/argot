@@ -19,7 +19,8 @@ const serialized: string = serializePaletteDefinition(definition);
 const roundTrip = normalizePaletteDefinition(JSON.parse(serialized) as unknown);
 const regenerated: string = generatePaletteCss(roundTrip);
 const fromCss: PaletteDefinition = {
-  version: 1, colors: [{ name: 'imported', ...parseCssColor('#663399') }],
+  version: 1,
+  colors: [{ name: 'imported', ...parseCssColor('#663399') }],
 };
 
 // @ts-expect-error The browser entrypoint must not introduce ambient Node types.

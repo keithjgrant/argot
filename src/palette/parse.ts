@@ -22,7 +22,12 @@ function parseCssColor(value: string): OklchColor {
   let [l, c, h] = color.coords;
   // Conversions of white can be a fraction above 1 due to floating-point error.
   // This tolerance belongs to CSS conversion, not numeric definition validation.
-  if (typeof l !== 'number' || !Number.isFinite(l) || l < -1e-12 || l > 1 + 1e-12) {
+  if (
+    typeof l !== 'number' ||
+    !Number.isFinite(l) ||
+    l < -1e-12 ||
+    l > 1 + 1e-12
+  ) {
     throw new Error('color.l: expected finite lightness between 0 and 1');
   }
   l = Math.min(1, Math.max(0, l));

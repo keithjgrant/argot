@@ -29,7 +29,10 @@ function getTokenIndex(options: TokenOptions = { extended: true }) {
  * True when a custom-property name (without leading --) sits in an Argot
  * namespace prefix (e.g. text-*, bg-*, space-*), whether or not it is known.
  */
-function looksLikeArgotToken(name: string, prefixes: readonly string[]): boolean {
+function looksLikeArgotToken(
+  name: string,
+  prefixes: readonly string[],
+): boolean {
   return prefixes.some(
     (prefix) => name === prefix || name.startsWith(`${prefix}-`),
   );
