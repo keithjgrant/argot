@@ -30,7 +30,7 @@ changing per design.
 | Path                       | Purpose                                                                                          |
 | -------------------------- | ------------------------------------------------------------------------------------------------ |
 | [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
-| [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                 |
+| [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                  |
 | [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
 | [`docs/`](./docs/)         | Planning notes, including [product scope](./docs/product-scope.md)                               |
 
@@ -100,14 +100,13 @@ model. Each color has a required name and `l`, `c`, `h`:
 - `h`: a finite hue angle in degrees, including for neutral colors.
 
 Coordinates are retained as supplied, without hue wrapping, chroma thresholding,
-or rounding. Gamut mapping and final precision limiting happen during CSS output.
+or rounding. Gamut mapping and final precision limiting happen during CSS
+output.
 
 ```json
 {
   "version": 1,
-  "colors": [
-    { "name": "brand", "l": 0.6, "c": 0.2, "h": 250 }
-  ],
+  "colors": [{ "name": "brand", "l": 0.6, "c": 0.2, "h": 250 }],
   "options": {
     "lightnessCurve": "inclusive",
     "chromaCurve": "weighted"
@@ -117,8 +116,8 @@ or rounding. Gamut mapping and final precision limiting happen during CSS output
 
 In a checkout, try
 `npm run dev -- palette scripts/fixtures/palette.json ./primitives.css` using
-the [sample definition](./scripts/fixtures/palette.json). Existing output requires
-`--force` to replace; `--dry-run` validates without writing.
+the [sample definition](./scripts/fixtures/palette.json). Existing output
+requires `--force` to replace; `--dry-run` validates without writing.
 
 The browser-safe `@keithjgrant/argot/palette` entrypoint exports
 `PaletteColorDefinition`, `OklchColor`, `PaletteDefinition`, and the generation
@@ -131,8 +130,8 @@ inputs rather than converting them to CSS and reparsing them.
 ## Development
 
 Library source lives in `src/*.ts` and `src/` subdirectories. Node 22.18+
-executes this source natively by stripping types; it does not check types.
-Use `.ts` extensions for relative source imports, `import type` for type-only
+executes this source natively by stripping types; it does not check types. Use
+`.ts` extensions for relative source imports, `import type` for type-only
 imports, and erasable syntax (no runtime enums or parameter properties).
 
 - `npm run dev -- help` — run the CLI from TypeScript source, without a build.
@@ -154,9 +153,9 @@ imports, and erasable syntax (no runtime enums or parameter properties).
 `npm pack` and publishing run the build automatically through `prepack`.
 Published exports and `bin/argot.js` use `dist/`; run the build before invoking
 that executable directly from a checkout. For normal development use
-`npm run dev -- ...` instead. Tests and website files remain JavaScript.
-The `./palette` entrypoint is browser-safe and exports its public types;
-filesystem adapters live separately at `./palette/node`.
+`npm run dev -- ...` instead. Tests and website files remain JavaScript. The
+`./palette` entrypoint is browser-safe and exports its public types; filesystem
+adapters live separately at `./palette/node`.
 
 ## Documentation website
 

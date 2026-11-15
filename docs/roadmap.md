@@ -21,8 +21,9 @@ format options. Cover extreme lightness, achromatic inputs, gamut handling, and
 deterministic output with tests.
 
 Preserve Theme Machine's existing curve calculations and verify them against
-a checked-in reference. The approved precision change is to avoid intermediate
-rounding and round only at final CSS output; do not retune the curves.
+checked-in golden data captured from the original source, not a duplicate
+implementation. The approved precision change is to avoid intermediate rounding
+and round only at final CSS output; do not retune the curves.
 
 Establish a small, versioned palette-definition contract with validation and
 file-based loading. Keep it independent of Theme Machine's browser state; adding

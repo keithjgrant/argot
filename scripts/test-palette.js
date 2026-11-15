@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import Color from 'colorjs.io';
+import postcss from 'postcss';
 import { fileURLToPath } from 'node:url';
 import { loadPaletteDefinition } from '@keithjgrant/argot/palette/node';
 import {
@@ -11,7 +12,7 @@ import {
   renderPaletteCss,
   serializePaletteDefinition,
 } from '@keithjgrant/argot/palette';
-import { referencePalette } from './fixtures/theme-machine-curves.js';
+import golden from './fixtures/palette-golden.json' with { type: 'json' };
 
 function definition(seed, options) {
   return {
@@ -20,21 +21,6 @@ function definition(seed, options) {
     options,
   };
 }
-
-const seeds = [
-  { l: 0.6, c: 0.2, h: 250 },
-  { l: 0.84, c: 0.12, h: 70 },
-  { l: 0.3, c: 0.03, h: 130 },
-  { l: 0.71, c: 0.04, h: 0 },
-  { l: 0.71, c: 0.039999, h: 180 },
-  { l: 0.99, c: 0.01, h: 20 },
-  { l: 0.01, c: 0.01, h: 310 },
-  { l: 0, c: 0.01, h: 20 },
-  { l: 1, c: 0.01, h: 20 },
-  { l: (0.66 + 0.58) / 2, c: 0.123456789, h: 123.456789 },
-  { l: 0.623456789123, c: 1e-14, h: -12.3456789123 },
-  { l: 0.623456789123, c: 0.123456789123, h: 721.23456789123 },
-];
 
 test('sample JSON loads numeric seeds directly and generates primitive CSS', () => {
   const input = loadPaletteDefinition(
@@ -48,27 +34,99 @@ test('sample JSON loads numeric seeds directly and generates primitive CSS', () 
   assert.match(generatePaletteCss(input), /--brand-16:/);
 });
 
-for (const lightnessCurve of ['uniform', 'inclusive', 'centered']) {
-  for (const chromaCurve of ['centered', 'weighted']) {
-    test(`${lightnessCurve}/${chromaCurve} matches Theme Machine calculations without intermediate rounding`, () => {
-      const options = { lightnessCurve, chromaCurve };
-      for (const seed of seeds) {
-        const [expected, index] = referencePalette(seed, options);
-        const actual = generatePalette(definition(seed, options)).colors[0];
-        assert.equal(actual.baseStep, index + 1);
-        assert.equal(actual.steps.length, 16);
-        actual.steps.forEach(({ step, l, c, h }, i) => {
-          assert.equal(step, i + 1);
-          for (const [key, value] of Object.entries({ l, c, h })) {
-            assert.ok(
-              Math.abs(value - expected[i][key]) < 1e-12,
-              `${JSON.stringify(seed)} step ${step} ${key}: ${value} != ${expected[i][key]}`,
-            );
-          }
-        });
-      }
-    });
+test('golden baseline covers every curve combination with complete fixed expectations', () => {
+  assert.equal(golden.schemaVersion, 1);
+  assert.equal(golden.cases.length, 96);
+  assert.equal(new Set(golden.cases.map(({ id }) => id)).size, 96);
+  const seeds = new Map();
+  for (const entry of golden.cases) {
+    const key = JSON.stringify(entry.seed);
+    if (!seeds.has(key)) seeds.set(key, new Set());
+    const combination = `${entry.options.lightnessCurve}/${entry.options.chromaCurve}`;
+    assert.ok(!seeds.get(key).has(combination), entry.id);
+    seeds.get(key).add(combination);
+    if (entry.expectedError) {
+      assert.equal(entry.expected, undefined);
+      assert.equal(entry.seed.c, 0);
+      assert.equal(combination, 'centered/weighted');
+      continue;
+    }
+    const expected = entry.expected;
+    assert.ok(expected.baseStep >= 1 && expected.baseStep <= 16);
+    for (const coordinates of [expected.lightness, expected.chroma]) {
+      assert.equal(coordinates.length, 16);
+      assert.ok(coordinates.every(Number.isFinite));
+    }
+    assert.equal(expected.hue, entry.seed.h);
+    for (const format of ['oklch', 'hex']) {
+      assert.equal(expected.css[format].length, 16);
+      assert.ok(
+        expected.css[format].every((value) => typeof value === 'string'),
+      );
+    }
   }
+  assert.equal(seeds.size, 16);
+  const combinations = [
+    'uniform/centered',
+    'uniform/weighted',
+    'inclusive/centered',
+    'inclusive/weighted',
+    'centered/centered',
+    'centered/weighted',
+  ].sort();
+  for (const actual of seeds.values())
+    assert.deepEqual([...actual].sort(), combinations);
+  assert.equal(
+    golden.cases.filter(({ expectedError }) => expectedError).length,
+    1,
+  );
+});
+
+// These values were captured from the verified original source, not calculated
+// by a second implementation during tests. Updating them requires review.
+for (const { id, seed, options, expected, expectedError } of golden.cases) {
+  test(`golden palette: ${id}`, () => {
+    const input = definition(seed, options);
+    if (expectedError) {
+      assert.throws(() => generatePalette(input), new RegExp(expectedError));
+      assert.throws(() => generatePaletteCss(input), new RegExp(expectedError));
+      return;
+    }
+    const actual = generatePalette(input).colors[0];
+    assert.deepEqual(actual, {
+      name: 'brand',
+      baseStep: expected.baseStep,
+      steps: expected.lightness.map((l, index) => ({
+        step: index + 1,
+        l,
+        c: expected.chroma[index],
+        h: expected.hue,
+      })),
+    });
+    for (const [format, gamut] of [
+      ['oklch', 'p3'],
+      ['hex', 'srgb'],
+    ]) {
+      const css = generatePaletteCss(
+        definition(seed, { ...options, format, gamut }),
+      );
+      const declarations = [];
+      postcss.parse(css).walkDecls(({ prop, value }) => {
+        declarations.push([prop, value]);
+      });
+      assert.deepEqual(
+        declarations,
+        [
+          ...expected.css[format].map((value, index) => [
+            `--brand-${index + 1}`,
+            value,
+          ]),
+          ['--brand', `var(--brand-${expected.baseStep})`],
+        ],
+        `${id}: ${format}/${gamut} CSS declarations`,
+      );
+    }
+  });
 }
 
 test('centered/weighted retains the weighted peak at the original nearest step', () => {
@@ -305,8 +363,6 @@ test('neutral calculations are preserved wherever the original multiplier is def
       const options = { lightnessCurve, chromaCurve };
       const input = definition(seed, options);
       if (lightnessCurve === 'centered' && chromaCurve === 'weighted') {
-        const [reference] = referencePalette(seed, options);
-        assert.ok(reference.every(({ c }) => Number.isNaN(c)));
         assert.throws(
           () => generatePalette(input),
           /undefined chroma multiplier/,
