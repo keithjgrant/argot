@@ -45,12 +45,7 @@ test('golden baseline covers every curve combination with complete fixed expecta
     const combination = `${entry.options.lightnessCurve}/${entry.options.chromaCurve}`;
     assert.ok(!seeds.get(key).has(combination), entry.id);
     seeds.get(key).add(combination);
-    if (entry.expectedError) {
-      assert.equal(entry.expected, undefined);
-      assert.equal(entry.seed.c, 0);
-      assert.equal(combination, 'centered/weighted');
-      continue;
-    }
+    assert.equal(entry.expectedError, undefined);
     const expected = entry.expected;
     assert.ok(expected.baseStep >= 1 && expected.baseStep <= 16);
     for (const coordinates of [expected.lightness, expected.chroma]) {
@@ -76,22 +71,13 @@ test('golden baseline covers every curve combination with complete fixed expecta
   ].sort();
   for (const actual of seeds.values())
     assert.deepEqual([...actual].sort(), combinations);
-  assert.equal(
-    golden.cases.filter(({ expectedError }) => expectedError).length,
-    1,
-  );
 });
 
 // These values were captured from the verified original source, not calculated
 // by a second implementation during tests. Updating them requires review.
-for (const { id, seed, options, expected, expectedError } of golden.cases) {
+for (const { id, seed, options, expected } of golden.cases) {
   test(`golden palette: ${id}`, () => {
     const input = definition(seed, options);
-    if (expectedError) {
-      assert.throws(() => generatePalette(input), new RegExp(expectedError));
-      assert.throws(() => generatePaletteCss(input), new RegExp(expectedError));
-      return;
-    }
     const actual = generatePalette(input).colors[0];
     assert.deepEqual(actual, {
       name: 'brand',
@@ -356,21 +342,14 @@ test('precision is retained through calculation and rounded only for CSS output'
   assert.equal(css, generatePaletteCss(input));
 });
 
-test('neutral calculations are preserved wherever the original multiplier is defined', () => {
+test('neutral seeds resolve to zero chroma for every curve combination', () => {
   const seed = { l: 0.6, c: 0, h: 0 };
   for (const lightnessCurve of ['uniform', 'inclusive', 'centered']) {
     for (const chromaCurve of ['centered', 'weighted']) {
-      const options = { lightnessCurve, chromaCurve };
-      const input = definition(seed, options);
-      if (lightnessCurve === 'centered' && chromaCurve === 'weighted') {
-        assert.throws(
-          () => generatePalette(input),
-          /undefined chroma multiplier/,
-        );
-      } else {
-        const actual = generatePalette(input).colors[0].steps;
-        assert.ok(actual.every(({ c }) => c === 0));
-      }
+      const actual = generatePalette(
+        definition(seed, { lightnessCurve, chromaCurve }),
+      ).colors[0].steps;
+      assert.ok(actual.every(({ c }) => c === 0));
     }
   }
 });

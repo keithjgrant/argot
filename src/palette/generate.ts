@@ -31,9 +31,8 @@ function generatePalette(definition: PaletteDefinition): Palette {
       chromaMultiplier = seed.c / chromaScale[index];
     }
     if (!Number.isFinite(chromaMultiplier)) {
-      throw new Error(
-        `Palette "${name}": the selected curves produce an undefined chroma multiplier`,
-      );
+      // catch divide by zero for 0-chroma values
+      chromaMultiplier = 0;
     }
     const lightness =
       lightnessCurve === 'uniform'

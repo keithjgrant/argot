@@ -92,11 +92,11 @@ Example shape:
 
 ## Primitive palette definitions
 
-Palette inputs use numeric OKLCH coordinates, matching Theme Machine's data
-model. Each color has a required name and `l`, `c`, `h`:
+Palette inputs use numeric OKLCH coordinates. Each color has a required name and
+`l`, `c`, `h`:
 
-- `l`: finite lightness from 0 through 1, not 0 through 100.
-- `c`: finite, nonnegative chroma.
+- `l`: finite lightness from 0 through 1 (not 0 through 100).
+- `c`: finite, nonnegative chroma (0.0 through 0.42 for reasonable range).
 - `h`: a finite hue angle in degrees, including for neutral colors.
 
 Coordinates are retained as supplied, without hue wrapping, chroma thresholding,
