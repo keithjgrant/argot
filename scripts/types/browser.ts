@@ -23,5 +23,6 @@ const fromCss: PaletteDefinition = {
   colors: [{ name: 'imported', ...parseCssColor('#663399') }],
 };
 
+// @ts-expect-error Node globals must not be available to browser consumers.
 const nodeProcess = process;
 void [css, regenerated, fromCss, nodeProcess];

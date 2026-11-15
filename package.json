@@ -91,7 +91,7 @@
     "prettier": "^3.10.1",
     "stylelint": "^16.0.0",
     "stylelint-config-recommended": "^16.0.0",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "colorjs.io": "0.7.1"

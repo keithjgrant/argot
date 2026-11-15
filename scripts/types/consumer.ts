@@ -94,19 +94,19 @@ const lintPlugins: Plugin[] = plugins;
 
 // @ts-expect-error Curve options must be one of the supported named values.
 const invalidOptions: PaletteOptions = { lightnessCurve: 'custom' };
-// @ts-expect-error Seed coordinates must be numbers.
 const invalidSeed: PaletteDefinition = {
   version: 1,
+  // @ts-expect-error Seed coordinates must be numbers.
   colors: [{ name: 'x', l: '60%', c: 0.2, h: 250 }],
 };
-// @ts-expect-error CSS strings are not canonical palette definitions.
 const invalidCssSeed: PaletteDefinition = {
   version: 1,
+  // @ts-expect-error CSS strings are not canonical palette definitions.
   colors: [{ name: 'x', color: '#663399' }],
 };
-// @ts-expect-error All three coordinates are required, including hue for neutrals.
 const missingCoordinate: PaletteDefinition = {
   version: 1,
+  // @ts-expect-error All three coordinates are required, including hue for neutrals.
   colors: [{ name: 'x', l: 0.6, c: 0 }],
 };
 // @ts-expect-error CSS parsing takes a string.
