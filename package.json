@@ -1,7 +1,7 @@
 {
   "name": "@keithjgrant/argot",
   "version": "0.0.1",
-  "description": "Semantic CSS custom property names, template generation, and Stylelint rules",
+  "description": "Primitive palette generation, semantic CSS custom property names, and optional Stylelint integration",
   "license": "MIT",
   "author": "Keith J. Grant",
   "repository": {
@@ -24,6 +24,7 @@
   "files": [
     "bin",
     "dist",
+    "docs/api.md",
     "tokens",
     "templates"
   ],
@@ -63,7 +64,7 @@
     "prettier": "prettier --check . --ignore-unknown",
     "prettier:fix": "prettier --write . --ignore-unknown",
     "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
-    "test": "node scripts/test-stylelint.js && node --test scripts/test-modules.js scripts/test-palette.js && npm run test:package",
+    "test": "node scripts/test-stylelint.js && node --test scripts/test-modules.js scripts/test-palette.js scripts/test-palette-io.js && npm run test:package",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",
     "prewebsite:build": "npm run website:lint",
     "website:build": "eleventy --config=website/eleventy.config.js",

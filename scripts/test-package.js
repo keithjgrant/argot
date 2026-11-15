@@ -35,6 +35,8 @@ test('packed package runs as JavaScript and exposes standalone declarations', ()
     assert.ok(files.includes('dist/load-tokens.js'));
     assert.ok(files.includes('tokens/color-text.json'));
     assert.ok(files.includes('templates/semantics.css'));
+    assert.ok(files.includes('docs/api.md'));
+    assert.deepEqual(files.filter((file) => file.startsWith('docs/')), ['docs/api.md']);
     assert.ok(files.every((file) => !file.startsWith('src/') && !file.startsWith('website/')));
     assert.ok(files.every((file) => !file.endsWith('.ts') || file.endsWith('.d.ts')));
     const installed = path.join(cwd, 'node_modules/@keithjgrant/argot');
@@ -44,6 +46,16 @@ test('packed package runs as JavaScript and exposes standalone declarations', ()
       '-C', installed, '--strip-components=1',
     ]);
     fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
+    const apiReference = fs.readFileSync(path.join(installed, 'docs/api.md'), 'utf8');
+    for (const entrypoint of [
+      '@keithjgrant/argot/palette',
+      '@keithjgrant/argot/palette/node',
+      '@keithjgrant/argot/generate',
+      '@keithjgrant/argot/stylelint',
+      '@keithjgrant/argot/stylelint/config',
+    ]) {
+      assert.ok(apiReference.includes(entrypoint), `Missing API reference: ${entrypoint}`);
+    }
     for (const dependency of ['colorjs.io', 'stylelint', '@types']) {
       linkDependency(cwd, dependency);
     }

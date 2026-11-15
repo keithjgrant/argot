@@ -13,9 +13,9 @@
       "Passed evaluated coordinates to Color via its numeric constructor, bypassing the old CSS parser for scientific notation.",
       "Recorded raw coordinates before gamut mapping; changed final OKLCH serialization precision from 3 to 6.",
       "Expanded shorthand hex to six digits without changing the color.",
-      "Recorded the original nonfinite zero-chroma centered/weighted case as an explicit expected Argot error."
+      "The original zero-chroma centered/weighted case was nonfinite. Its golden entry was subsequently reviewed and updated to zero-chroma output to lock in Argot's explicit divide-by-zero fix, not claimed as original-source parity."
     ],
-    "verification": "Original-source baseline checked against Argot: raw coordinates exact and final colors equal for the aligned rounding policy. Golden entries independently checked before writing.",
+    "verification": "Defined original-source cases were checked against Argot: raw coordinates exact and final colors equal for the aligned rounding policy. The zero-chroma centered/weighted entry instead records the subsequently reviewed Argot fix described above.",
     "policy": "Frozen migration expectations. Do not regenerate from Argot to make tests pass; changes require deliberate review."
   },
   "cases": [

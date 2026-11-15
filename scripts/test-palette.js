@@ -139,6 +139,34 @@ test('centered mode preserves fixed endpoints even outside the usual lightness r
   }
 });
 
+test('all supported format/gamut combinations render in gamut without changing raw steps', () => {
+  const seed = { l: 0.65, c: 0.4, h: 30 };
+  const baseline = generatePalette(definition(seed));
+  const rendered = new Map();
+  for (const [format, gamut] of [
+    ['oklch', 'p3'],
+    ['oklch', 'srgb'],
+    ['hex', 'srgb'],
+  ]) {
+    const input = definition(seed, { format, gamut });
+    const palette = generatePalette(input);
+    assert.deepEqual(palette.colors, baseline.colors);
+    const css = renderPaletteCss(palette);
+    rendered.set(`${format}/${gamut}`, css);
+    assert.equal(css, generatePaletteCss(input));
+    let steps = 0;
+    postcss.parse(css).walkDecls(({ value }) => {
+      if (value.startsWith('var(')) return;
+      steps++;
+      assert.ok(new Color(value).inGamut(gamut, { epsilon: 0.0001 }), value);
+      if (format === 'hex') assert.match(value, /^#[0-9a-f]{6}$/i);
+      else assert.match(value, /^oklch\(/);
+    });
+    assert.equal(steps, 16);
+  }
+  assert.notEqual(rendered.get('oklch/p3'), rendered.get('oklch/srgb'));
+});
+
 test('numeric definitions preserve precision, tiny chroma and unwrapped hue without mutation', () => {
   const seed = Object.freeze({
     l: 0.6234567891234567,

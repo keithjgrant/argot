@@ -12,6 +12,13 @@ phase. Bring relevant website work forward if publication becomes a priority.
 
 ## Phase 1: Headless palette generation
 
+**Status: complete.** The package ships headless palette generation, validated
+portable definitions, JSON handoff, and independent CLI/Node file adapters.
+Golden curve/output fixtures, file/CLI safety tests, and packed JavaScript/type
+consumer checks cover the public interface. The [API reference](./api.md) is
+included in the npm package. Theme Machine UI integration and website content
+alignment remain later work.
+
 **Deliverable:** Generate primitive CSS properties from named seed colors,
 independently of scaffolding or builds.
 

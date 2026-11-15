@@ -1,8 +1,12 @@
 # Argot
 
-A standardized set of **semantic design token names**, packaged as CSS custom
-properties. These are designed to provide a common foundation, a shared
-dictionary that can be used as a starting point for any CSS project.
+A standardized set of **semantic design token names**, plus headless
+**primitive color palette generation**, packaged for modern CSS projects.
+Use either independently, or generate a palette and map semantic properties
+to it.
+
+See the [public API and CLI reference](./docs/api.md) for package imports,
+portable definitions, options, return values, and file-writing behavior.
 
 Argot is ready for beta use. The token set is deliberately defined; real-world
 adoption will help prove it out and refine it. Names may change during beta.
@@ -21,9 +25,10 @@ The expectation here is for CSS custom properties to
    intent
 3. **Module** — variables scoped to a single component
 
-This project focuses on the **semantic** layer: a carefully chosen set of names
-that could cover most of what most projects need, with only the _values_
-changing per design.
+The semantic layer provides a carefully chosen set of names that could cover
+most of what most projects need, with only the _values_ changing per design.
+The palette engine supplies primitive color scales from numeric OKLCH seeds.
+Scaffold generation and CSS processing are planned, not currently shipped.
 
 ## What’s in this repo
 
@@ -32,7 +37,7 @@ changing per design.
 | [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
 | [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                  |
 | [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
-| [`docs/`](./docs/)         | Planning notes, including [product scope](./docs/product-scope.md)                               |
+| [`docs/`](./docs/)         | [Public API](./docs/api.md) and planning notes, including [product scope](./docs/product-scope.md) |
 
 Tokens are grouped for backgrounds, text, brand/accent, status, typography,
 spacing, borders, shadow, focus, motion, layout, and charts. Tokens are marked
