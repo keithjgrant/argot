@@ -61,6 +61,7 @@
     "test:package": "node --test scripts/test-package.js",
     "pretest": "npm run build && npm run test:types",
     "prepack": "npm run build",
+    "eslint": "eslint .",
     "prettier": "prettier --check . --ignore-unknown",
     "prettier:fix": "prettier --write . --ignore-unknown",
     "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
@@ -84,14 +85,17 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.8",
+    "@eslint/js": "^10.0.1",
     "@jgarber/eleventy-plugin-postcss": "^3.0.1",
     "@types/node": "^22.20.5",
+    "eslint": "^10.15.0",
     "postcss": "^8.5.32",
     "postcss-import": "^17.0.1",
     "prettier": "^3.10.1",
     "stylelint": "^16.0.0",
     "stylelint-config-recommended": "^16.0.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2"
   },
   "dependencies": {
     "colorjs.io": "0.7.1"

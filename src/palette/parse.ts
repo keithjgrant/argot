@@ -19,7 +19,8 @@ function parseCssColor(value: string): OklchColor {
   if (color.alpha !== 1) {
     throw new Error('color: expected an opaque color (alpha must be 1)');
   }
-  let [l, c, h] = color.coords;
+  const [l, c, h] = color.coords;
+
   // Conversions of white can be a fraction above 1 due to floating-point error.
   // This tolerance belongs to CSS conversion, not numeric definition validation.
   if (
@@ -30,12 +31,14 @@ function parseCssColor(value: string): OklchColor {
   ) {
     throw new Error('color.l: expected finite lightness between 0 and 1');
   }
-  l = Math.min(1, Math.max(0, l));
+  const newL = Math.min(1, Math.max(0, l));
+
+  let newH = h;
   // Achromatic CSS colors may have no hue; supply a numeric angle for handoff.
   if (c === 0 && (h === null || Number.isNaN(h))) {
-    h = 0;
+    newH = 0;
   }
-  const coordinates = { l, c, h };
+  const coordinates = { l: newL, c, h: newH };
   checkCoordinates(coordinates, 'color');
   return coordinates;
 }

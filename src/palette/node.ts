@@ -27,6 +27,7 @@ function loadPaletteDefinition(filename: string): NormalizedPaletteDefinition {
   } catch (error) {
     throw new Error(
       `Cannot read palette definition "${resolved}": ${(error as NodeJS.ErrnoException).code}`,
+      { cause: error },
     );
   }
   let definition: unknown;
@@ -40,6 +41,7 @@ function loadPaletteDefinition(filename: string): NormalizedPaletteDefinition {
   } catch (error) {
     throw new Error(
       `Invalid palette definition "${resolved}": ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error },
     );
   }
 }
