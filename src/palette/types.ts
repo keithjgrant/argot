@@ -53,6 +53,6 @@ export interface PaletteColor {
 /** Raw OKLCH coordinates, before output gamut mapping or rounding. */
 export interface Palette {
   version: 1;
-  options: NormalizedPaletteOptions;
   colors: PaletteColor[];
+  options: NormalizedPaletteOptions;
 }
