@@ -1,11 +1,33 @@
 # Argot public API
 
-This reference describes the currently implemented npm package, not planned
-scaffolding or PostCSS processing features.
+The API is still in development and likely to change, prior to first published
+version.
 
 Node.js 22.18 or newer is required for the CLI and Node APIs. The package is
 native ESM with compiled JavaScript and TypeScript declarations. No TypeScript
 compiler is needed to consume it.
+
+All functions below are synchronous and throw on failure. Palette validation
+errors identify the invalid field. Error messages are human-readable; no
+machine-readable error-code API is currently provided. Unless noted, APIs do not
+mutate inputs or write files.
+
+## Typical workflows
+
+**Primitive palette**
+
+1. Build or load a palette seed definition (JSON or in memory).
+2. Use `generatePalette()` to produce structured color shades for each seed in
+   the palette, or `generatePaletteCss()` / `renderPaletteCss()` to generate CSS
+   custom properties.
+3. In Node, `writePalette()` or `argot palette` writes the CSS file.
+
+**Semantic templates**
+
+1. `argot generate` or `writeTemplate()` emits a semantic custom properties
+   template stylesheet.
+2. Use the palette primitives to assign values to semantic properties in the
+   stylesheet.
 
 ## Entrypoints
 
@@ -14,6 +36,7 @@ compiler is needed to consume it.
 - `@keithjgrant/argot/palette/node`: synchronous definition-file loading and CSS
   file writing. Node only.
 - `@keithjgrant/argot/generate`: semantic CSS template generation. Node only.
+  Same behavior as [`argot generate`](#semantic-templates).
 - `@keithjgrant/argot/stylelint`: optional Stylelint plugin array.
 - `@keithjgrant/argot/stylelint/config`: optional shareable Stylelint config.
 - `@keithjgrant/argot/tokens/*`: packaged DTCG-shaped JSON files.
@@ -26,13 +49,10 @@ than internal `src/` or `dist/` paths. Browser-safe means the palette entrypoint
 does not require Node built-ins or browser globals; use a bundler or other
 package-resolution setup to import the npm package in a browser.
 
-All functions below are synchronous and throw on failure. Palette validation
-errors identify the invalid field. Error messages are human-readable; no
-machine-readable error-code API is currently provided.
-
 ## Palette definitions
 
-The canonical interchange format is numeric OKLCH JSON:
+To generate a color palette, provide a PaletteDefinition with "seed" colors
+defined using numeric OKLCH values in this format:
 
 ```json
 {
@@ -57,49 +77,53 @@ requires:
   `blue` or `brand-primary`. Do not include the leading `--`.
 - `l`: finite lightness from 0 through 1, not a percentage from 0 through 100.
 - `c`: finite, nonnegative chroma. There is no enforced upper bound; practical
-  displayable values depend on lightness, hue, and output gamut.
+  displayable values depend on lightness, hue, and output gamut (typically below
+  0.5).
 - `h`: a finite hue angle in degrees, including for neutral colors. Values are
   not wrapped, so negative angles and angles above 360 are retained.
 
 Unknown fields and unsupported versions are rejected, not silently ignored.
-Names must not collide with any other emitted property, including step names:
-`blue` and `blue-1` cannot both be palette names. Coordinates are not coerced
-from strings, clamped, rounded, or thresholded during definition validation.
-Definitions contain no alpha, CSS strings, browser state, or filesystem paths.
+Coordinates are not coerced from strings, clamped, rounded, or thresholded
+during definition validation. Definitions contain no alpha, CSS strings, browser
+state, or filesystem paths.
+
+Each color emits `--name`, `--name-1` … `--name-16`. Names must not collide with
+any of those properties for any color in the definition. For example, `blue` and
+`blue-1` cannot both be color names, because `blue` already reserves `--blue-1`.
 
 ### Options and defaults
 
 All options are optional:
 
-- `lightnessCurve`: `'uniform'` (default), `'inclusive'`, or `'centered'`.
-- `chromaCurve`: `'centered'` (default) or `'weighted'`.
-- `format`: `'oklch'` (default) or `'hex'`.
-- `gamut`: `'p3'` by default for OKLCH, or `'srgb'` by default for hex.
+| Option           | Values                                   | Default                            |
+| ---------------- | ---------------------------------------- | ---------------------------------- |
+| `lightnessCurve` | `'uniform'`, `'inclusive'`, `'centered'` | `'uniform'`                        |
+| `chromaCurve`    | `'centered'`, `'weighted'`               | `'centered'`                       |
+| `format`         | `'oklch'`, `'hex'`                       | `'oklch'`                          |
+| `gamut`          | `'p3'`, `'srgb'`                         | `'p3'` for OKLCH; `'srgb'` for hex |
 
-OKLCH supports either gamut. Hex requires sRGB; explicitly combining
-`format: 'hex'` with `gamut: 'p3'` throws. A color's input space does not select
-its output gamut.
+OKLCH supports either gamut. Hex requires sRGB; `format: 'hex'` with
+`gamut: 'p3'` throws. A color's input space does not select its output gamut.
 
-Every palette has 16 steps from generally light to dark:
+### How scales are built
 
-- **Uniform lightness** uses the same fixed lightness scale for every seed. The
-  base alias uses the step nearest to the seed's lightness; it need not
-  reproduce the seed exactly.
-- **Inclusive lightness** interpolates around that nearest step to include the
-  seed's lightness.
-- **Centered lightness** puts the seed's lightness at step 9.
-- **Centered chroma** uses the fixed weighted profile, rescaled for the seed.
-- **Weighted chroma** builds a profile around the seed's nearest-lightness step.
-  With centered lightness, that existing profile is rescaled at step 9, not
-  rebuilt around it; the highest chroma can occur at another step.
+Argot generates palettes with 16 shades from light to dark for each seed color
+you provide. Shades are numbered from 1 through 16. The exact shades produced
+are shaped by a lightness curve and a chroma curve, as specified in `options`:
 
-Inclusive/centered lightness retain fixed endpoints of 0.98 and 0.1 on the
-interpolated sides. Seeds outside that range can produce non-monotonic sections.
-Zero-chroma seeds produce zero chroma for every curve combination, including the
-centered/weighted combination that was undefined in the original Theme Machine.
+| Lightness curve | Behavior                                                                                                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Uniform**     | Prioritizes uniform lightness across all hues in the palette, based on a hand-crafted lightness scale. Seed color may be rounded slightly to conform.                    |
+| **Inclusive**   | Ensures your seed color is in the final set of color shade, evenly spacing other shades around them. Use if the seeds include precise brand colors you want to preserve. |
+| **Centered**    | Places seed color at the middle of each palette.                                                                                                                         |
 
-These statements describe raw calculations. Gamut mapping and output rounding
-can change the rendered seed color. Palette generation does not guarantee
+| Chroma curve | Behavior                                                                              |
+| ------------ | ------------------------------------------------------------------------------------- |
+| **Centered** | Shades near the center of the scale have the highest chroma.                          |
+| **Weighted** | Shades near the seed color have the highest chroma. Useful for light/pastel palettes. |
+
+After shade calculation, gamut mapping and output rounding is applied to ensure
+all shades are usable on the web. Palette generation does not guarantee
 accessible contrast for semantic pairings.
 
 ## Browser-safe palette functions
@@ -109,7 +133,7 @@ Import these from `@keithjgrant/argot/palette`.
 ### `normalizePaletteDefinition(value: unknown): NormalizedPaletteDefinition`
 
 Validate external input and return fresh color records with all option defaults
-explicit. Does not mutate the input, calculate steps, map gamut, or write files.
+explicit. Does not calculate steps or map gamut.
 
 ```js
 import { normalizePaletteDefinition } from '@keithjgrant/argot/palette';
@@ -136,8 +160,8 @@ this boundary for data from JSON files, browser forms, or another tool.
 ### `serializePaletteDefinition(definition: PaletteDefinition): string`
 
 Validate/normalize the definition and return two-space-indented JSON with a
-trailing newline and explicit defaults. It serializes generation inputs, not
-generated steps or CSS. No files are written.
+trailing newline and explicit defaults. Serializes generation inputs, not
+generated steps or CSS.
 
 ```js
 import { serializePaletteDefinition } from '@keithjgrant/argot/palette';
@@ -180,32 +204,18 @@ not in numeric definition validation. No output-gamut mapping is performed.
 import { parseCssColor } from '@keithjgrant/argot/palette';
 
 const seed = parseCssColor('#663399');
-// => {
-//   l: 0.4402717960022945,
-//   c: 0.16029599938108785,
-//   h: 303.37298848855636,
-// }
+// => { l: 0.4402…, c: 0.1602…, h: 303.37… }
 
 const definition = {
   version: 1,
   colors: [{ name: 'brand', ...seed }],
 };
-// => {
-//   version: 1,
-//   colors: [{
-//     name: 'brand',
-//     l: 0.4402717960022945,
-//     c: 0.16029599938108785,
-//     h: 303.37298848855636,
-//   }],
-// }
 ```
 
 ### `generatePalette(definition: PaletteDefinition): Palette`
 
-Validate inputs and generate a fresh structured palette without mutating the
-definition. The result contains raw, unrounded OKLCH coordinates before gamut
-mapping:
+Validate inputs and return a fresh structured palette. The result contains raw,
+unrounded OKLCH coordinates before gamut mapping:
 
 ```ts
 interface Palette {
@@ -232,12 +242,8 @@ const palette = generatePalette({
 });
 // => {
 //   version: 1,
-//   options: {
-//     lightnessCurve: 'inclusive',
-//     chromaCurve: 'centered',
-//     format: 'oklch',
-//     gamut: 'p3',
-//   },
+//   options: { lightnessCurve: 'inclusive', chromaCurve: 'centered',
+//              format: 'oklch', gamut: 'p3' },
 //   colors: [{
 //     name: 'brand',
 //     baseStep: 8,
@@ -262,7 +268,7 @@ Format/gamut options are retained in the result but do not change its raw steps.
 
 Render a generated model to a `:root` block containing `--name-1` through
 `--name-16`, followed by `--name: var(--name-N)` using `baseStep`. Returns CSS
-with a generated-file comment and trailing newline, without modifying the model.
+with a generated-file comment and trailing newline.
 
 Colors are mapped to the selected gamut using Color.js's `css` mapping method.
 OKLCH serialization uses Color.js precision `6`; hex is six-digit sRGB. Rounding
@@ -282,11 +288,10 @@ const css = renderPaletteCss(
     options: { lightnessCurve: 'inclusive' },
   }),
 );
-// => `/* Generated by Argot.  */
+// => `/* Generated by Argot. */
 // :root {
 //   --brand-1: oklch(97.6518% 0.017936 219.617);
-//   --brand-2: oklch(92.1928% 0.046366 239.152);
-//   /* ... --brand-3 through --brand-15 ... */
+//   /* ... --brand-2 through --brand-15 ... */
 //   --brand-16: oklch(10.219% 0.045256 256.462);
 //   --brand: var(--brand-8);
 // }
@@ -308,20 +313,7 @@ const css = generatePaletteCss({
 // => `/* Generated by Argot. */
 // :root {
 //   --brand-1: #ebfaff;
-//   --brand-2: #e3f8ff;
-//   --brand-3: #ccecff;
-//   --brand-4: #95d0ff;
-//   --brand-5: #7bc3ff;
-//   --brand-6: #31a6ff;
-//   --brand-7: #0095ff;
-//   --brand-8: #007bea;
-//   --brand-9: #006cd1;
-//   --brand-10: #0060be;
-//   --brand-11: #004c9d;
-//   --brand-12: #00397d;
-//   --brand-13: #00255a;
-//   --brand-14: #00153b;
-//   --brand-15: #000d28;
+//   /* ... --brand-2 through --brand-15 ... */
 //   --brand-16: #000312;
 //   --brand: var(--brand-8);
 // }
@@ -348,14 +340,6 @@ const definition = {
   colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
 } satisfies PaletteDefinition;
 const css: string = generatePaletteCss(definition);
-// => `/* Generated by Argot. */
-// :root {
-//   --brand-1: oklch(97.6518% 0.017936 219.617);
-//   /* ... --brand-2 through --brand-15 ... */
-//   --brand-16: oklch(10.219% 0.045256 256.462);
-//   --brand: var(--brand-8);
-// }
-// `
 ```
 
 TypeScript types do not replace runtime validation of imported JSON.
@@ -368,8 +352,7 @@ browser-safe entrypoint. Relative paths resolve against `process.cwd()`.
 ### `loadPaletteDefinition(filename: string): NormalizedPaletteDefinition`
 
 Read UTF-8 JSON synchronously, parse it, and validate/normalize it. Read, JSON,
-and definition errors include the resolved input path. Loading does not generate
-CSS or write files.
+and definition errors include the resolved input path.
 
 ```js
 import { loadPaletteDefinition } from '@keithjgrant/argot/palette/node';
@@ -413,15 +396,15 @@ interface WritePaletteResult {
 ```
 
 - Missing parent directories are created only for a real write.
-- Existing files are refused unless `force: true`.
+- Existing files are refused unless `force: true`. Dry runs use the same path
+  checks, so previewing over an existing file still needs `force: true` even
+  though nothing is written.
 - Output directories and final-path symlinks are refused even with `force`.
 - Dry runs validate and render but do not create directories or modify output.
-  Existing files still require `force: true` during a dry run.
 - Invalid definitions fail before output directories or files are created.
 
-Filesystem failures throw. This function does not save the definition, update
-other project files, or protect a separately held input file automatically:
-choose distinct input and output locations.
+Filesystem failures throw. This function does not save the definition or update
+other project files. Choose distinct input and output locations.
 
 ```js
 import { writeFileSync } from 'node:fs';
@@ -436,28 +419,13 @@ const definition = loadPaletteDefinition('./palette.json');
 const preview = writePalette('./styles/primitives.css', definition, {
   dryRun: true,
 });
-// => {
-//   path: '/absolute/path/to/styles/primitives.css',
-//   written: false,
-//   css: `/* Generated by Argot. */
-// :root {
-//   --brand-1: oklch(97.6518% 0.017936 219.617);
-//   /* ... */
-//   --brand: var(--brand-8);
-// }
-// `,
-// }
+// => { path: '/absolute/path/to/styles/primitives.css', written: false, css: '…' }
 
 const result = writePalette('./styles/primitives.css', definition);
-// => {
-//   path: '/absolute/path/to/styles/primitives.css',
-//   written: true,
-//   css: /* same CSS string as preview.css */,
-// }
+// => { path: '/absolute/path/to/styles/primitives.css', written: true, css: '…' }
 
 // Optional export of the portable inputs, separate from the CSS output.
 writeFileSync('./palette-export.json', serializePaletteDefinition(definition));
-// ./palette-export.json receives the normalized JSON from serializePaletteDefinition()
 ```
 
 `WritePaletteOptions` and `WritePaletteResult` are exported types from this Node
@@ -476,15 +444,18 @@ argot palette ./palette.json ./styles/primitives.css --force
 argot palette --help
 ```
 
-The default palette output is `./primitives.css`. The CLI uses the file API's
+The default palette output is `./primitives.css`. The CLI uses
+[`writePalette()`](#writepaletteoutpath-definition-options-writepaletteresult)'s
 overwrite and dry-run rules, rejects identical resolved input/output paths, and
 reports failures on stderr with a nonzero exit status. It never runs Stylelint
-or semantic/scaffold generation as a side effect.
+or semantic generation as a side effect.
 
 From a source checkout, `npm run dev -- palette ...` runs the same command using
 native TypeScript. The installed executable uses compiled JavaScript.
 
 ### Semantic templates
+
+Same behavior as [`@keithjgrant/argot/generate`](#semantic-generation-library):
 
 ```sh
 argot generate
@@ -500,7 +471,8 @@ files without `--force`.** Its CLI refuses output directories.
 
 ## Semantic generation library
 
-Import from `@keithjgrant/argot/generate`:
+Import from `@keithjgrant/argot/generate` (CLI:
+[`argot generate`](#semantic-templates)):
 
 - `generateCss(options?: TokenOptions): string`: load packaged semantic tokens
   and render their CSS template. `extended` defaults to `false`.
@@ -542,6 +514,8 @@ interchange support.
 import textTokens from '@keithjgrant/argot/tokens/color-text.json' with { type: 'json' };
 ```
 
-The two exported CSS templates contain the core or core-plus-extended semantic
-property names. CSS import resolution depends on the consumer's build tooling.
-No PostCSS preset or processing command is shipped in Phase 1.
+The two CSS templates export core or core-plus-extended semantic property names
+for projects that prefer a static import over
+[`generate` / `writeTemplate`](#semantic-generation-library). CSS import
+resolution depends on the consumer's build tooling. No PostCSS preset or
+processing command is shipped.
