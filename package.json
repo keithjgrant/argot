@@ -55,11 +55,11 @@
   },
   "scripts": {
     "cli": "node scripts/dev.js",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "tsc": "tsc --noEmit",
     "test:types": "tsc --project scripts/types/tsconfig.json && tsc --project scripts/types/tsconfig.browser.json",
     "test:package": "node --test scripts/test-package.js",
-    "pretest": "npm run build && npm run test:types",
+    "pretest": "npm run build && npm run tsc && npm run test:types",
     "prepack": "npm run build",
     "eslint": "eslint .",
     "prettier": "prettier --check . --ignore-unknown",
