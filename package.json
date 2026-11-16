@@ -55,7 +55,7 @@
   },
   "scripts": {
     "cli": "node scripts/dev.js",
-    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "tsc": "tsc --noEmit",
     "test:types": "tsc --project scripts/types/tsconfig.json && tsc --project scripts/types/tsconfig.browser.json",
     "test:package": "node --test scripts/package.test.js",
@@ -65,7 +65,6 @@
     "prettier": "prettier --check . --ignore-unknown",
     "prettier:fix": "prettier --write . --ignore-unknown",
     "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
-    "test-old": "node --test scripts/test-modules.js && npm run test:package",
     "test": "node --test 'src/**/*.test.ts' 'scripts/**/*.test.js'",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",
     "prewebsite:build": "npm run website:lint",
