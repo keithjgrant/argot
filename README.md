@@ -123,13 +123,13 @@ In a checkout, try
 the [sample definition](./scripts/fixtures/palette.json). Existing output
 requires `--force` to replace; `--dry-run` validates without writing.
 
-The browser-safe `@keithjgrant/argot/palette` entrypoint exports
-`PaletteColorDefinition`, `OklchColor`, `PaletteDefinition`, and the generation
-functions. If an input interface accepts CSS strings, call the separate
-`parseCssColor()` helper and compose a numeric seed such as
-`{ name: 'brand', ...parseCssColor('#663399') }`. Definitions themselves do not
-accept CSS strings. JSON loading and serialization preserve numeric generation
-inputs rather than converting them to CSS and reparsing them.
+The browser-safe `@keithjgrant/argot/palette` entrypoint exports `SeedColor`,
+`OklchColor`, `PaletteDefinition`, and the generation functions. If an input
+interface accepts CSS strings, call the separate `parseCssColor()` helper and
+compose a numeric seed such as `{ name: 'brand', ...parseCssColor('#663399') }`.
+Definitions themselves do not accept CSS strings. JSON loading and serialization
+preserve numeric generation inputs rather than converting them to CSS and
+reparsing them.
 
 ## Development
 

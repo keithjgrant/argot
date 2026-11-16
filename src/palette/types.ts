@@ -3,6 +3,11 @@ export type ChromaCurve = 'centered' | 'weighted';
 export type ColorFormat = 'oklch' | 'hex';
 export type ColorGamut = 'p3' | 'srgb';
 
+// Seed - input l,c,h (and optional name) to generate steps
+// Step - tint/shade of a certain hue
+// Scale - set of 16 steps
+// Palette - full set of colors
+
 export interface PaletteOptions {
   lightnessCurve?: LightnessCurve;
   chromaCurve?: ChromaCurve;
@@ -12,25 +17,8 @@ export interface PaletteOptions {
 
 export type NormalizedPaletteOptions = Required<PaletteOptions>;
 
-/** Numeric OKLCH seed coordinates, matching Theme Machine's data model. */
-export interface PaletteColorDefinition extends OklchColor {
-  name: string;
-}
-
-export interface PaletteDefinition {
-  version: 1;
-  colors: readonly PaletteColorDefinition[];
-  options?: PaletteOptions;
-}
-
-export interface NormalizedPaletteDefinition {
-  version: 1;
-  colors: PaletteColorDefinition[];
-  options: NormalizedPaletteOptions;
-}
-
 export interface OklchColor {
-  /** Lightness from 0 through 1 */
+  /** Lightness from 0 to 1 */
   l: number;
   /** Chroma */
   c: number;
@@ -38,12 +26,33 @@ export interface OklchColor {
   h: number;
 }
 
+/** Numeric OKLCH seed coordinates, matching Theme Machine's data model. */
+export interface SeedColor extends OklchColor {
+  name: string;
+}
+
 export interface PaletteStep extends OklchColor {
   /** One-based index, from 1 through 16. */
   step: number;
 }
 
-export interface PaletteColor {
+export interface PaletteDefinition {
+  version: 1;
+  seedColors: readonly SeedColor[];
+  options?: PaletteOptions;
+}
+
+// PaletteDefinition with all options filled in
+export interface NormalizedPaletteDefinition {
+  version: 1;
+  colors: SeedColor[];
+  options: NormalizedPaletteOptions;
+}
+
+// TODO: can baseStep be removed?
+// don't need to output it to CSS any longer, but might need to
+// indicate to user where seedColor landed in the set
+export interface PaletteScale {
   name: string;
   /** One-based step used for the unnumbered custom-property alias. */
   baseStep: number;
@@ -53,6 +62,6 @@ export interface PaletteColor {
 /** Raw OKLCH coordinates, before output gamut mapping or rounding. */
 export interface Palette {
   version: 1;
-  colors: PaletteColor[];
+  colors: PaletteScale[];
   options: NormalizedPaletteOptions;
 }

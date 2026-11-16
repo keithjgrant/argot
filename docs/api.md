@@ -107,9 +107,10 @@ OKLCH supports either gamut. Hex requires sRGB; `format: 'hex'` with
 
 ### How scales are built
 
-Argot generates palettes with 16 shades from light to dark for each seed color
-you provide. Shades are numbered from 1 through 16. The exact shades produced
-are shaped by a lightness curve and a chroma curve, as specified in `options`:
+Argot generates palettes with 16 shades ("steps") from light to dark for each
+seed color you provide. Steps are numbered from 1 through 16. The exact colors
+produced are shaped by a lightness curve and a chroma curve, as specified in
+`options`:
 
 | Lightness curve | Behavior                                                                                                                                                                 |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -322,11 +323,10 @@ const css = generatePaletteCss({
 
 ### Exported palette types
 
-- Inputs: `OklchColor`, `PaletteColorDefinition`, `PaletteDefinition`,
-  `PaletteOptions`.
+- Inputs: `OklchColor`, `SeedColor`, `PaletteDefinition`, `PaletteOptions`.
 - Validated definitions: `NormalizedPaletteDefinition`,
   `NormalizedPaletteOptions`.
-- Generated models: `Palette`, `PaletteColor`, `PaletteStep`.
+- Generated models: `Palette`, `PaletteScale`, `PaletteStep`.
 - Option unions: `LightnessCurve`, `ChromaCurve`, `ColorFormat`, `ColorGamut`.
 
 ```ts

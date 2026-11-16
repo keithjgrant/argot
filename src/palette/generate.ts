@@ -1,5 +1,10 @@
 import { normalizePaletteDefinition } from './definition.ts';
-import type { Palette, PaletteDefinition } from './types.ts';
+import type {
+  Palette,
+  PaletteDefinition,
+  SeedColor,
+  PaletteOptions,
+} from './types.ts';
 
 const LIGHTNESS = Object.freeze([
   0.98, 0.97, 0.93, 0.84, 0.8, 0.71, 0.66, 0.58, 0.53, 0.49, 0.42, 0.35, 0.27,
@@ -16,40 +21,46 @@ const CHROMA = Object.freeze([
  */
 function generatePalette(definition: PaletteDefinition): Palette {
   const normalized = normalizePaletteDefinition(definition);
-  const { lightnessCurve, chromaCurve } = normalized.options;
-  const colors = normalized.colors.map(({ name, ...seed }) => {
-    const index = findTargetIndex(seed.l);
-    const chromaScale =
-      chromaCurve === 'weighted' ? buildChromaScale(index, seed.c) : CHROMA;
-    const anchor = lightnessCurve === 'centered' ? 8 : index;
-    // Centered lightness rescales the original chroma curve at step 9; it does
-    // not rebuild the weighted curve around that step.
-    let chromaMultiplier = 1;
-    if (lightnessCurve === 'centered') {
-      chromaMultiplier = seed.c / chromaScale[8];
-    } else if (chromaCurve === 'centered') {
-      chromaMultiplier = seed.c / chromaScale[index];
-    }
-    if (!Number.isFinite(chromaMultiplier)) {
-      // catch divide by zero for 0-chroma values
-      chromaMultiplier = 0;
-    }
-    const lightness =
-      lightnessCurve === 'uniform'
-        ? LIGHTNESS
-        : buildInclusiveLightness(seed.l, anchor);
-    return {
-      name,
-      baseStep: anchor + 1,
-      steps: lightness.map((l, index) => ({
-        step: index + 1,
-        l,
-        c: chromaScale[index] * chromaMultiplier,
-        h: seed.h,
-      })),
-    };
-  });
+
+  const colors = normalized.colors.map((seed) =>
+    generateShades(seed, definition.options || {}),
+  );
   return { version: 1, options: normalized.options, colors };
+}
+
+// TODO skip normalizing, just fill in defaults here
+function generateShades(seed: SeedColor, options: PaletteOptions) {
+  const { lightnessCurve = 'uniform', chromaCurve = 'centered' } = options;
+  const index = findTargetIndex(seed.l);
+  const chromaScale =
+    chromaCurve === 'weighted' ? buildChromaScale(index, seed.c) : CHROMA;
+  const anchor = lightnessCurve === 'centered' ? 8 : index;
+  // Centered lightness rescales the original chroma curve at step 9; it does
+  // not rebuild the weighted curve around that step.
+  let chromaMultiplier = 1;
+  if (lightnessCurve === 'centered') {
+    chromaMultiplier = seed.c / chromaScale[8];
+  } else if (chromaCurve === 'centered') {
+    chromaMultiplier = seed.c / chromaScale[index];
+  }
+  if (!Number.isFinite(chromaMultiplier)) {
+    // handle divide by zero for 0-chroma values
+    chromaMultiplier = 0;
+  }
+  const lightness =
+    lightnessCurve === 'uniform'
+      ? LIGHTNESS
+      : buildInclusiveLightness(seed.l, anchor);
+  return {
+    name: seed.name,
+    baseStep: anchor + 1,
+    steps: lightness.map((l, index) => ({
+      step: index + 1,
+      l,
+      c: chromaScale[index] * chromaMultiplier,
+      h: seed.h,
+    })),
+  };
 }
 
 function findTargetIndex(lightness: number): number {

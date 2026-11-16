@@ -88,6 +88,7 @@ test('website adaptation does not mutate shared token data', () => {
   assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
 });
 
+// TODO flaky
 test(
   'watch mode reloads native TypeScript source without compiling',
   { timeout: 20000 },
