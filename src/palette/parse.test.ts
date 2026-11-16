@@ -75,10 +75,13 @@ describe('integration', () => {
         ...parsed,
       });
       assert.match(generatePaletteCss(input), /--brand-16:/);
-      assert.deepEqual(JSON.parse(serializePaletteDefinition(input)).colors[0], {
-        name: 'brand',
-        ...parsed,
-      });
+      assert.deepEqual(
+        JSON.parse(serializePaletteDefinition(input)).colors[0],
+        {
+          name: 'brand',
+          ...parsed,
+        },
+      );
     }
   });
 });
