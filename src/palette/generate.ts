@@ -22,18 +22,18 @@ const CHROMA = Object.freeze([
 function generatePalette(definition: PaletteDefinition): Palette {
   const normalized = normalizePaletteDefinition(definition);
 
-  const colors = normalized.colors.map((seed) =>
-    generateShades(seed, definition.options || {}),
+  const colors = normalized.seedColors.map((seed) =>
+    generateScale(seed, definition.options || {}),
   );
   return { version: 1, options: normalized.options, colors };
 }
 
 // TODO skip normalizing, just fill in defaults here
-function generateShades(seed: SeedColor, options: PaletteOptions) {
+function generateScale(seed: SeedColor, options: PaletteOptions) {
   const { lightnessCurve = 'uniform', chromaCurve = 'centered' } = options;
   const index = findTargetIndex(seed.l);
   const chromaScale =
-    chromaCurve === 'weighted' ? buildChromaScale(index, seed.c) : CHROMA;
+    chromaCurve === 'weighted' ? buildChromaCurve(index, seed.c) : CHROMA;
   const anchor = lightnessCurve === 'centered' ? 8 : index;
   // Centered lightness rescales the original chroma curve at step 9; it does
   // not rebuild the weighted curve around that step.
@@ -50,7 +50,7 @@ function generateShades(seed: SeedColor, options: PaletteOptions) {
   const lightness =
     lightnessCurve === 'uniform'
       ? LIGHTNESS
-      : buildInclusiveLightness(seed.l, anchor);
+      : buildInclusiveLightnessCurve(seed.l, anchor);
   return {
     name: seed.name,
     baseStep: anchor + 1,
@@ -73,7 +73,7 @@ function findTargetIndex(lightness: number): number {
   return beforeDiff < afterDiff ? before : after;
 }
 
-function buildChromaScale(index: number, peakValue: number): number[] {
+function buildChromaCurve(index: number, peakValue: number): number[] {
   const endValue = peakValue < 0.04 ? 0 : 0.01;
   const beforeSteps = index;
   const afterSteps = 15 - index;
@@ -90,7 +90,10 @@ function buildChromaScale(index: number, peakValue: number): number[] {
   return scale;
 }
 
-function buildInclusiveLightness(lightness: number, index: number): number[] {
+function buildInclusiveLightnessCurve(
+  lightness: number,
+  index: number,
+): number[] {
   const maxLightness = LIGHTNESS[0];
   const minLightness = LIGHTNESS[15];
 

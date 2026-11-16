@@ -11,7 +11,7 @@ import type { PaletteDefinition } from './types.ts';
 
 const definition: PaletteDefinition = {
   version: 1,
-  colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+  seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
 };
 
 function workspace(t: TestContext): string {
@@ -27,7 +27,7 @@ describe('loadPaletteDefinition', () => {
         new URL('../../scripts/fixtures/palette.json', import.meta.url),
       ),
     );
-    assert.deepEqual(input.colors, [
+    assert.deepEqual(input.seedColors, [
       { name: 'gray', l: 0.6, c: 0.015, h: 250 },
       { name: 'brand', l: 0.6, c: 0.2, h: 250 },
     ]);
@@ -74,13 +74,14 @@ describe('loadPaletteDefinition', () => {
       input,
       JSON.stringify({
         version: 1,
-        colors: [{ name: 'brand', l: '60%', c: 0.2, h: 250 }],
+        seedColors: [{ name: 'brand', l: '60%', c: 0.2, h: 250 }],
       }),
     );
     assert.throws(
       () => loadPaletteDefinition(input),
       (error: Error) =>
-        error.message.includes(input) && error.message.includes('colors[0].l'),
+        error.message.includes(input) &&
+        error.message.includes('seedColors[0].l'),
     );
     assert.deepEqual(fs.readdirSync(cwd), ['palette.json']);
   });
@@ -144,14 +145,14 @@ describe('writePalette', () => {
   test('invalid definitions fail before any output directory or file changes', (t) => {
     const cwd = workspace(t);
     const output = path.join(cwd, 'missing/primitives.css');
-    const invalid = { version: 1 as const, colors: [] };
-    assert.throws(() => writePalette(output, invalid), /definition.colors/);
+    const invalid = { version: 1 as const, seedColors: [] };
+    assert.throws(() => writePalette(output, invalid), /definition.seedColors/);
     assert.equal(fs.existsSync(path.dirname(output)), false);
     const existing = path.join(cwd, 'existing.css');
     fs.writeFileSync(existing, 'keep me');
     assert.throws(
       () => writePalette(existing, invalid, { force: true }),
-      /definition.colors/,
+      /definition.seedColors/,
     );
     assert.equal(fs.readFileSync(existing, 'utf8'), 'keep me');
   });

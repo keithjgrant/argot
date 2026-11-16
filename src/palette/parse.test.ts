@@ -13,7 +13,7 @@ function definition(
 ): PaletteDefinition {
   return {
     version: 1,
-    colors: [{ name: 'brand', ...seed }],
+    seedColors: [{ name: 'brand', ...seed }],
     options,
   };
 }
@@ -70,13 +70,13 @@ describe('integration', () => {
     for (const value of ['#663399', 'red', 'rgb(50% 0% 50%)']) {
       const parsed = parseCssColor(value);
       const input = definition(parsed);
-      assert.deepEqual(normalizePaletteDefinition(input).colors[0], {
+      assert.deepEqual(normalizePaletteDefinition(input).seedColors[0], {
         name: 'brand',
         ...parsed,
       });
       assert.match(generatePaletteCss(input), /--brand-16:/);
       assert.deepEqual(
-        JSON.parse(serializePaletteDefinition(input)).colors[0],
+        JSON.parse(serializePaletteDefinition(input)).seedColors[0],
         {
           name: 'brand',
           ...parsed,

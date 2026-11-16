@@ -45,7 +45,7 @@ export interface PaletteDefinition {
 // PaletteDefinition with all options filled in
 export interface NormalizedPaletteDefinition {
   version: 1;
-  colors: SeedColor[];
+  seedColors: SeedColor[];
   options: NormalizedPaletteOptions;
 }
 

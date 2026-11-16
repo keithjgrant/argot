@@ -48,7 +48,7 @@ function renderCombination(definition, lightnessCurve, chromaCurve) {
     });
     const rows = palette.colors
       .map(({ name, baseStep, steps }) => {
-        const seed = definition.colors.find((color) => color.name === name);
+        const seed = definition.seedColors.find((color) => color.name === name);
         const swatches = steps
           .map(({ step }) => {
             const property = `--${name}-${step}`;

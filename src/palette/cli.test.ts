@@ -10,7 +10,7 @@ import type { PaletteDefinition } from './types.ts';
 const root = path.resolve(import.meta.dirname, '../..');
 const definition: PaletteDefinition = {
   version: 1,
-  colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+  seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
 };
 
 function workspace(t: TestContext): string {
@@ -138,7 +138,7 @@ describe('integration', () => {
         fails(invoke(cwd, 'invalid.json', output), /Invalid JSON/);
         fs.writeFileSync(
           path.join(cwd, 'invalid.json'),
-          '{"version":2,"colors":[]}',
+          '{"version":2,"seedColors":[]}',
         );
         fails(invoke(cwd, 'invalid.json', output), /definition.version/);
         assert.equal(fs.existsSync(path.join(cwd, 'missing')), false);

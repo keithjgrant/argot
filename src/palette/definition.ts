@@ -19,18 +19,21 @@ const OPTION_VALUES = {
 function normalizePaletteDefinition(
   definition: unknown,
 ): NormalizedPaletteDefinition {
-  checkObject(definition, 'definition', ['version', 'colors', 'options']);
+  checkObject(definition, 'definition', ['version', 'seedColors', 'options']);
   if (definition.version !== 1) {
     throw new Error('definition.version: expected supported version 1');
   }
-  if (!Array.isArray(definition.colors) || definition.colors.length === 0) {
-    throw new Error('definition.colors: expected a nonempty array');
+  if (
+    !Array.isArray(definition.seedColors) ||
+    definition.seedColors.length === 0
+  ) {
+    throw new Error('definition.seedColors: expected a nonempty array');
   }
 
   const names = new Set<string>();
-  const entries: unknown[] = definition.colors;
+  const entries: unknown[] = definition.seedColors;
   const colors = Array.from(entries, (entry, index) => {
-    const field = `definition.colors[${index}]`;
+    const field = `definition.seedColors[${index}]`;
     checkObject(entry, field, ['name', 'l', 'c', 'h']);
     checkName(entry.name, `${field}.name`);
     checkCoordinates(entry, field);
@@ -48,7 +51,7 @@ function normalizePaletteDefinition(
 
   return {
     version: 1,
-    colors,
+    seedColors: colors,
     options: normalizeOptions(definition.options),
   };
 }

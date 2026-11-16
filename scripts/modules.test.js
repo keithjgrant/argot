@@ -30,7 +30,7 @@ test('native TypeScript development entrypoints match compiled output', async (t
     await import('../src/palette/index.ts');
   const input = {
     version: 1,
-    colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+    seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
     options: { lightnessCurve: 'centered', chromaCurve: 'weighted' },
   };
   assert.equal(nativeCss(), generateCss());

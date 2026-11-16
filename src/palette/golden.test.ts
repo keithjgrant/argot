@@ -37,7 +37,7 @@ function definition(
 ): PaletteDefinition {
   return {
     version: 1,
-    colors: [{ name: 'brand', ...seed }],
+    seedColors: [{ name: 'brand', ...seed }],
     options,
   };
 }

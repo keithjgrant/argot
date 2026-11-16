@@ -45,7 +45,7 @@ const options: PaletteOptions = {
 };
 const definition = {
   version: 1,
-  colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+  seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
   options,
 } as const satisfies PaletteDefinition;
 
@@ -59,7 +59,7 @@ const serialized: string = serializePaletteDefinition(definition);
 const parsed: OklchColor = parseCssColor('#663399');
 const fromCss: PaletteDefinition = {
   version: 1,
-  colors: [{ name: 'brand', ...parsed }],
+  seedColors: [{ name: 'brand', ...parsed }],
 };
 const loaded: NormalizedPaletteDefinition =
   loadPaletteDefinition('palette.json');

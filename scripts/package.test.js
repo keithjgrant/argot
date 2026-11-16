@@ -91,7 +91,7 @@ import {
 import { loadPaletteDefinition, writePalette } from '@keithjgrant/argot/palette/node';
 import plugins from '@keithjgrant/argot/stylelint';
 import config from '@keithjgrant/argot/stylelint/config';
-const definition = { version: 1, colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }] };
+const definition = { version: 1, seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }] };
 assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), { l: 0.6, c: 0.2, h: 250 });
 const palette = generatePalette(definition);
 assert.equal(palette.colors[0].steps.length, 16);
@@ -209,7 +209,7 @@ test('native development commands work with no dist directory', (t) => {
     path.join(cwd, 'palette.json'),
     JSON.stringify({
       version: 1,
-      colors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+      seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
     }),
   );
   execFileSync(

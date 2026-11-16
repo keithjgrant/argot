@@ -13,7 +13,7 @@ function definition(
 ): PaletteDefinition {
   return {
     version: 1,
-    colors: [{ name: 'brand', ...seed }],
+    seedColors: [{ name: 'brand', ...seed }],
     options,
   };
 }
@@ -28,16 +28,16 @@ describe('normalizePaletteDefinition', () => {
     const color = Object.freeze({ name: 'brand', ...seed });
     const input = Object.freeze({
       version: 1 as const,
-      colors: Object.freeze([color]),
+      seedColors: Object.freeze([color]),
       options: Object.freeze({
         lightnessCurve: 'inclusive' as const,
         chromaCurve: 'weighted' as const,
       }),
     });
     const normalized = normalizePaletteDefinition(input);
-    assert.deepEqual(normalized.colors, [color]);
-    assert.notEqual(normalized.colors, input.colors);
-    assert.notEqual(normalized.colors[0], color);
+    assert.deepEqual(normalized.seedColors, [color]);
+    assert.notEqual(normalized.seedColors, input.seedColors);
+    assert.notEqual(normalized.seedColors[0], color);
   });
 
   test('reports invalid or missing coordinates by field', () => {
@@ -62,7 +62,7 @@ describe('normalizePaletteDefinition', () => {
         const seed = { l: 0.6, c: 0.2, h: 250, [field]: value };
         assert.throws(
           () => normalizePaletteDefinition(definition(seed as OklchColor)),
-          new RegExp(`definition\\.colors\\[0\\]\\.${field}:`),
+          new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
         );
       }
       const seed: Record<string, number> = { l: 0.6, c: 0.2, h: 250 };
@@ -70,19 +70,20 @@ describe('normalizePaletteDefinition', () => {
       assert.throws(
         () =>
           normalizePaletteDefinition(definition(seed as unknown as OklchColor)),
-        new RegExp(`definition\\.colors\\[0\\]\\.${field}:`),
+        new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
       );
     }
     for (const l of [0, 1]) {
       assert.equal(
-        normalizePaletteDefinition(definition({ l, c: 0, h: 250 })).colors[0].l,
+        normalizePaletteDefinition(definition({ l, c: 0, h: 250 }))
+          .seedColors[0].l,
         l,
       );
     }
     const neutral = normalizePaletteDefinition(
       definition({ l: 0.6, c: 0, h: 250 }),
     );
-    assert.equal(neutral.colors[0].h, 250);
+    assert.equal(neutral.seedColors[0].h, 250);
   });
 
   test('rejects legacy strings and ambiguous or unknown seed fields', () => {
@@ -111,7 +112,7 @@ describe('normalizePaletteDefinition', () => {
         () =>
           normalizePaletteDefinition({
             version: 1,
-            colors: names.map((name) => ({ name, ...seed })),
+            seedColors: names.map((name) => ({ name, ...seed })),
           }),
         /duplicate custom property/,
       );
@@ -120,7 +121,7 @@ describe('normalizePaletteDefinition', () => {
       () =>
         normalizePaletteDefinition({
           version: 2,
-          colors: [{ name: 'brand', ...seed }],
+          seedColors: [{ name: 'brand', ...seed }],
         }),
       /version/,
     );
@@ -128,9 +129,9 @@ describe('normalizePaletteDefinition', () => {
       () =>
         normalizePaletteDefinition({
           version: 1,
-          colors: [{ name: '--brand', ...seed }],
+          seedColors: [{ name: '--brand', ...seed }],
         }),
-      /colors\[0\]\.name/,
+      /seedColors\[0\]\.name/,
     );
     assert.throws(
       () =>
@@ -158,7 +159,7 @@ describe('serializePaletteDefinition', () => {
     });
     const input = Object.freeze({
       version: 1 as const,
-      colors: Object.freeze([{ name: 'brand', ...seed }]),
+      seedColors: Object.freeze([{ name: 'brand', ...seed }]),
       options: Object.freeze({
         lightnessCurve: 'inclusive' as const,
         chromaCurve: 'weighted' as const,
@@ -184,14 +185,14 @@ describe('integration', () => {
         const seed = { l: 0.6, c: 0.2, h: 250, [field]: value };
         assert.throws(
           () => generatePalette(definition(seed as OklchColor)),
-          new RegExp(`definition\\.colors\\[0\\]\\.${field}:`),
+          new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
         );
       }
       const seed: Record<string, number> = { l: 0.6, c: 0.2, h: 250 };
       delete seed[field];
       assert.throws(
         () => generatePalette(definition(seed as unknown as OklchColor)),
-        new RegExp(`definition\\.colors\\[0\\]\\.${field}:`),
+        new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
       );
     }
   });
@@ -219,7 +220,7 @@ describe('integration', () => {
     });
     const input = Object.freeze({
       version: 1 as const,
-      colors: Object.freeze([{ name: 'brand', ...seed }]),
+      seedColors: Object.freeze([{ name: 'brand', ...seed }]),
       options: Object.freeze({
         lightnessCurve: 'inclusive' as const,
         chromaCurve: 'weighted' as const,
