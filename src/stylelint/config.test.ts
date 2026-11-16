@@ -4,13 +4,13 @@ import stylelint from 'stylelint';
 import config from './config.ts';
 
 describe('config', () => {
-  test('enables the valid-token rule', () => {
+  test('should enable the valid-token rule', () => {
     assert.equal(config.rules['argot/valid-token'], true);
   });
 });
 
 describe('integration', () => {
-  test('works when stylelint extends the published config', async () => {
+  test('should work when stylelint extends the published config', async () => {
     const result = await stylelint.lint({
       code: 'a { color: var(--text-primry); --my-extra: 1rem; }\n',
       config: { extends: ['@keithjgrant/argot/stylelint/config'] },
@@ -23,7 +23,7 @@ describe('integration', () => {
     );
   });
 
-  test('works when stylelint uses the local config export', async () => {
+  test('should work when stylelint uses the local config export', async () => {
     const result = await stylelint.lint({
       code: 'a { color: var(--text-primry); --my-extra: 1rem; }\n',
       config,

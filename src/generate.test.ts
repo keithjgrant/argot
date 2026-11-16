@@ -7,7 +7,7 @@ import { generateCss } from './generate.ts';
 const root = path.resolve(import.meta.dirname, '..');
 
 describe('generateCss', () => {
-  test('checked-in CSS templates match the current token definitions', () => {
+  test('should match checked-in CSS templates to current token definitions', () => {
     for (const extended of [false, true]) {
       const file = extended ? 'semantics-extended.css' : 'semantics.css';
       assert.equal(

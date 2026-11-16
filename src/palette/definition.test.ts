@@ -19,7 +19,7 @@ function definition(
 }
 
 describe('normalizePaletteDefinition', () => {
-  test('returns a fresh copy without mutating numeric seeds', () => {
+  test('should return a fresh copy without mutating numeric seeds', () => {
     const seed = Object.freeze({
       l: 0.6234567891234567,
       c: 1e-14,
@@ -40,7 +40,7 @@ describe('normalizePaletteDefinition', () => {
     assert.notEqual(normalized.seedColors[0], color);
   });
 
-  test('reports invalid or missing coordinates by field', () => {
+  test('should report invalid or missing coordinates by field', () => {
     const invalid = {
       l: [
         undefined,
@@ -86,7 +86,7 @@ describe('normalizePaletteDefinition', () => {
     assert.equal(neutral.seedColors[0].h, 250);
   });
 
-  test('rejects legacy strings and ambiguous or unknown seed fields', () => {
+  test('should reject legacy strings and ambiguous or unknown seed fields', () => {
     const cases = [
       { name: 'brand', color: '#663399' },
       { name: 'brand', l: 0.6, c: 0.2, h: 250, color: '#663399' },
@@ -101,7 +101,7 @@ describe('normalizePaletteDefinition', () => {
     }
   });
 
-  test('retains name, version and option validation', () => {
+  test('should retain name, version and option validation', () => {
     const seed = { l: 0.6, c: 0.2, h: 250 };
     for (const names of [
       ['brand', 'brand'],
@@ -151,7 +151,7 @@ describe('normalizePaletteDefinition', () => {
 });
 
 describe('serializePaletteDefinition', () => {
-  test('round-trips through JSON without changing normalized values', () => {
+  test('should round-trip through JSON without changing normalized values', () => {
     const seed = Object.freeze({
       l: 0.6234567891234567,
       c: 1e-14,
@@ -174,7 +174,7 @@ describe('serializePaletteDefinition', () => {
 });
 
 describe('integration', () => {
-  test('missing coordinates fail through generatePalette with the same field errors', () => {
+  test('should fail missing coordinates through generatePalette with the same field errors', () => {
     const invalid = {
       l: [undefined],
       c: [undefined],
@@ -197,7 +197,7 @@ describe('integration', () => {
     }
   });
 
-  test('invalid options fail through generatePalette', () => {
+  test('should fail invalid options through generatePalette', () => {
     const seed = { l: 0.6, c: 0.2, h: 250 };
     assert.throws(
       () =>
@@ -212,7 +212,7 @@ describe('integration', () => {
     );
   });
 
-  test('serialize and normalize preserve generatePalette output', () => {
+  test('should preserve generatePalette output through serialize and normalize', () => {
     const seed = Object.freeze({
       l: 0.6234567891234567,
       c: 1e-14,

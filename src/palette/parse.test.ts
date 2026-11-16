@@ -19,7 +19,7 @@ function definition(
 }
 
 describe('parseCssColor', () => {
-  test('returns numeric generation inputs for CSS colors', () => {
+  test('should return numeric generation inputs for CSS colors', () => {
     assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), {
       l: 0.6,
       c: 0.2,
@@ -45,7 +45,7 @@ describe('parseCssColor', () => {
     assert.equal(tiny.c, 1e-14);
   });
 
-  test('rejects invalid, transparent, missing-component and context-dependent colors', () => {
+  test('should reject invalid, transparent, missing-component and context-dependent colors', () => {
     for (const color of [
       null,
       42,
@@ -66,7 +66,7 @@ describe('parseCssColor', () => {
 });
 
 describe('integration', () => {
-  test('parsed CSS colors are accepted as numeric generation inputs', () => {
+  test('should accept parsed CSS colors as numeric generation inputs', () => {
     for (const value of ['#663399', 'red', 'rgb(50% 0% 50%)']) {
       const parsed = parseCssColor(value);
       const input = definition(parsed);

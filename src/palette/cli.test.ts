@@ -54,7 +54,7 @@ describe('integration', () => {
     }
 
     describe(`${mode} CLI`, () => {
-      test('supports dry runs, default output and explicit replacement', (t) => {
+      test('should support dry runs, default output and explicit replacement', (t) => {
         const cwd = workspace(t);
         fs.writeFileSync(
           path.join(cwd, 'palette.json'),
@@ -95,7 +95,7 @@ describe('integration', () => {
         );
       });
 
-      test('rejects invalid arguments and identical resolved paths', (t) => {
+      test('should reject invalid arguments and identical resolved paths', (t) => {
         const cwd = workspace(t);
         const input = JSON.stringify(definition);
         fs.writeFileSync(path.join(cwd, 'palette.json'), input);
@@ -130,7 +130,7 @@ describe('integration', () => {
         assert.match(help.stdout, /Usage: argot palette/);
       });
 
-      test('reports input errors without creating output', (t) => {
+      test('should report input errors without creating output', (t) => {
         const cwd = workspace(t);
         const output = 'missing/primitives.css';
         fails(invoke(cwd, 'absent.json', output), /Cannot read.*ENOENT/);
@@ -144,7 +144,7 @@ describe('integration', () => {
         assert.equal(fs.existsSync(path.join(cwd, 'missing')), false);
       });
 
-      test('refuses directory and symlink output even with force', (t) => {
+      test('should refuse directory and symlink output even with force', (t) => {
         const cwd = workspace(t);
         fs.writeFileSync(
           path.join(cwd, 'palette.json'),

@@ -43,7 +43,7 @@ function definition(
 }
 
 describe('golden baseline', () => {
-  test('covers every curve combination with complete fixed expectations', () => {
+  test('should cover every curve combination with complete fixed expectations', () => {
     assert.equal(golden.schemaVersion, 1);
     assert.equal(golden.cases.length, 96);
     assert.equal(new Set(golden.cases.map(({ id }) => id)).size, 96);
@@ -83,10 +83,10 @@ describe('golden baseline', () => {
   });
 });
 
-describe('integration', () => {
+describe('golden palette', () => {
   // These values were captured from the verified original source in Theme Machine
   for (const { id, seed, options, expected } of golden.cases) {
-    test(`golden palette: ${id}`, () => {
+    test(`should match ${id}`, () => {
       const actual = generatePalette(definition(seed, options)).colors[0];
       assert.deepEqual(actual, {
         name: 'brand',

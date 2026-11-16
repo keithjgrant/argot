@@ -4,7 +4,7 @@ import stylelint from 'stylelint';
 import validToken from './valid-token.ts';
 
 describe('argot/valid-token', () => {
-  test('is a no-op that reports no warnings for unknown tokens', async () => {
+  test('should be a no-op that reports no warnings for unknown tokens', async () => {
     const result = await stylelint.lint({
       code: 'a { color: var(--text-primry); --my-extra: 1rem; }\n',
       config: {

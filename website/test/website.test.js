@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
+import { describe, test } from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, spawn } from 'node:child_process';
@@ -31,308 +31,334 @@ function sourceTokens() {
   return records;
 }
 
-test('reference preserves every source token and its metadata in source order', () => {
-  const source = sourceTokens();
-  const generated = reference.sections.flatMap((section) => section.tokens);
-  assert.deepEqual(
-    generated.map((token) => token.name),
-    source.map((token) => token.name),
-  );
-  assert.equal(reference.total, source.length);
-  assert.equal(reference.core + reference.extended, reference.total);
-  assert.equal(new Set(generated.map((token) => token.id)).size, source.length);
-  for (const [index, token] of generated.entries()) {
-    assert.equal(token.type, source[index].$type);
-    assert.equal(token.description, source[index].$description);
-    assert.equal(token.usage, source[index].usage || '');
-    assert.equal(token.value, source[index].$value);
-    for (const field of ['pairsWith', 'related']) {
-      assert.deepEqual(
-        token[field].map((partner) => partner.name),
-        (source[index][field] || []).map((name) => `--${name}`),
-      );
+describe('reference', () => {
+  test('should preserve every source token and its metadata in source order', () => {
+    const source = sourceTokens();
+    const generated = reference.sections.flatMap((section) => section.tokens);
+    assert.deepEqual(
+      generated.map((token) => token.name),
+      source.map((token) => token.name),
+    );
+    assert.equal(reference.total, source.length);
+    assert.equal(reference.core + reference.extended, reference.total);
+    assert.equal(
+      new Set(generated.map((token) => token.id)).size,
+      source.length,
+    );
+    for (const [index, token] of generated.entries()) {
+      assert.equal(token.type, source[index].$type);
+      assert.equal(token.description, source[index].$description);
+      assert.equal(token.usage, source[index].usage || '');
+      assert.equal(token.value, source[index].$value);
+      for (const field of ['pairsWith', 'related']) {
+        assert.deepEqual(
+          token[field].map((partner) => partner.name),
+          (source[index][field] || []).map((name) => `--${name}`),
+        );
+      }
     }
-  }
-  for (const section of reference.sections) {
-    assert.ok(section.title && section.intro && section.example);
-  }
+    for (const section of reference.sections) {
+      assert.ok(section.title && section.intro && section.example);
+    }
+  });
 });
 
-test('shared loader preserves core filtering and resolves token directories', () => {
-  const all = loadTokens({ extended: true });
-  const core = loadTokens();
-  assert.equal(getTokensDir(), path.join(root, 'tokens'));
-  assert.equal(
-    getTokensDir(path.join(root, 'example-package')),
-    path.join(root, 'example-package/tokens'),
-  );
-  assert.deepEqual(
-    core,
-    all.map((section) => ({
-      ...section,
-      tokens: section.tokens.filter((token) => token.tier === 'core'),
-    })),
-  );
-  assert.ok(
-    all.some((section) => section.tokens.some((t) => t.tier === 'extended')),
-  );
+describe('shared loader', () => {
+  test('should preserve core filtering and resolve token directories', () => {
+    const all = loadTokens({ extended: true });
+    const core = loadTokens();
+    assert.equal(getTokensDir(), path.join(root, 'tokens'));
+    assert.equal(
+      getTokensDir(path.join(root, 'example-package')),
+      path.join(root, 'example-package/tokens'),
+    );
+    assert.deepEqual(
+      core,
+      all.map((section) => ({
+        ...section,
+        tokens: section.tokens.filter((token) => token.tier === 'core'),
+      })),
+    );
+    assert.ok(
+      all.some((section) => section.tokens.some((t) => t.tier === 'extended')),
+    );
+  });
 });
 
-test('website adaptation does not mutate shared token data', () => {
-  const before = loadTokens({ extended: true });
-  buildReference();
-  assert.deepEqual(loadTokens({ extended: true }), before);
-  const primary = before
-    .flatMap((section) => section.tokens)
-    .find((token) => token.name === '--text-primary');
-  assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
+describe('website adaptation', () => {
+  test('should not mutate shared token data', () => {
+    const before = loadTokens({ extended: true });
+    buildReference();
+    assert.deepEqual(loadTokens({ extended: true }), before);
+    const primary = before
+      .flatMap((section) => section.tokens)
+      .find((token) => token.name === '--text-primary');
+    assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
+  });
 });
 
 // TODO flaky
-test(
-  'watch mode reloads native TypeScript source without compiling',
-  { timeout: 20000 },
-  async (t) => {
-    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-website-native-'));
-    t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
-    for (const directory of ['src', 'tokens', 'website']) {
-      fs.cpSync(path.join(root, directory), path.join(cwd, directory), {
-        recursive: true,
-        filter: (source) =>
-          !source
-            .split(path.sep)
-            .some((part) => part === '_site' || part === '.test-output'),
-      });
-    }
-    fs.copyFileSync(
-      path.join(root, 'postcss.config.js'),
-      path.join(cwd, 'postcss.config.js'),
-    );
-    fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
-    fs.symlinkSync(
-      path.join(root, 'node_modules'),
-      path.join(cwd, 'node_modules'),
-      'dir',
-    );
-    const child = spawn(
-      process.execPath,
-      [
-        path.resolve(
-          path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
-          '../cmd.cjs',
-        ),
-        '--config=website/eleventy.config.js',
-        '--watch',
-      ],
-      { cwd, stdio: ['ignore', 'pipe', 'pipe'] },
-    );
-    let log = '';
-    child.stdout.on('data', (data) => {
-      log += data;
-    });
-    child.stderr.on('data', (data) => {
-      log += data;
-    });
-    let error;
-    child.on('error', (cause) => {
-      error = cause;
-    });
-    const closed = new Promise((resolve) => child.once('close', resolve));
-    try {
-      async function until(predicate) {
-        const deadline = Date.now() + 7000;
-        while (!predicate()) {
-          assert.equal(error, undefined);
-          assert.equal(child.exitCode, null, log);
-          assert.ok(Date.now() < deadline, log);
-          await delay(50);
-        }
+describe('watch mode', () => {
+  test(
+    'should reload native TypeScript source without compiling',
+    { timeout: 20000 },
+    async (t) => {
+      const cwd = fs.mkdtempSync(
+        path.join(os.tmpdir(), 'argot-website-native-'),
+      );
+      t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
+      for (const directory of ['src', 'tokens', 'website']) {
+        fs.cpSync(path.join(root, directory), path.join(cwd, directory), {
+          recursive: true,
+          filter: (source) =>
+            !source
+              .split(path.sep)
+              .some((part) => part === '_site' || part === '.test-output'),
+        });
       }
-      await until(() => log.includes('Watching'));
-      const loader = path.join(cwd, 'src/load-tokens.ts');
-      fs.writeFileSync(
-        loader,
-        fs
-          .readFileSync(loader, 'utf8')
-          .replace(
-            "description: node.$description || ''",
-            "description: 'Native TypeScript reload verified'",
+      fs.copyFileSync(
+        path.join(root, 'postcss.config.js'),
+        path.join(cwd, 'postcss.config.js'),
+      );
+      fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
+      fs.symlinkSync(
+        path.join(root, 'node_modules'),
+        path.join(cwd, 'node_modules'),
+        'dir',
+      );
+      const child = spawn(
+        process.execPath,
+        [
+          path.resolve(
+            path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
+            '../cmd.cjs',
           ),
+          '--config=website/eleventy.config.js',
+          '--watch',
+        ],
+        { cwd, stdio: ['ignore', 'pipe', 'pipe'] },
       );
-      const page = path.join(cwd, 'website/_site/tokens/color-text/index.html');
-      await until(
-        () =>
-          fs.existsSync(page) &&
+      let log = '';
+      child.stdout.on('data', (data) => {
+        log += data;
+      });
+      child.stderr.on('data', (data) => {
+        log += data;
+      });
+      let error;
+      child.on('error', (cause) => {
+        error = cause;
+      });
+      const closed = new Promise((resolve) => child.once('close', resolve));
+      try {
+        async function until(predicate) {
+          const deadline = Date.now() + 7000;
+          while (!predicate()) {
+            assert.equal(error, undefined);
+            assert.equal(child.exitCode, null, log);
+            assert.ok(Date.now() < deadline, log);
+            await delay(50);
+          }
+        }
+        await until(() => log.includes('Watching'));
+        const loader = path.join(cwd, 'src/load-tokens.ts');
+        fs.writeFileSync(
+          loader,
           fs
-            .readFileSync(page, 'utf8')
-            .includes('Native TypeScript reload verified'),
-      );
-      assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
-      assert.doesNotMatch(
-        log,
-        /problem was encountered looking for JavaScript dependencies/,
-      );
-    } finally {
-      child.kill('SIGTERM');
-      await closed;
-    }
-  },
-);
+            .readFileSync(loader, 'utf8')
+            .replace(
+              "description: node.$description || ''",
+              "description: 'Native TypeScript reload verified'",
+            ),
+        );
+        const page = path.join(
+          cwd,
+          'website/_site/tokens/color-text/index.html',
+        );
+        await until(
+          () =>
+            fs.existsSync(page) &&
+            fs
+              .readFileSync(page, 'utf8')
+              .includes('Native TypeScript reload verified'),
+        );
+        assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
+        assert.doesNotMatch(
+          log,
+          /problem was encountered looking for JavaScript dependencies/,
+        );
+      } finally {
+        child.kill('SIGTERM');
+        await closed;
+      }
+    },
+  );
+});
 
 for (const prefix of ['/', '/argot/']) {
-  test(`build at ${prefix} contains all tokens and working internal links`, async (t) => {
-    const output = path.join(
-      root,
-      'website/.test-output',
-      prefix === '/' ? 'root' : 'prefixed',
-    );
-    fs.mkdirSync(output, { recursive: true });
-    t.after(() => fs.rmSync(output, { recursive: true, force: true }));
-    execFileSync(
-      process.execPath,
-      [
-        path.resolve(
-          path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
-          '../cmd.cjs',
-        ),
-        '--config=website/eleventy.config.js',
-        `--output=${output}`,
-        `--pathprefix=${prefix}`,
-      ],
-      { cwd: root, stdio: 'pipe' },
-    );
+  describe(`build at ${prefix}`, () => {
+    test('should contain all tokens and working internal links', async (t) => {
+      const output = path.join(
+        root,
+        'website/.test-output',
+        prefix === '/' ? 'root' : 'prefixed',
+      );
+      fs.mkdirSync(output, { recursive: true });
+      t.after(() => fs.rmSync(output, { recursive: true, force: true }));
+      execFileSync(
+        process.execPath,
+        [
+          path.resolve(
+            path.dirname(fileURLToPath(import.meta.resolve('@11ty/eleventy'))),
+            '../cmd.cjs',
+          ),
+          '--config=website/eleventy.config.js',
+          `--output=${output}`,
+          `--pathprefix=${prefix}`,
+        ],
+        { cwd: root, stdio: 'pipe' },
+      );
 
-    const pages = new Map();
-    function readPages(directory) {
-      for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-        const file = path.join(directory, entry.name);
-        if (entry.isDirectory()) readPages(file);
-        else if (file.endsWith('.html')) {
-          const html = fs.readFileSync(file, 'utf8');
-          const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
-          assert.equal(
-            new Set(ids).size,
-            ids.length,
-            `Duplicate id in ${file}`,
-          );
-          pages.set(file, { html, ids: new Set(ids) });
+      const pages = new Map();
+      function readPages(directory) {
+        for (const entry of fs.readdirSync(directory, {
+          withFileTypes: true,
+        })) {
+          const file = path.join(directory, entry.name);
+          if (entry.isDirectory()) readPages(file);
+          else if (file.endsWith('.html')) {
+            const html = fs.readFileSync(file, 'utf8');
+            const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
+            assert.equal(
+              new Set(ids).size,
+              ids.length,
+              `Duplicate id in ${file}`,
+            );
+            pages.set(file, { html, ids: new Set(ids) });
+          }
         }
       }
-    }
-    readPages(output);
-    const css = fs.readFileSync(path.join(output, 'assets/site.css'), 'utf8');
-    assert.doesNotMatch(css, /@import\b/);
-    assert.match(css, /--bg-body:/);
-    assert.deepEqual(
-      fs
-        .readdirSync(path.join(output, 'assets'))
-        .filter((file) => file.endsWith('.css')),
-      ['site.css'],
-    );
-    for (const section of reference.sections) {
-      const file = path.join(output, 'tokens', section.slug, 'index.html');
-      const { html, ids } = pages.get(file);
-      for (const token of section.tokens) {
-        assert.ok(ids.has(token.id), `Missing ${token.name} in ${file}`);
-        assert.ok(
-          html.includes(token.name),
-          `Missing ${token.name} text in ${file}`,
-        );
-      }
-    }
-
-    for (const [file, { html }] of pages) {
-      const relative = path.relative(output, file).split(path.sep).join('/');
-      const pageUrl = new URL(`${prefix}${relative}`, 'https://example.test');
-      for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
-        const href = match[1].replaceAll('&amp;', '&');
-        const target = new URL(href, pageUrl);
-        if (target.origin !== pageUrl.origin) continue;
-        assert.ok(
-          target.pathname.startsWith(prefix),
-          `Unprefixed URL ${href} in ${file}`,
-        );
-        const local = target.pathname.slice(prefix.length);
-        const destination = path.join(
-          output,
-          local,
-          target.pathname.endsWith('/') ? 'index.html' : '',
-        );
-        assert.ok(fs.existsSync(destination), `Missing ${href} from ${file}`);
-        if (target.hash) {
+      readPages(output);
+      const css = fs.readFileSync(path.join(output, 'assets/site.css'), 'utf8');
+      assert.doesNotMatch(css, /@import\b/);
+      assert.match(css, /--bg-body:/);
+      assert.deepEqual(
+        fs
+          .readdirSync(path.join(output, 'assets'))
+          .filter((file) => file.endsWith('.css')),
+        ['site.css'],
+      );
+      for (const section of reference.sections) {
+        const file = path.join(output, 'tokens', section.slug, 'index.html');
+        const { html, ids } = pages.get(file);
+        for (const token of section.tokens) {
+          assert.ok(ids.has(token.id), `Missing ${token.name} in ${file}`);
           assert.ok(
-            pages
-              .get(destination)
-              ?.ids.has(decodeURIComponent(target.hash.slice(1))),
-            `Missing fragment ${href} from ${file}`,
+            html.includes(token.name),
+            `Missing ${token.name} text in ${file}`,
           );
         }
       }
-    }
-    const overview = pages.get(path.join(output, 'tokens/index.html')).html;
-    assert.equal(
-      [...overview.matchAll(/data-token-entry\b/g)].length,
-      reference.total,
-    );
-    assert.match(overview, /data-token-filters hidden/);
-    assert.doesNotMatch(overview, /data-token-entry[^>]*\bhidden/);
-    assert.match(overview, /type="module"/);
+
+      for (const [file, { html }] of pages) {
+        const relative = path.relative(output, file).split(path.sep).join('/');
+        const pageUrl = new URL(`${prefix}${relative}`, 'https://example.test');
+        for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
+          const href = match[1].replaceAll('&amp;', '&');
+          const target = new URL(href, pageUrl);
+          if (target.origin !== pageUrl.origin) continue;
+          assert.ok(
+            target.pathname.startsWith(prefix),
+            `Unprefixed URL ${href} in ${file}`,
+          );
+          const local = target.pathname.slice(prefix.length);
+          const destination = path.join(
+            output,
+            local,
+            target.pathname.endsWith('/') ? 'index.html' : '',
+          );
+          assert.ok(fs.existsSync(destination), `Missing ${href} from ${file}`);
+          if (target.hash) {
+            assert.ok(
+              pages
+                .get(destination)
+                ?.ids.has(decodeURIComponent(target.hash.slice(1))),
+              `Missing fragment ${href} from ${file}`,
+            );
+          }
+        }
+      }
+      const overview = pages.get(path.join(output, 'tokens/index.html')).html;
+      assert.equal(
+        [...overview.matchAll(/data-token-entry\b/g)].length,
+        reference.total,
+      );
+      assert.match(overview, /data-token-filters hidden/);
+      assert.doesNotMatch(overview, /data-token-entry[^>]*\bhidden/);
+      assert.match(overview, /type="module"/);
+    });
   });
 }
 
-test('search matches names, descriptions, usage, case, words, and tiers', () => {
-  const text = '--text-secondary Supporting copy. Usage: subtitles, metadata';
-  assert.ok(matchesToken(text, 'core', 'TEXT-secondary', 'all'));
-  assert.ok(matchesToken(text, 'core', 'supporting metadata', 'core'));
-  assert.ok(matchesToken(text, 'core', '   ', 'all'));
-  assert.ok(!matchesToken(text, 'core', '', 'extended'));
-  assert.ok(!matchesToken(text, 'core', 'chart', 'all'));
+describe('search', () => {
+  test('should match names, descriptions, usage, case, words, and tiers', () => {
+    const text = '--text-secondary Supporting copy. Usage: subtitles, metadata';
+    assert.ok(matchesToken(text, 'core', 'TEXT-secondary', 'all'));
+    assert.ok(matchesToken(text, 'core', 'supporting metadata', 'core'));
+    assert.ok(matchesToken(text, 'core', '   ', 'all'));
+    assert.ok(!matchesToken(text, 'core', '', 'extended'));
+    assert.ok(!matchesToken(text, 'core', 'chart', 'all'));
+  });
 });
 
-test('filter UI hides empty groups, reports results, and resets', () => {
-  const query = { value: '' };
-  const tier = { value: 'all' };
-  const listeners = {};
-  const form = {
-    hidden: true,
-    elements: { namedItem: (name) => (name === 'query' ? query : tier) },
-    addEventListener: (event, callback) => (listeners[event] = callback),
-  };
-  const entries = [
-    { textContent: '--text-primary Main copy', dataset: { tier: 'core' } },
-    {
-      textContent: '--icon-primary Default icon',
-      dataset: { tier: 'extended' },
-    },
-  ];
-  const groups = entries.map((entry) => ({ querySelectorAll: () => [entry] }));
-  const count = {};
-  const empty = {};
-  const rootElement = {
-    querySelector: (selector) =>
-      ({
-        '[data-token-filters]': form,
-        '[data-result-count]': count,
-        '[data-no-results]': empty,
-      })[selector],
-    querySelectorAll: () => groups,
-  };
-  initializeSearch(rootElement);
-  assert.equal(form.hidden, false);
-  assert.equal(count.textContent, '2 tokens');
-  tier.value = 'extended';
-  listeners.change();
-  assert.equal(count.textContent, '1 token');
-  assert.equal(groups[0].hidden, true);
-  query.value = 'not-a-token';
-  listeners.input();
-  assert.equal(count.textContent, '0 tokens');
-  assert.equal(empty.hidden, false);
-  assert.ok(groups.every((group) => group.hidden));
-  tier.value = 'all';
-  query.value = '';
-  listeners.input();
-  assert.equal(count.textContent, '2 tokens');
-  assert.equal(empty.hidden, true);
-  assert.ok(entries.every((entry) => !entry.hidden));
+describe('filter UI', () => {
+  test('should hide empty groups, report results, and reset', () => {
+    const query = { value: '' };
+    const tier = { value: 'all' };
+    const listeners = {};
+    const form = {
+      hidden: true,
+      elements: { namedItem: (name) => (name === 'query' ? query : tier) },
+      addEventListener: (event, callback) => (listeners[event] = callback),
+    };
+    const entries = [
+      { textContent: '--text-primary Main copy', dataset: { tier: 'core' } },
+      {
+        textContent: '--icon-primary Default icon',
+        dataset: { tier: 'extended' },
+      },
+    ];
+    const groups = entries.map((entry) => ({
+      querySelectorAll: () => [entry],
+    }));
+    const count = {};
+    const empty = {};
+    const rootElement = {
+      querySelector: (selector) =>
+        ({
+          '[data-token-filters]': form,
+          '[data-result-count]': count,
+          '[data-no-results]': empty,
+        })[selector],
+      querySelectorAll: () => groups,
+    };
+    initializeSearch(rootElement);
+    assert.equal(form.hidden, false);
+    assert.equal(count.textContent, '2 tokens');
+    tier.value = 'extended';
+    listeners.change();
+    assert.equal(count.textContent, '1 token');
+    assert.equal(groups[0].hidden, true);
+    query.value = 'not-a-token';
+    listeners.input();
+    assert.equal(count.textContent, '0 tokens');
+    assert.equal(empty.hidden, false);
+    assert.ok(groups.every((group) => group.hidden));
+    tier.value = 'all';
+    query.value = '';
+    listeners.input();
+    assert.equal(count.textContent, '2 tokens');
+    assert.equal(empty.hidden, true);
+    assert.ok(entries.every((entry) => !entry.hidden));
+  });
 });

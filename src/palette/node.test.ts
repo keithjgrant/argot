@@ -21,7 +21,7 @@ function workspace(t: TestContext): string {
 }
 
 describe('loadPaletteDefinition', () => {
-  test('sample JSON loads numeric seeds directly', () => {
+  test('should load numeric seeds directly from sample JSON', () => {
     const input = loadPaletteDefinition(
       fileURLToPath(
         new URL('../../scripts/fixtures/palette.json', import.meta.url),
@@ -33,7 +33,7 @@ describe('loadPaletteDefinition', () => {
     ]);
   });
 
-  test('reads UTF-8 JSON and returns validated defaults', (t) => {
+  test('should read UTF-8 JSON and return validated defaults', (t) => {
     const cwd = workspace(t);
     const input = path.join(cwd, 'palette.json');
     fs.writeFileSync(input, JSON.stringify(definition));
@@ -48,7 +48,7 @@ describe('loadPaletteDefinition', () => {
     assert.equal(fs.readFileSync(input, 'utf8'), JSON.stringify(definition));
   });
 
-  test('distinguishes read, JSON and schema errors with the input path', (t) => {
+  test('should distinguish read, JSON and schema errors with the input path', (t) => {
     const cwd = workspace(t);
     const input = path.join(cwd, 'palette.json');
     assert.throws(
@@ -88,7 +88,7 @@ describe('loadPaletteDefinition', () => {
 });
 
 describe('writePalette', () => {
-  test('creates parent directories and returns the actual CSS and path', (t) => {
+  test('should create parent directories and return the actual CSS and path', (t) => {
     const cwd = workspace(t);
     const output = path.join(cwd, 'styles/tokens/primitives.css');
     const result = writePalette(output, definition);
@@ -100,7 +100,7 @@ describe('writePalette', () => {
     assert.equal(fs.readFileSync(output, 'utf8'), result.css);
   });
 
-  test('requires force to replace user-edited files', (t) => {
+  test('should require force to replace user-edited files', (t) => {
     const cwd = workspace(t);
     const output = path.join(cwd, 'primitives.css');
     const other = path.join(cwd, 'other.css');
@@ -117,7 +117,7 @@ describe('writePalette', () => {
     assert.equal(fs.readFileSync(other, 'utf8'), 'unrelated CSS');
   });
 
-  test('dry runs render without creating directories or modifying output', (t) => {
+  test('should dry-run render without creating directories or modifying output', (t) => {
     const cwd = workspace(t);
     const output = path.join(cwd, 'missing/parent/primitives.css');
     const result = writePalette(output, definition, { dryRun: true });
@@ -142,7 +142,7 @@ describe('writePalette', () => {
     assert.equal(fs.readFileSync(existing, 'utf8'), 'keep me');
   });
 
-  test('invalid definitions fail before any output directory or file changes', (t) => {
+  test('should fail invalid definitions before any output directory or file changes', (t) => {
     const cwd = workspace(t);
     const output = path.join(cwd, 'missing/primitives.css');
     const invalid = { version: 1 as const, seedColors: [] };
@@ -157,7 +157,7 @@ describe('writePalette', () => {
     assert.equal(fs.readFileSync(existing, 'utf8'), 'keep me');
   });
 
-  test('refuses directory outputs, including forced dry runs', (t) => {
+  test('should refuse directory outputs, including forced dry runs', (t) => {
     const cwd = workspace(t);
     for (const force of [false, true]) {
       for (const dryRun of [false, true]) {
@@ -170,7 +170,7 @@ describe('writePalette', () => {
     assert.deepEqual(fs.readdirSync(cwd), []);
   });
 
-  test('refuses existing and dangling final-path symlinks', (t) => {
+  test('should refuse existing and dangling final-path symlinks', (t) => {
     const cwd = workspace(t);
     const target = path.join(cwd, 'target.css');
     fs.writeFileSync(target, 'keep target');
@@ -194,7 +194,7 @@ describe('writePalette', () => {
 });
 
 describe('integration', () => {
-  test('sample JSON generates primitive CSS', () => {
+  test('should generate primitive CSS from sample JSON', () => {
     const input = loadPaletteDefinition(
       fileURLToPath(
         new URL('../../scripts/fixtures/palette.json', import.meta.url),

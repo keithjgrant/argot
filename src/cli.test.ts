@@ -15,8 +15,8 @@ function workspace(t: TestContext): string {
   return cwd;
 }
 
-describe('integration', () => {
-  test('generates identical core and extended templates outside the package', (t) => {
+describe('CLI', () => {
+  test('should generate identical core and extended templates outside the package', (t) => {
     const cwd = workspace(t);
     for (const extended of [false, true]) {
       const filename = extended ? 'extended.css' : 'core.css';
@@ -32,7 +32,7 @@ describe('integration', () => {
     }
   });
 
-  test('help and error handling still work', () => {
+  test('should handle help and unknown commands', () => {
     const help = execFileSync(process.execPath, [cli, '--help'], {
       encoding: 'utf8',
     });

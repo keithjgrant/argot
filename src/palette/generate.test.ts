@@ -21,31 +21,35 @@ function definition(
 }
 
 describe('generatePalette', () => {
-  test('centered/weighted retains the weighted peak at the original nearest step', () => {
-    const palette = generatePalette(
-      definition(
-        { l: 0.84, c: 0.2, h: 250 },
-        { lightnessCurve: 'centered', chromaCurve: 'weighted' },
-      ),
-    ).colors[0];
-    assert.equal(palette.baseStep, 9);
-    assert.equal(palette.steps[8].l, 0.84);
-    assert.equal(palette.steps[8].c, 0.2);
-    assert.ok(palette.steps[3].c > palette.steps[8].c);
-  });
-
-  test('centered mode preserves fixed endpoints even outside the usual lightness range', () => {
-    for (const l of [0.01, 0.99]) {
+  describe('centered/weighted', () => {
+    test('should retain the weighted peak at the original nearest step', () => {
       const palette = generatePalette(
-        definition({ l, c: 0.1, h: 250 }, { lightnessCurve: 'centered' }),
+        definition(
+          { l: 0.84, c: 0.2, h: 250 },
+          { lightnessCurve: 'centered', chromaCurve: 'weighted' },
+        ),
       ).colors[0];
-      assert.equal(palette.steps[0].l, 0.98);
-      assert.ok(Math.abs(palette.steps[15].l - 0.1) < 1e-12);
-      assert.equal(palette.steps[8].l, l);
-    }
+      assert.equal(palette.baseStep, 9);
+      assert.equal(palette.steps[8].l, 0.84);
+      assert.equal(palette.steps[8].c, 0.2);
+      assert.ok(palette.steps[3].c > palette.steps[8].c);
+    });
   });
 
-  test('neutral seeds resolve to zero chroma for every curve combination', () => {
+  describe('centered lightness curve', () => {
+    test('should preserve fixed endpoints even outside the usual lightness range', () => {
+      for (const l of [0.01, 0.99]) {
+        const palette = generatePalette(
+          definition({ l, c: 0.1, h: 250 }, { lightnessCurve: 'centered' }),
+        ).colors[0];
+        assert.equal(palette.steps[0].l, 0.98);
+        assert.ok(Math.abs(palette.steps[15].l - 0.1) < 1e-12);
+        assert.equal(palette.steps[8].l, l);
+      }
+    });
+  });
+
+  test('should resolve neutral seeds to zero chroma for every curve combination', () => {
     const seed = { l: 0.6, c: 0, h: 0 };
     for (const lightnessCurve of [
       'uniform',
@@ -61,7 +65,7 @@ describe('generatePalette', () => {
     }
   });
 
-  test('format and gamut options do not change raw steps', () => {
+  test('should leave raw steps unchanged for format and gamut options', () => {
     const seed = { l: 0.65, c: 0.4, h: 30 };
     const baseline = generatePalette(definition(seed));
     for (const [format, gamut] of [
@@ -76,7 +80,7 @@ describe('generatePalette', () => {
     }
   });
 
-  test('preserves seed precision including unwrapped hue', () => {
+  test('should preserve seed precision including unwrapped hue', () => {
     const seed = Object.freeze({
       l: 0.6234567891234567,
       c: 1e-14,

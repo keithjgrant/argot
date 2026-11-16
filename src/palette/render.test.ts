@@ -18,7 +18,7 @@ function definition(
 }
 
 describe('renderPaletteCss', () => {
-  test('maps supported format/gamut combinations into gamut without mutating palette steps', () => {
+  test('should map supported format/gamut combinations into gamut without mutating palette steps', () => {
     const seed = { l: 0.65, c: 0.4, h: 30 };
     const palette = generatePalette(definition(seed));
     const before = structuredClone(palette);
@@ -46,7 +46,7 @@ describe('renderPaletteCss', () => {
     assert.deepEqual(palette, before);
   });
 
-  test('rounds only for CSS output and leaves the palette model unchanged', () => {
+  test('should round only for CSS output and leave the palette model unchanged', () => {
     const seed = { l: 0.623456789123, c: 0.123456789123, h: 250 };
     const palette = generatePalette(
       definition(seed, {
@@ -69,7 +69,7 @@ describe('renderPaletteCss', () => {
 });
 
 describe('integration', () => {
-  test('generatePaletteCss matches renderPaletteCss(generatePalette(...))', () => {
+  test('should match generatePaletteCss to renderPaletteCss(generatePalette(...))', () => {
     const seed = { l: 0.65, c: 0.4, h: 30 };
     for (const [format, gamut] of [
       ['oklch', 'p3'],
@@ -84,7 +84,7 @@ describe('integration', () => {
     }
   });
 
-  test('precision path matches generatePaletteCss after renderPaletteCss', () => {
+  test('should match precision path to generatePaletteCss after renderPaletteCss', () => {
     const seed = { l: 0.623456789123, c: 0.123456789123, h: 250 };
     const input = definition(seed, {
       lightnessCurve: 'inclusive',
