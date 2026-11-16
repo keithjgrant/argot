@@ -1,5 +1,16 @@
+/**
+ * Distribution / consumer checks, not in-repo unit tests of `src/`.
+ *
+ * The packed-package suite runs `npm pack`, extracts the tarball into a private
+ * workspace, and asserts tarball contents, docs, runtime imports, CLI, and
+ * TypeScript consumers against that install—without a registry. Shared `before`
+ * setup packs once per suite so those cases stay focused without re-packing.
+ *
+ * Native development commands copy `src/` and `scripts/dev.js` into a workspace
+ * with no `dist/`, confirming the strip-types CLI works as a consumer of source.
+ */
 import assert from 'node:assert/strict';
-import { describe, test } from 'node:test';
+import { after, before, describe, test } from 'node:test';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -8,12 +19,6 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(import.meta.dirname, '..');
 
-function workspace(t) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-distribution-'));
-  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  return dir;
-}
-
 function linkDependency(cwd, name) {
   const destination = path.join(cwd, 'node_modules', name);
   fs.mkdirSync(path.dirname(destination), { recursive: true });
@@ -21,46 +26,99 @@ function linkDependency(cwd, name) {
 }
 
 describe('packed package', () => {
-  test('should run as JavaScript and expose standalone declarations', () => {
+  /** @type {string} */
+  let cwd;
+  /** @type {string[]} */
+  let files;
+  /** @type {string} */
+  let installed;
+  /** @type {string} */
+  let compiler;
+
+  before(() => {
     // Use a private workspace and local dependencies: no registry, publishing, or
     // reliance on source files being adjacent to dist in the package under test.
-    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-packed-'));
-    try {
-      const output = execFileSync(
-        'npm',
-        ['pack', '--json', '--pack-destination', cwd],
-        { cwd: root, encoding: 'utf8' },
+    cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-packed-'));
+    const output = execFileSync(
+      'npm',
+      ['pack', '--json', '--pack-destination', cwd],
+      { cwd: root, encoding: 'utf8' },
+    );
+    const [packed] = JSON.parse(output.slice(output.indexOf('[')));
+    files = packed.files.map(({ path: filename }) => filename);
+    installed = path.join(cwd, 'node_modules/@keithjgrant/argot');
+    fs.mkdirSync(installed, { recursive: true });
+    execFileSync('tar', [
+      '-xzf',
+      path.join(cwd, packed.filename),
+      '-C',
+      installed,
+      '--strip-components=1',
+    ]);
+    fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
+    for (const dependency of ['colorjs.io', 'stylelint', '@types']) {
+      linkDependency(cwd, dependency);
+    }
+    for (const file of [
+      'consumer.ts',
+      'tsconfig.json',
+      'browser.ts',
+      'tsconfig.browser.json',
+    ]) {
+      fs.copyFileSync(
+        path.join(root, 'scripts/types', file),
+        path.join(cwd, file),
       );
-      const [packed] = JSON.parse(output.slice(output.indexOf('[')));
-      const files = packed.files.map(({ path: filename }) => filename);
+    }
+    compiler = path.join(
+      path.dirname(
+        fileURLToPath(import.meta.resolve('typescript/package.json')),
+      ),
+      'bin/tsc',
+    );
+  });
+
+  after(() => {
+    fs.rmSync(cwd, { recursive: true, force: true });
+  });
+
+  describe('tarball contents', () => {
+    test('should include compiled palette entrypoints', () => {
       assert.ok(files.includes('dist/palette/index.js'));
       assert.ok(files.includes('dist/palette/index.d.ts'));
+    });
+
+    test('should include tokens, templates, and load-tokens', () => {
       assert.ok(files.includes('dist/load-tokens.js'));
       assert.ok(files.includes('tokens/color-text.json'));
       assert.ok(files.includes('templates/semantics.css'));
+    });
+
+    test('should include only docs/api.md under docs/', () => {
       assert.ok(files.includes('docs/api.md'));
       assert.deepEqual(
         files.filter((file) => file.startsWith('docs/')),
         ['docs/api.md'],
       );
+    });
+
+    test('should omit src and website', () => {
       assert.ok(
         files.every(
           (file) => !file.startsWith('src/') && !file.startsWith('website/'),
         ),
       );
+    });
+
+    test('should omit TypeScript sources except declarations', () => {
       assert.ok(
         files.every((file) => !file.endsWith('.ts') || file.endsWith('.d.ts')),
       );
-      const installed = path.join(cwd, 'node_modules/@keithjgrant/argot');
-      fs.mkdirSync(installed, { recursive: true });
-      execFileSync('tar', [
-        '-xzf',
-        path.join(cwd, packed.filename),
-        '-C',
-        installed,
-        '--strip-components=1',
-      ]);
-      fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
+    });
+  });
+
+  describe('API reference', () => {
+    test('should document public entrypoints', () => {
       const apiReference = fs.readFileSync(
         path.join(installed, 'docs/api.md'),
         'utf8',
@@ -77,9 +135,11 @@ describe('packed package', () => {
           `Missing API reference: ${entrypoint}`,
         );
       }
-      for (const dependency of ['colorjs.io', 'stylelint', '@types']) {
-        linkDependency(cwd, dependency);
-      }
+    });
+  });
+
+  describe('runtime smoke', () => {
+    test('should import and exercise public APIs from the installed package', () => {
       fs.writeFileSync(
         path.join(cwd, 'smoke.js'),
         `
@@ -121,6 +181,11 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
           stdio: 'pipe',
         },
       );
+    });
+  });
+
+  describe('CLI', () => {
+    test('should generate semantics.css', () => {
       execFileSync(
         process.execPath,
         [
@@ -130,6 +195,20 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
           'semantics.css',
         ],
         { cwd, stdio: 'pipe' },
+      );
+      assert.match(
+        fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'),
+        /--text-primary:/,
+      );
+    });
+
+    test('should generate palette CSS', () => {
+      fs.writeFileSync(
+        path.join(cwd, 'palette.json'),
+        JSON.stringify({
+          version: 1,
+          seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
+        }),
       );
       execFileSync(
         process.execPath,
@@ -143,34 +222,21 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
         { cwd, stdio: 'pipe' },
       );
       assert.match(
-        fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'),
-        /--text-primary:/,
-      );
-      assert.match(
         fs.readFileSync(path.join(cwd, 'cli-palette.css'), 'utf8'),
         /--brand-16:/,
       );
-      for (const file of [
-        'consumer.ts',
-        'tsconfig.json',
-        'browser.ts',
-        'tsconfig.browser.json',
-      ]) {
-        fs.copyFileSync(
-          path.join(root, 'scripts/types', file),
-          path.join(cwd, file),
-        );
-      }
-      const compiler = path.join(
-        path.dirname(
-          fileURLToPath(import.meta.resolve('typescript/package.json')),
-        ),
-        'bin/tsc',
-      );
+    });
+  });
+
+  describe('TypeScript consumers', () => {
+    test('should typecheck the node consumer project', () => {
       execFileSync(process.execPath, [compiler, '--project', 'tsconfig.json'], {
         cwd,
         stdio: 'pipe',
       });
+    });
+
+    test('should typecheck the browser consumer project', () => {
       execFileSync(
         process.execPath,
         [compiler, '--project', 'tsconfig.browser.json'],
@@ -179,15 +245,16 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
           stdio: 'pipe',
         },
       );
-    } finally {
-      fs.rmSync(cwd, { recursive: true, force: true });
-    }
+    });
   });
 });
 
 describe('native development commands', () => {
-  test('should work with no dist directory', (t) => {
-    const cwd = workspace(t);
+  /** @type {string} */
+  let cwd;
+
+  before(() => {
+    cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-distribution-'));
     for (const directory of ['src', 'tokens']) {
       fs.cpSync(path.join(root, directory), path.join(cwd, directory), {
         recursive: true,
@@ -200,14 +267,6 @@ describe('native development commands', () => {
     );
     fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
     linkDependency(cwd, 'colorjs.io');
-    execFileSync(
-      process.execPath,
-      ['scripts/dev.js', 'generate', 'semantics.css'],
-      {
-        cwd,
-        stdio: 'pipe',
-      },
-    );
     fs.writeFileSync(
       path.join(cwd, 'palette.json'),
       JSON.stringify({
@@ -217,20 +276,35 @@ describe('native development commands', () => {
     );
     execFileSync(
       process.execPath,
-      ['scripts/dev.js', 'palette', 'palette.json'],
-      {
-        cwd,
-        stdio: 'pipe',
-      },
+      ['scripts/dev.js', 'generate', 'semantics.css'],
+      { cwd, stdio: 'pipe' },
     );
-    assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
+    execFileSync(
+      process.execPath,
+      ['scripts/dev.js', 'palette', 'palette.json'],
+      { cwd, stdio: 'pipe' },
+    );
+  });
+
+  after(() => {
+    fs.rmSync(cwd, { recursive: true, force: true });
+  });
+
+  test('should generate semantics.css without a dist directory', () => {
     assert.match(
       fs.readFileSync(path.join(cwd, 'semantics.css'), 'utf8'),
       /--text-primary:/,
     );
+  });
+
+  test('should generate palette CSS without a dist directory', () => {
     assert.match(
       fs.readFileSync(path.join(cwd, 'primitives.css'), 'utf8'),
       /--brand-16:/,
     );
+  });
+
+  test('should leave no dist directory', () => {
+    assert.equal(fs.existsSync(path.join(cwd, 'dist')), false);
   });
 });

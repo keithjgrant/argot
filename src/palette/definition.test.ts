@@ -40,7 +40,7 @@ describe('normalizePaletteDefinition', () => {
     assert.notEqual(normalized.seedColors[0], color);
   });
 
-  test('should report invalid or missing coordinates by field', () => {
+  test('should reject invalid coordinate values by field', () => {
     const invalid = {
       l: [
         undefined,
@@ -65,6 +65,11 @@ describe('normalizePaletteDefinition', () => {
           new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
         );
       }
+    }
+  });
+
+  test('should reject missing coordinates by field', () => {
+    for (const field of ['l', 'c', 'h']) {
       const seed: Record<string, number> = { l: 0.6, c: 0.2, h: 250 };
       delete seed[field];
       assert.throws(
@@ -73,6 +78,9 @@ describe('normalizePaletteDefinition', () => {
         new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
       );
     }
+  });
+
+  test('should accept endpoint lightness 0 and 1', () => {
     for (const l of [0, 1]) {
       assert.equal(
         normalizePaletteDefinition(definition({ l, c: 0, h: 250 }))
@@ -80,28 +88,41 @@ describe('normalizePaletteDefinition', () => {
         l,
       );
     }
+  });
+
+  test('should preserve hue for zero chroma', () => {
     const neutral = normalizePaletteDefinition(
       definition({ l: 0.6, c: 0, h: 250 }),
     );
     assert.equal(neutral.seedColors[0].h, 250);
   });
 
-  test('should reject legacy strings and ambiguous or unknown seed fields', () => {
+  test('should reject the legacy colors key', () => {
+    assert.throws(
+      () =>
+        normalizePaletteDefinition({
+          version: 1,
+          colors: [{ name: 'brand', color: '#663399' }],
+        }),
+      /unknown field/,
+    );
+  });
+
+  test('should reject unknown seed fields', () => {
     const cases = [
-      { name: 'brand', color: '#663399' },
       { name: 'brand', l: 0.6, c: 0.2, h: 250, color: '#663399' },
       { name: 'brand', l: 0.6, c: 0.2, h: 250, alpha: 0.5 },
       { name: 'brand', l: 0.6, c: 0.2, h: 250, space: 'lch' },
     ];
     for (const color of cases) {
       assert.throws(
-        () => normalizePaletteDefinition({ version: 1, colors: [color] }),
+        () => normalizePaletteDefinition({ version: 1, seedColors: [color] }),
         /unknown field/,
       );
     }
   });
 
-  test('should retain name, version and option validation', () => {
+  test('should reject duplicate custom property names', () => {
     const seed = { l: 0.6, c: 0.2, h: 250 };
     for (const names of [
       ['brand', 'brand'],
@@ -117,33 +138,51 @@ describe('normalizePaletteDefinition', () => {
         /duplicate custom property/,
       );
     }
+  });
+
+  test('should reject unsupported versions', () => {
     assert.throws(
       () =>
         normalizePaletteDefinition({
           version: 2,
-          seedColors: [{ name: 'brand', ...seed }],
+          seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }],
         }),
       /version/,
     );
+  });
+
+  test('should reject invalid seed names', () => {
     assert.throws(
       () =>
         normalizePaletteDefinition({
           version: 1,
-          seedColors: [{ name: '--brand', ...seed }],
+          seedColors: [{ name: '--brand', l: 0.6, c: 0.2, h: 250 }],
         }),
       /seedColors\[0\]\.name/,
     );
+  });
+
+  test('should reject unknown option values', () => {
     assert.throws(
       () =>
         normalizePaletteDefinition(
-          definition(seed, { lightnessCurve: 'custom' as never }),
+          definition(
+            { l: 0.6, c: 0.2, h: 250 },
+            { lightnessCurve: 'custom' as never },
+          ),
         ),
       /lightnessCurve/,
     );
+  });
+
+  test('should reject hex format with non-srgb gamut', () => {
     assert.throws(
       () =>
         normalizePaletteDefinition(
-          definition(seed, { format: 'hex', gamut: 'p3' }),
+          definition(
+            { l: 0.6, c: 0.2, h: 250 },
+            { format: 'hex', gamut: 'p3' },
+          ),
         ),
       /hex output requires srgb/,
     );
@@ -175,19 +214,12 @@ describe('serializePaletteDefinition', () => {
 
 describe('integration', () => {
   test('should fail missing coordinates through generatePalette with the same field errors', () => {
-    const invalid = {
-      l: [undefined],
-      c: [undefined],
-      h: [undefined],
-    };
-    for (const [field, values] of Object.entries(invalid)) {
-      for (const value of values) {
-        const seed = { l: 0.6, c: 0.2, h: 250, [field]: value };
-        assert.throws(
-          () => generatePalette(definition(seed as OklchColor)),
-          new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
-        );
-      }
+    for (const field of ['l', 'c', 'h']) {
+      const withUndefined = { l: 0.6, c: 0.2, h: 250, [field]: undefined };
+      assert.throws(
+        () => generatePalette(definition(withUndefined as OklchColor)),
+        new RegExp(`definition\\.seedColors\\[0\\]\\.${field}:`),
+      );
       const seed: Record<string, number> = { l: 0.6, c: 0.2, h: 250 };
       delete seed[field];
       assert.throws(
@@ -197,17 +229,28 @@ describe('integration', () => {
     }
   });
 
-  test('should fail invalid options through generatePalette', () => {
-    const seed = { l: 0.6, c: 0.2, h: 250 };
+  test('should fail unknown option values through generatePalette', () => {
     assert.throws(
       () =>
         generatePalette(
-          definition(seed, { lightnessCurve: 'custom' as never }),
+          definition(
+            { l: 0.6, c: 0.2, h: 250 },
+            { lightnessCurve: 'custom' as never },
+          ),
         ),
       /lightnessCurve/,
     );
+  });
+
+  test('should fail hex format with non-srgb gamut through generatePalette', () => {
     assert.throws(
-      () => generatePalette(definition(seed, { format: 'hex', gamut: 'p3' })),
+      () =>
+        generatePalette(
+          definition(
+            { l: 0.6, c: 0.2, h: 250 },
+            { format: 'hex', gamut: 'p3' },
+          ),
+        ),
       /hex output requires srgb/,
     );
   });

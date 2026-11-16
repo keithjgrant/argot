@@ -17,36 +17,80 @@ function definition(
   };
 }
 
+const formatGamuts = [
+  ['oklch', 'p3'],
+  ['oklch', 'srgb'],
+  ['hex', 'srgb'],
+] as const;
+
 describe('renderPaletteCss', () => {
-  test('should map supported format/gamut combinations into gamut without mutating palette steps', () => {
+  test('should map step colors into the requested gamut', () => {
     const seed = { l: 0.65, c: 0.4, h: 30 };
-    const palette = generatePalette(definition(seed));
-    const before = structuredClone(palette);
-    const rendered = new Map<string, string>();
-    for (const [format, gamut] of [
-      ['oklch', 'p3'],
-      ['oklch', 'srgb'],
-      ['hex', 'srgb'],
-    ] as const) {
+    for (const [format, gamut] of formatGamuts) {
       const css = renderPaletteCss(
         generatePalette(definition(seed, { format, gamut })),
       );
-      rendered.set(`${format}/${gamut}`, css);
+      postcss.parse(css).walkDecls(({ value }) => {
+        if (value.startsWith('var(')) return;
+        assert.ok(new Color(value).inGamut(gamut, { epsilon: 0.0001 }), value);
+      });
+    }
+  });
+
+  test('should format values as hex or oklch according to format', () => {
+    const seed = { l: 0.65, c: 0.4, h: 30 };
+    for (const [format, gamut] of formatGamuts) {
+      const css = renderPaletteCss(
+        generatePalette(definition(seed, { format, gamut })),
+      );
       let steps = 0;
       postcss.parse(css).walkDecls(({ value }) => {
         if (value.startsWith('var(')) return;
         steps++;
-        assert.ok(new Color(value).inGamut(gamut, { epsilon: 0.0001 }), value);
         if (format === 'hex') assert.match(value, /^#[0-9a-f]{6}$/i);
         else assert.match(value, /^oklch\(/);
       });
       assert.equal(steps, 16);
     }
-    assert.notEqual(rendered.get('oklch/p3'), rendered.get('oklch/srgb'));
+  });
+
+  test('should emit different oklch CSS for p3 and srgb', () => {
+    const seed = { l: 0.65, c: 0.4, h: 30 };
+    const p3 = renderPaletteCss(
+      generatePalette(definition(seed, { format: 'oklch', gamut: 'p3' })),
+    );
+    const srgb = renderPaletteCss(
+      generatePalette(definition(seed, { format: 'oklch', gamut: 'srgb' })),
+    );
+    assert.notEqual(p3, srgb);
+  });
+
+  test('should not mutate palette steps when rendering', () => {
+    const seed = { l: 0.65, c: 0.4, h: 30 };
+    const palette = generatePalette(definition(seed));
+    const before = structuredClone(palette);
+    renderPaletteCss(palette);
     assert.deepEqual(palette, before);
   });
 
-  test('should round only for CSS output and leave the palette model unchanged', () => {
+  test('should round CSS output to six digits of precision', () => {
+    const seed = { l: 0.623456789123, c: 0.123456789123, h: 250 };
+    const palette = generatePalette(
+      definition(seed, {
+        lightnessCurve: 'inclusive',
+        chromaCurve: 'weighted',
+      }),
+    );
+    const base = palette.colors[0].steps[palette.colors[0].baseStep - 1];
+    const css = renderPaletteCss(palette);
+    const expected = new Color('oklch', [base.l, base.c, base.h])
+      .toGamut({ space: 'p3', method: 'css' })
+      .to('oklch')
+      .toString({ precision: 6 });
+    assert.ok(css.includes(expected));
+  });
+
+  test('should leave the palette model unchanged after rounding for CSS', () => {
     const seed = { l: 0.623456789123, c: 0.123456789123, h: 250 };
     const palette = generatePalette(
       definition(seed, {
@@ -58,12 +102,7 @@ describe('renderPaletteCss', () => {
     const base = palette.colors[0].steps[palette.colors[0].baseStep - 1];
     assert.equal(base.l, seed.l);
     assert.equal(base.c, seed.c);
-    const css = renderPaletteCss(palette);
-    const expected = new Color('oklch', [base.l, base.c, base.h])
-      .toGamut({ space: 'p3', method: 'css' })
-      .to('oklch')
-      .toString({ precision: 6 });
-    assert.ok(css.includes(expected));
+    renderPaletteCss(palette);
     assert.deepEqual(palette, before);
   });
 });
@@ -71,11 +110,7 @@ describe('renderPaletteCss', () => {
 describe('integration', () => {
   test('should match generatePaletteCss to renderPaletteCss(generatePalette(...))', () => {
     const seed = { l: 0.65, c: 0.4, h: 30 };
-    for (const [format, gamut] of [
-      ['oklch', 'p3'],
-      ['oklch', 'srgb'],
-      ['hex', 'srgb'],
-    ] as const) {
+    for (const [format, gamut] of formatGamuts) {
       const input = definition(seed, { format, gamut });
       assert.equal(
         renderPaletteCss(generatePalette(input)),

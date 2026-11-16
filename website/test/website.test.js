@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { describe, test } from 'node:test';
+import { after, before, describe, test } from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, spawn } from 'node:child_process';
@@ -32,19 +32,31 @@ function sourceTokens() {
 }
 
 describe('reference', () => {
-  test('should preserve every source token and its metadata in source order', () => {
+  test('should preserve source token names in source order', () => {
     const source = sourceTokens();
     const generated = reference.sections.flatMap((section) => section.tokens);
     assert.deepEqual(
       generated.map((token) => token.name),
       source.map((token) => token.name),
     );
-    assert.equal(reference.total, source.length);
+  });
+
+  test('should count every source token in total', () => {
+    assert.equal(reference.total, sourceTokens().length);
     assert.equal(reference.core + reference.extended, reference.total);
+  });
+
+  test('should assign a unique id for every token', () => {
+    const generated = reference.sections.flatMap((section) => section.tokens);
     assert.equal(
       new Set(generated.map((token) => token.id)).size,
-      source.length,
+      sourceTokens().length,
     );
+  });
+
+  test('should preserve token metadata fields', () => {
+    const source = sourceTokens();
+    const generated = reference.sections.flatMap((section) => section.tokens);
     for (const [index, token] of generated.entries()) {
       assert.equal(token.type, source[index].$type);
       assert.equal(token.description, source[index].$description);
@@ -57,6 +69,9 @@ describe('reference', () => {
         );
       }
     }
+  });
+
+  test('should include section title, intro, and example', () => {
     for (const section of reference.sections) {
       assert.ok(section.title && section.intro && section.example);
     }
@@ -64,14 +79,17 @@ describe('reference', () => {
 });
 
 describe('shared loader', () => {
-  test('should preserve core filtering and resolve token directories', () => {
-    const all = loadTokens({ extended: true });
-    const core = loadTokens();
+  test('should resolve token directories', () => {
     assert.equal(getTokensDir(), path.join(root, 'tokens'));
     assert.equal(
       getTokensDir(path.join(root, 'example-package')),
       path.join(root, 'example-package/tokens'),
     );
+  });
+
+  test('should filter to core tokens by default', () => {
+    const all = loadTokens({ extended: true });
+    const core = loadTokens();
     assert.deepEqual(
       core,
       all.map((section) => ({
@@ -79,18 +97,26 @@ describe('shared loader', () => {
         tokens: section.tokens.filter((token) => token.tier === 'core'),
       })),
     );
+  });
+
+  test('should include extended tokens when requested', () => {
     assert.ok(
-      all.some((section) => section.tokens.some((t) => t.tier === 'extended')),
+      loadTokens({ extended: true }).some((section) =>
+        section.tokens.some((token) => token.tier === 'extended'),
+      ),
     );
   });
 });
 
 describe('website adaptation', () => {
-  test('should not mutate shared token data', () => {
+  test('should not mutate shared token data when building reference', () => {
     const before = loadTokens({ extended: true });
     buildReference();
     assert.deepEqual(loadTokens({ extended: true }), before);
-    const primary = before
+  });
+
+  test('should keep pairsWith as string names in loader output', () => {
+    const primary = loadTokens({ extended: true })
       .flatMap((section) => section.tokens)
       .find((token) => token.name === '--text-primary');
     assert.ok(primary.pairsWith.every((name) => typeof name === 'string'));
@@ -197,14 +223,18 @@ describe('watch mode', () => {
 
 for (const prefix of ['/', '/argot/']) {
   describe(`build at ${prefix}`, () => {
-    test('should contain all tokens and working internal links', async (t) => {
-      const output = path.join(
+    /** @type {string} */
+    let output;
+    /** @type {Map<string, { html: string, ids: Set<string> }>} */
+    let pages;
+
+    before(() => {
+      output = path.join(
         root,
         'website/.test-output',
         prefix === '/' ? 'root' : 'prefixed',
       );
       fs.mkdirSync(output, { recursive: true });
-      t.after(() => fs.rmSync(output, { recursive: true, force: true }));
       execFileSync(
         process.execPath,
         [
@@ -219,7 +249,7 @@ for (const prefix of ['/', '/argot/']) {
         { cwd: root, stdio: 'pipe' },
       );
 
-      const pages = new Map();
+      pages = new Map();
       function readPages(directory) {
         for (const entry of fs.readdirSync(directory, {
           withFileTypes: true,
@@ -229,16 +259,25 @@ for (const prefix of ['/', '/argot/']) {
           else if (file.endsWith('.html')) {
             const html = fs.readFileSync(file, 'utf8');
             const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
-            assert.equal(
-              new Set(ids).size,
-              ids.length,
-              `Duplicate id in ${file}`,
-            );
             pages.set(file, { html, ids: new Set(ids) });
           }
         }
       }
       readPages(output);
+    });
+
+    after(() => {
+      fs.rmSync(output, { recursive: true, force: true });
+    });
+
+    test('should keep unique ids on every page', () => {
+      for (const [file, { html, ids }] of pages) {
+        const listed = [...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
+        assert.equal(ids.size, listed.length, `Duplicate id in ${file}`);
+      }
+    });
+
+    test('should bundle site CSS without imports', () => {
       const css = fs.readFileSync(path.join(output, 'assets/site.css'), 'utf8');
       assert.doesNotMatch(css, /@import\b/);
       assert.match(css, /--bg-body:/);
@@ -248,6 +287,9 @@ for (const prefix of ['/', '/argot/']) {
           .filter((file) => file.endsWith('.css')),
         ['site.css'],
       );
+    });
+
+    test('should include every token on its section page', () => {
       for (const section of reference.sections) {
         const file = path.join(output, 'tokens', section.slug, 'index.html');
         const { html, ids } = pages.get(file);
@@ -259,7 +301,9 @@ for (const prefix of ['/', '/argot/']) {
           );
         }
       }
+    });
 
+    test('should prefix internal URLs', () => {
       for (const [file, { html }] of pages) {
         const relative = path.relative(output, file).split(path.sep).join('/');
         const pageUrl = new URL(`${prefix}${relative}`, 'https://example.test');
@@ -271,6 +315,18 @@ for (const prefix of ['/', '/argot/']) {
             target.pathname.startsWith(prefix),
             `Unprefixed URL ${href} in ${file}`,
           );
+        }
+      }
+    });
+
+    test('should resolve internal links and fragments', () => {
+      for (const [file, { html }] of pages) {
+        const relative = path.relative(output, file).split(path.sep).join('/');
+        const pageUrl = new URL(`${prefix}${relative}`, 'https://example.test');
+        for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
+          const href = match[1].replaceAll('&amp;', '&');
+          const target = new URL(href, pageUrl);
+          if (target.origin !== pageUrl.origin) continue;
           const local = target.pathname.slice(prefix.length);
           const destination = path.join(
             output,
@@ -288,11 +344,18 @@ for (const prefix of ['/', '/argot/']) {
           }
         }
       }
+    });
+
+    test('should list every token on the overview', () => {
       const overview = pages.get(path.join(output, 'tokens/index.html')).html;
       assert.equal(
         [...overview.matchAll(/data-token-entry\b/g)].length,
         reference.total,
       );
+    });
+
+    test('should ship hidden filter markup and a module script', () => {
+      const overview = pages.get(path.join(output, 'tokens/index.html')).html;
       assert.match(overview, /data-token-filters hidden/);
       assert.doesNotMatch(overview, /data-token-entry[^>]*\bhidden/);
       assert.match(overview, /type="module"/);
@@ -301,18 +364,31 @@ for (const prefix of ['/', '/argot/']) {
 }
 
 describe('search', () => {
-  test('should match names, descriptions, usage, case, words, and tiers', () => {
-    const text = '--text-secondary Supporting copy. Usage: subtitles, metadata';
+  const text = '--text-secondary Supporting copy. Usage: subtitles, metadata';
+
+  test('should match token names case-insensitively', () => {
     assert.ok(matchesToken(text, 'core', 'TEXT-secondary', 'all'));
+  });
+
+  test('should match description and usage words', () => {
     assert.ok(matchesToken(text, 'core', 'supporting metadata', 'core'));
+  });
+
+  test('should treat whitespace-only query as matching when the tier allows', () => {
     assert.ok(matchesToken(text, 'core', '   ', 'all'));
+  });
+
+  test('should exclude tokens outside the selected tier', () => {
     assert.ok(!matchesToken(text, 'core', '', 'extended'));
+  });
+
+  test('should reject unmatched query terms', () => {
     assert.ok(!matchesToken(text, 'core', 'chart', 'all'));
   });
 });
 
 describe('filter UI', () => {
-  test('should hide empty groups, report results, and reset', () => {
+  function setup() {
     const query = { value: '' };
     const tier = { value: 'all' };
     const listeners = {};
@@ -343,17 +419,42 @@ describe('filter UI', () => {
       querySelectorAll: () => groups,
     };
     initializeSearch(rootElement);
+    return { query, tier, listeners, form, entries, groups, count, empty };
+  }
+
+  test('should show the filter form on initialize', () => {
+    const { form } = setup();
     assert.equal(form.hidden, false);
+  });
+
+  test('should report the total token count', () => {
+    const { count } = setup();
     assert.equal(count.textContent, '2 tokens');
+  });
+
+  test('should hide empty groups when filtering by tier', () => {
+    const { tier, listeners, groups, count } = setup();
     tier.value = 'extended';
     listeners.change();
     assert.equal(count.textContent, '1 token');
     assert.equal(groups[0].hidden, true);
+  });
+
+  test('should show no-results when nothing matches', () => {
+    const { query, listeners, groups, count, empty } = setup();
     query.value = 'not-a-token';
     listeners.input();
     assert.equal(count.textContent, '0 tokens');
     assert.equal(empty.hidden, false);
     assert.ok(groups.every((group) => group.hidden));
+  });
+
+  test('should restore all tokens when filters reset', () => {
+    const { query, tier, listeners, entries, count, empty } = setup();
+    tier.value = 'extended';
+    listeners.change();
+    query.value = 'not-a-token';
+    listeners.input();
     tier.value = 'all';
     query.value = '';
     listeners.input();

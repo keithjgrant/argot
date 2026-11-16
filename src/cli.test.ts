@@ -16,27 +16,36 @@ function workspace(t: TestContext): string {
 }
 
 describe('CLI', () => {
-  test('should generate identical core and extended templates outside the package', (t) => {
+  test('should generate a core template matching generateCss outside the package', (t) => {
     const cwd = workspace(t);
-    for (const extended of [false, true]) {
-      const filename = extended ? 'extended.css' : 'core.css';
-      execFileSync(
-        process.execPath,
-        [cli, 'generate', filename, ...(extended ? ['--extended'] : [])],
-        { cwd },
-      );
-      assert.equal(
-        fs.readFileSync(path.join(cwd, filename), 'utf8'),
-        generateCss({ extended }),
-      );
-    }
+    execFileSync(process.execPath, [cli, 'generate', 'core.css'], { cwd });
+    assert.equal(
+      fs.readFileSync(path.join(cwd, 'core.css'), 'utf8'),
+      generateCss({ extended: false }),
+    );
   });
 
-  test('should handle help and unknown commands', () => {
+  test('should generate an extended template matching generateCss outside the package', (t) => {
+    const cwd = workspace(t);
+    execFileSync(
+      process.execPath,
+      [cli, 'generate', 'extended.css', '--extended'],
+      { cwd },
+    );
+    assert.equal(
+      fs.readFileSync(path.join(cwd, 'extended.css'), 'utf8'),
+      generateCss({ extended: true }),
+    );
+  });
+
+  test('should print usage for --help', () => {
     const help = execFileSync(process.execPath, [cli, '--help'], {
       encoding: 'utf8',
     });
     assert.match(help, /Usage:/);
+  });
+
+  test('should exit with status 1 for an unknown command', () => {
     const unknown = spawnSync(process.execPath, [cli, 'unknown'], {
       encoding: 'utf8',
     });
