@@ -1,4 +1,4 @@
-import { generateName } from './generateName.ts';
+import { generateName, dedupeNames } from './generateName.ts';
 import type {
   NormalizedPaletteDefinition,
   NormalizedPaletteOptions,
@@ -31,7 +31,7 @@ function normalizePaletteDefinition(
     throw new Error('definition.seedColors: expected a nonempty array');
   }
 
-  const names = new Set<string>();
+  // const names = new Set<string>();
   const entries: unknown[] = definition.seedColors;
   const colors = Array.from(entries, (entry, index) => {
     const field = `definition.seedColors[${index}]`;
@@ -42,21 +42,21 @@ function normalizePaletteDefinition(
       // throw new Error('name ' + entry.name);
     }
     checkName(entry.name, `${field}.name`);
-    for (const name of [
-      entry.name,
-      ...Array.from({ length: 16 }, (_, i) => `${entry.name}-${i + 1}`),
-    ]) {
-      if (names.has(name)) {
-        throw new Error(`${field}.name: duplicate custom property "--${name}"`);
-      }
-      names.add(name);
-    }
+    // for (const name of [
+    //   entry.name,
+    //   ...Array.from({ length: 16 }, (_, i) => `${entry.name}-${i + 1}`),
+    // ]) {
+    //   if (names.has(name)) {
+    //     throw new Error(`${field}.name: duplicate custom property "--${name}"`);
+    //   }
+    //   names.add(name);
+    // }
     return { name: entry.name, l: entry.l, c: entry.c, h: entry.h };
   });
 
   return {
     version: 1,
-    seedColors: colors,
+    seedColors: dedupeNames(colors),
     options: normalizeOptions(definition.options),
   };
 }

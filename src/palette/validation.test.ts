@@ -122,24 +122,6 @@ describe('normalizePaletteDefinition', () => {
     }
   });
 
-  test('should reject duplicate custom property names', () => {
-    const seed = { l: 0.6, c: 0.2, h: 250 };
-    for (const names of [
-      ['brand', 'brand'],
-      ['brand', 'brand-1'],
-      ['brand-16', 'brand'],
-    ]) {
-      assert.throws(
-        () =>
-          normalizePaletteDefinition({
-            version: 1,
-            seedColors: names.map((name) => ({ name, ...seed })),
-          }),
-        /duplicate custom property/,
-      );
-    }
-  });
-
   test('should reject unsupported versions', () => {
     assert.throws(
       () =>
@@ -234,6 +216,26 @@ describe('normalizePaletteDefinition', () => {
     assert.equal(normalized.seedColors[0].name, 'slate');
     assert.equal(normalized.seedColors[1].name, 'stone');
     assert.equal(normalized.seedColors[2].name, 'sand');
+  });
+
+  test('should deduplicate color names', () => {
+    const definition: PaletteDefinition = {
+      version: 1,
+      seedColors: [
+        { l: 0.6, c: 0.1, h: 255 },
+        { l: 0.4, c: 0.048, h: 12 },
+        { l: 0.4, c: 0.15, h: 249 },
+        { l: 0.6, c: 0.12, h: 254 },
+        { l: 0.6, c: 0.02, h: 15 },
+      ],
+    };
+    const normalized = normalizePaletteDefinition(definition);
+
+    assert.equal(normalized.seedColors[0].name, 'blue');
+    assert.equal(normalized.seedColors[1].name, 'dust');
+    assert.equal(normalized.seedColors[2].name, 'blue2');
+    assert.equal(normalized.seedColors[3].name, 'blue3');
+    assert.equal(normalized.seedColors[4].name, 'dust2');
   });
 });
 

@@ -1,4 +1,4 @@
-import type { OklchColor, SeedColor } from './types.ts';
+import type { OklchColor, NormalizedSeedColor } from './types.ts';
 
 const NAMES = {
   0: 'raspberry',
@@ -51,9 +51,9 @@ export function generateName(color: OklchColor): string {
   return names[rounded] || 'unnamed';
 }
 
-export function dedupeNames(neutrals: SeedColor[], colors: SeedColor[]) {
+export function dedupeNames(colors: NormalizedSeedColor[]) {
   const names: string[] = [];
-  const all = [...neutrals, ...colors];
+  const all = [...colors];
   all.forEach((color) => {
     if (!color.name) {
       return;
@@ -66,8 +66,5 @@ export function dedupeNames(neutrals: SeedColor[], colors: SeedColor[]) {
       color.name = `${color.name}${count}`;
     }
   });
-  return {
-    neutrals,
-    colors,
-  };
+  return colors;
 }
