@@ -1,15 +1,13 @@
-@layer layout {
-  .stack {
-    display: flex;
-    flex-direction: column;
-    gap: var(--_stack-gap, 1rem);
-  }
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_stack-gap, 1rem);
+}
 
-  .prose > * + * {
-    margin-block-start: var(--_prose-flow, 1em);
+.prose > * + * {
+  margin-block-start: var(--_prose-flow, 1em);
 
-    & > p {
-      max-inline-size: 70ch;
-    }
+  & > p {
+    max-inline-size: 70ch;
   }
 }
