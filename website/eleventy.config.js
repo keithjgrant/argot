@@ -1,12 +1,17 @@
 import postcssPlugin from '@jgarber/eleventy-plugin-postcss';
-import { buildReference } from './lib/reference.js';
+import { buildReference, reloadTokenLoader } from './lib/reference.js';
 
 export default function (eleventyConfig) {
   eleventyConfig.addPlugin(postcssPlugin, { templateFormats: ['css'] });
   eleventyConfig.addGlobalData('reference', () => buildReference());
   eleventyConfig.addWatchTarget('./tokens/');
-  eleventyConfig.addWatchTarget('./src/load-tokens.js');
+  eleventyConfig.addWatchTarget('./src/**/*.ts');
   eleventyConfig.addWatchTarget('./website/lib/');
+  eleventyConfig.on('eleventy.beforeWatch', async (changedFiles) => {
+    if (changedFiles.some((file) => file.endsWith('.ts'))) {
+      await reloadTokenLoader();
+    }
+  });
   eleventyConfig.addPassthroughCopy({
     'website/assets': 'assets',
   });

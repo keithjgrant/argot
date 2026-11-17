@@ -1,4 +1,6 @@
 node_modules/
+dist/
+preview/
 npm-debug.log*
 .DS_Store
 website/_site/

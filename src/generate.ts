@@ -1,13 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { loadTokens } from './load-tokens.js';
+import { loadTokens } from './load-tokens.ts';
+import type { TokenOptions, TokenRecord, TokenSection } from './load-tokens.ts';
+
+export type { TokenOptions, TokenRecord, TokenSection } from './load-tokens.ts';
 
 /**
  * Write the CSS template to disk.
- * @param {string} outPath
- * @param {{ extended?: boolean }} [options]
  */
-function writeTemplate(outPath, options = {}) {
+function writeTemplate(outPath: string, options: TokenOptions = {}): string {
   const css = generateCss(options);
   const resolved = path.resolve(outPath);
   fs.mkdirSync(path.dirname(resolved), { recursive: true });
@@ -19,15 +20,14 @@ function writeTemplate(outPath, options = {}) {
  * Generate CSS text from the package tokens directory.
  * @param {{ extended?: boolean }} [options]
  */
-function generateCss(options = {}) {
+function generateCss(options: TokenOptions = {}): string {
   return renderCss(loadTokens(options));
 }
 
 /**
  * Build a :root CSS template from loaded sections.
- * @param {ReturnType<typeof loadTokens>} sections
  */
-function renderCss(sections) {
+function renderCss(sections: readonly TokenSection[]): string {
   const blocks = [];
 
   for (const section of sections) {
@@ -45,9 +45,8 @@ function renderCss(sections) {
 
 /**
  * Emit tokens in source order.
- * @param {Array<{ name: string, value: string, tier: string }>} tokens
  */
-function formatTokenRun(tokens) {
+function formatTokenRun(tokens: readonly TokenRecord[]): string[] {
   const lines = [];
 
   for (const token of tokens) {
@@ -56,7 +55,7 @@ function formatTokenRun(tokens) {
   return lines;
 }
 
-function formatDeclaration(token) {
+function formatDeclaration(token: TokenRecord): string {
   const value =
     token.value === '' || token.value === null || token.value === undefined
       ? ' '

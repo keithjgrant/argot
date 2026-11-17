@@ -1,27 +1,28 @@
 # Token source of truth & tooling
 
-(ai-generated recommendations)
-
-Notes on how to define tokens so they can feed both documentation and a
-generated CSS template — and when to wire that up.
-
-This is planning guidance, not a committed architecture.
+Token-format guidance for the expanded Argot toolkit. The
+[product scope](./product-scope.md), [architecture](./architecture.md), and
+[roadmap](./roadmap.md) define product boundaries and sequencing.
 
 ## Goal
 
-Define tokens in an easy-to-edit format that can eventually produce:
+Define tokens in an easy-to-edit format shared by:
 
 1. Human-readable documentation (purpose + recommended usage per token)
 2. A `*.css` template of semantic custom property names
 
-## Recommended approach
+## Tooling direction
 
-| Piece                  | Recommendation                                                                                                                                                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Data format**        | [DTCG](https://www.w3.org/community/design-tokens/) design-token JSON (`$value`, `$type`, `$description`) — stable as of Oct 2025; widely supported                                                                       |
-| **Build tool (later)** | [Style Dictionary](https://styledictionary.com/) — largest ecosystem; built-in `css/variables`; custom formats for Markdown/docs; [DTCG support](https://styledictionary.com/info/dtcg/) (full 2025.10 still catching up) |
-| **Alternative**        | [Terrazzo](https://terrazzo.app/docs/) — DTCG-native CSS/Sass/JS generation; smaller community than Style Dictionary                                                                                                      |
-| **Docs site (later)**  | Generate Markdown/HTML from token metadata, then publish with Eleventy / VitePress / similar                                                                                                                              |
+Use DTCG-shaped JSON (`$value`, `$type`, `$description`) and the existing custom
+loader/generator. "DTCG-shaped" describes the current data conventions, not a
+claim of complete standards compliance.
+
+The existing Eleventy website already consumes the same loader for its token
+reference. Retain this shared source of truth as the toolkit expands.
+
+Style Dictionary and Terrazzo remain options if additional output formats or
+interchange requirements justify them, not prerequisites for palette generation,
+scaffolding, or CSS processing.
 
 ### Example token shape
 
@@ -52,16 +53,17 @@ Custom field meanings:
 
 ## Fit for this project
 
-This repo is a bit unusual: it ships **shared semantic names** (often with empty
-values for consumers to fill in), not a finished multi-platform palette.
+The vocabulary ships **shared semantic names**, often with empty values for
+consumers to fill in. Keep that use case even as the toolkit gains primitive
+palette generation and usable starter presets.
 
-Style Dictionary still works, but we would likely want a **custom CSS format**
-that emits a template (`--text-primary: ;` or a clear placeholder) rather than
-resolved hex/oklch values.
+Starter values and semantic-to-primitive mappings belong in separate presets,
+not in the authoritative vocabulary. Palette generation calculates raw values;
+scaffolding composes those values with semantic mappings and project templates.
 
-Until names stabilize, a plain DTCG-shaped JSON/YAML file edited by hand is
-enough. Collaborators can review diffs of names and descriptions without
-learning a build system.
+The current template renderer can continue emitting empty declarations such as
+`--text-primary: ;`, while starter mode supplies usable values for properties
+consumed by its base styles.
 
 ## Current status
 
@@ -70,24 +72,23 @@ truth (one file per group). Each token has `$type`, `$value`, `$description`,
 and `tier` (`core` | `extended`). Optional `usage`, `pairsWith` (contrast), and
 `related` (non-contrast links) where helpful.
 
-**Still waiting on:** Style Dictionary / Terrazzo — a small custom generator is
-enough while names move. CSS custom property name = `--` + path segments joined
-by `-` (e.g. `text.primary` → `--text-primary`).
+**Naming:** CSS custom property name = `--` + path segments joined by `-` (e.g.
+`text.primary` → `--text-primary`).
 
-**Generator:** `argot generate [path]` (see `src/generate.js`) reads `tokens/`
+**Generator:** `argot generate [path]` (see `src/generate.ts`) reads `tokens/`
 and writes a `:root` CSS template. `npm run build:template` writes
 `templates/semantics.css` (core) and `templates/semantics-extended.css`.
 
-## Suggested path
+**Website:** The Eleventy token reference exists in `website/`. Keep its build
+and shared token-data compatibility working, but defer full content alignment
+and publishing readiness to the final roadmap phase unless publication becomes a
+priority.
 
-1. **Done:** Tokens live in DTCG-shaped JSON with descriptions.
-2. **Done:** Small generator → CSS template (`argot generate`).
-3. **Next:** Stylelint plugin/config driven by the same token metadata.
-4. **Later:** Docs website (token reference from JSON); optionally Style
-   Dictionary/Terrazzo if multi-format output becomes necessary.
+**Stylelint:** Plugin/config entrypoints exist; the current token rule is a
+placeholder. Useful rules remain optional follow-up work rather than a
+prerequisite for the generator or processor.
 
-Avoid leading with Figma / Tokens Studio sync for this repo: the product is a
-CSS naming convention, not multi-tool design-system interchange.
+Figma / Tokens Studio sync and multi-platform interchange remain out of scope.
 
 ## References
 

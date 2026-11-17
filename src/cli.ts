@@ -1,9 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { writeTemplate } from './generate.js';
+import { writeTemplate } from './generate.ts';
 
 const USAGE = `Usage:
   argot generate [path] [--extended]   Write semantic CSS template (default: ./semantics.css)
+  argot palette <definition.json> [output.css] [--force] [--dry-run]
+                                       Write primitive CSS (default: ./primitives.css)
   argot help                           Show this help
 
 Options:
@@ -15,7 +17,7 @@ Examples:
   npx @keithjgrant/argot generate ./styles/tokens.css --extended
 `;
 
-function run(argv = process.argv.slice(2)) {
+function run(argv: string[] = process.argv.slice(2)): void | Promise<void> {
   const [command, ...rest] = argv;
 
   if (
@@ -28,6 +30,15 @@ function run(argv = process.argv.slice(2)) {
     return;
   }
 
+  if (command === 'palette') {
+    return import('./palette/cli.ts')
+      .then(({ runPalette }) => runPalette(rest))
+      .catch((error) => {
+        printError(error.message);
+        process.exitCode = 1;
+      });
+  }
+
   if (command === 'generate') {
     cmdGenerate(rest);
     return;
@@ -38,8 +49,8 @@ function run(argv = process.argv.slice(2)) {
   process.exitCode = 1;
 }
 
-function cmdGenerate(args) {
-  const flags = args.reduce((acc, arg) => {
+function cmdGenerate(args: string[]): void {
+  const flags = args.reduce<Record<string, string | boolean>>((acc, arg) => {
     if (arg.startsWith('--')) {
       const [key, value] = arg.slice(2).split('=');
       acc[key] = parseFlagValue(value);
@@ -61,7 +72,7 @@ function cmdGenerate(args) {
   console.log(`Wrote ${outPath}`);
 }
 
-function parseFlagValue(value) {
+function parseFlagValue(value: string | undefined): string | boolean {
   if (value === undefined) return true;
   const normalized = String(value).toLowerCase();
   if (normalized === 'true' || normalized === '1') return true;
@@ -69,7 +80,7 @@ function parseFlagValue(value) {
   return value;
 }
 
-function printError(message) {
+function printError(message: string): void {
   console.error(`argot: ${message}`);
 }
 

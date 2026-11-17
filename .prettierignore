@@ -1,4 +1,7 @@
 node_modules
+dist/
+preview/
 package-lock.json
 website/_site/
 website/.test-output/
+examples

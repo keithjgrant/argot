@@ -1,6 +1,38 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+export interface TokenOptions {
+  extended?: boolean;
+}
+
+export interface TokenRecord {
+  name: string;
+  value: string | null;
+  description: string;
+  tier: 'core' | 'extended';
+  type: string;
+  usage: string;
+  pairsWith: string[];
+  related: string[];
+}
+
+export interface TokenSection {
+  file: string;
+  label: string;
+  tokens: TokenRecord[];
+}
+
+/** Packaged DTCG-shaped source records; not a general token interchange format. */
+interface TokenSource extends Record<string, unknown> {
+  $value?: string | null;
+  $type?: string;
+  $description?: string;
+  tier?: string;
+  usage?: string;
+  pairsWith?: string[];
+  related?: string[];
+}
+
 /** Ordered token groups shared by CSS generation and documentation. */
 const SECTIONS = [
   { file: 'color-bg.json', label: 'color — surfaces' },
@@ -18,9 +50,8 @@ const SECTIONS = [
 
 /**
  * Load all token files into ordered sections of flat token records.
- * @param {{ extended?: boolean }} [options]
  */
-function loadTokens(options = {}) {
+function loadTokens(options: TokenOptions = {}): TokenSection[] {
   const dir = getTokensDir();
 
   return SECTIONS.map(({ file, label }) => {
@@ -28,7 +59,7 @@ function loadTokens(options = {}) {
     if (!fs.existsSync(filePath)) {
       throw new Error(`Missing token file: ${filePath}`);
     }
-    const tokens = [];
+    const tokens: TokenRecord[] = [];
     walk(JSON.parse(fs.readFileSync(filePath, 'utf8')), [], tokens);
     return {
       file,
@@ -50,7 +81,7 @@ function getTokensDir(packageRoot = path.join(import.meta.dirname, '..')) {
   return path.join(packageRoot, 'tokens');
 }
 
-function walk(node, parts, out) {
+function walk(node: unknown, parts: string[], out: TokenRecord[]): void {
   if (!node || typeof node !== 'object' || Array.isArray(node)) return;
   if (isToken(node)) {
     out.push({
@@ -70,9 +101,9 @@ function walk(node, parts, out) {
   }
 }
 
-function isToken(node) {
+function isToken(node: unknown): node is TokenSource {
   return (
-    node &&
+    node !== null &&
     typeof node === 'object' &&
     !Array.isArray(node) &&
     ('$value' in node || '$type' in node)

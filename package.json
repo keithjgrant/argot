@@ -1,7 +1,7 @@
 {
   "name": "@keithjgrant/argot",
   "version": "0.0.1",
-  "description": "Semantic CSS custom property names, template generation, and Stylelint rules",
+  "description": "Primitive palette generation, semantic CSS custom property names, and optional Stylelint integration",
   "license": "MIT",
   "author": "Keith J. Grant",
   "repository": {
@@ -13,7 +13,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=22.16.0"
+    "node": ">=22.18.0"
   },
   "bin": {
     "argot": "./bin/argot.js"
@@ -23,7 +23,8 @@
   },
   "files": [
     "bin",
-    "src",
+    "dist",
+    "docs/api.md",
     "tokens",
     "templates"
   ],
@@ -31,13 +32,40 @@
     "./tokens/*": "./tokens/*",
     "./templates/semantics.css": "./templates/semantics.css",
     "./templates/semantics-extended.css": "./templates/semantics-extended.css",
-    "./generate": "./src/generate.js",
-    "./stylelint": "./src/stylelint/index.js",
-    "./stylelint/config": "./src/stylelint/config.js"
+    "./generate": {
+      "types": "./dist/generate.d.ts",
+      "import": "./dist/generate.js"
+    },
+    "./palette": {
+      "types": "./dist/palette/index.d.ts",
+      "import": "./dist/palette/index.js"
+    },
+    "./palette/node": {
+      "types": "./dist/palette/node.d.ts",
+      "import": "./dist/palette/node.js"
+    },
+    "./stylelint": {
+      "types": "./dist/stylelint/index.d.ts",
+      "import": "./dist/stylelint/index.js"
+    },
+    "./stylelint/config": {
+      "types": "./dist/stylelint/config.d.ts",
+      "import": "./dist/stylelint/config.js"
+    }
   },
   "scripts": {
-    "build:template": "node bin/argot.js generate ./templates/semantics.css && node bin/argot.js generate --extended ./templates/semantics-extended.css",
-    "test": "node scripts/test-stylelint.js && node --test scripts/test-modules.js",
+    "cli": "node scripts/dev.js",
+    "build": "tsc -p tsconfig.build.json",
+    "tsc": "tsc --noEmit",
+    "test:types": "tsc --project scripts/types/tsconfig.json && tsc --project scripts/types/tsconfig.browser.json",
+    "test:package": "node --test scripts/package.test.js",
+    "pretest": "npm run build && npm run tsc && npm run test:types",
+    "prepack": "npm run build",
+    "eslint": "eslint .",
+    "prettier": "prettier --check . --ignore-unknown",
+    "prettier:fix": "prettier --write . --ignore-unknown",
+    "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
+    "test": "node --test 'src/**/*.test.ts' 'scripts/**/*.test.js' 'website/**/*.test.js'",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",
     "prewebsite:build": "npm run website:lint",
     "website:build": "eleventy --config=website/eleventy.config.js",
@@ -57,11 +85,19 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.8",
+    "@eslint/js": "^10.0.1",
     "@jgarber/eleventy-plugin-postcss": "^3.0.1",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.15.0",
     "postcss": "^8.5.32",
     "postcss-import": "^17.0.1",
     "prettier": "^3.10.1",
     "stylelint": "^16.0.0",
-    "stylelint-config-recommended": "^16.0.0"
+    "stylelint-config-recommended": "^16.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2"
+  },
+  "dependencies": {
+    "colorjs.io": "0.7.1"
   }
 }

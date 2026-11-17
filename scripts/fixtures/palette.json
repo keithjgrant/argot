@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "seedColors": [
+    { "name": "gray", "l": 0.6, "c": 0.015, "h": 250 },
+    { "name": "brand", "l": 0.6, "c": 0.2, "h": 250 }
+  ],
+  "options": {
+    "lightnessCurve": "inclusive",
+    "chromaCurve": "weighted",
+    "format": "oklch",
+    "gamut": "p3"
+  }
+}

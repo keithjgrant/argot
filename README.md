@@ -1,8 +1,11 @@
 # Argot
 
-A standardized set of **semantic design token names**, packaged as CSS custom
-properties. These are designed to provide a common foundation, a shared
-dictionary that can be used as a starting point for any CSS project.
+A standardized set of **semantic design token names**, plus headless **primitive
+color palette generation**, packaged for modern CSS projects. Use either
+independently, or generate a palette and map semantic properties to it.
+
+See the [public API and CLI reference](./docs/api.md) for package imports,
+portable definitions, options, return values, and file-writing behavior.
 
 Argot is ready for beta use. The token set is deliberately defined; real-world
 adoption will help prove it out and refine it. Names may change during beta.
@@ -21,18 +24,19 @@ The expectation here is for CSS custom properties to
    intent
 3. **Module** — variables scoped to a single component
 
-This project focuses on the **semantic** layer: a carefully chosen set of names
-that could cover most of what most projects need, with only the _values_
-changing per design.
+The semantic layer provides a carefully chosen set of names that could cover
+most of what most projects need, with only the _values_ changing per design. The
+palette engine supplies primitive color scales from numeric OKLCH seeds.
+Scaffold generation and CSS processing are planned, not currently shipped.
 
 ## What’s in this repo
 
-| Path                       | Purpose                                                                                          |
-| -------------------------- | ------------------------------------------------------------------------------------------------ |
-| [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended |
-| [`src/`](./src/)           | `argot generate` (+ Stylelint plugin under `src/stylelint/`)                                     |
-| [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                        |
-| [`docs/`](./docs/)         | Planning notes, including [product scope](./docs/product-scope.md)                               |
+| Path                       | Purpose                                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------------------------- |
+| [`tokens/`](./tokens/)     | **Source of truth** — DTCG-shaped JSON for semantic token names, descriptions, and core/extended   |
+| [`src/`](./src/)           | TypeScript library and CLI source (+ optional Stylelint plugin)                                    |
+| [`examples/`](./examples/) | Variable names pulled from existing frameworks for comparison/inspiration                          |
+| [`docs/`](./docs/)         | [Public API](./docs/api.md) and planning notes, including [product scope](./docs/product-scope.md) |
 
 Tokens are grouped for backgrounds, text, brand/accent, status, typography,
 spacing, borders, shadow, focus, motion, layout, and charts. Tokens are marked
@@ -45,8 +49,9 @@ template.
 
 ## How to use the template (for now)
 
-The CLI requires Node.js 22.16 or newer. Argot uses native ES modules; no
-CommonJS build is provided.
+The CLI requires Node.js 22.18 or newer. Argot uses native ES modules; no
+CommonJS build is provided. Published entrypoints contain JavaScript and
+TypeScript declarations, so consumers do not need a TypeScript compiler.
 
 1. Emit a template into your project:
 
@@ -89,11 +94,82 @@ Example shape:
 }
 ```
 
+## Primitive palette definitions
+
+Palette inputs use numeric OKLCH coordinates. Each color has a required name and
+`l`, `c`, `h`:
+
+- `l`: finite lightness from 0 through 1 (not 0 through 100).
+- `c`: finite, nonnegative chroma (0.0 through 0.42 for reasonable range).
+- `h`: a finite hue angle in degrees, including for neutral colors.
+
+Coordinates are retained as supplied, without hue wrapping, chroma thresholding,
+or rounding. Gamut mapping and final precision limiting happen during CSS
+output.
+
+```json
+{
+  "version": 1,
+  "colors": [{ "name": "brand", "l": 0.6, "c": 0.2, "h": 250 }],
+  "options": {
+    "lightnessCurve": "inclusive",
+    "chromaCurve": "weighted"
+  }
+}
+```
+
+In a checkout, try
+`npm run dev -- palette scripts/fixtures/palette.json ./primitives.css` using
+the [sample definition](./scripts/fixtures/palette.json). Existing output
+requires `--force` to replace; `--dry-run` validates without writing.
+
+The browser-safe `@keithjgrant/argot/palette` entrypoint exports `SeedColor`,
+`OklchColor`, `PaletteDefinition`, and the generation functions. If an input
+interface accepts CSS strings, call the separate `parseCssColor()` helper and
+compose a numeric seed such as `{ name: 'brand', ...parseCssColor('#663399') }`.
+Definitions themselves do not accept CSS strings. JSON loading and serialization
+preserve numeric generation inputs rather than converting them to CSS and
+reparsing them.
+
+## Development
+
+Library source lives in `src/*.ts` and `src/` subdirectories. Node 22.18+
+executes this source natively by stripping types; it does not check types. Use
+`.ts` extensions for relative source imports, `import type` for type-only
+imports, and erasable syntax (no runtime enums or parameter properties).
+
+- `npm run dev -- help` — run the CLI from TypeScript source, without a build.
+- `npm run dev -- generate ./semantics.css` — generate a semantic template
+  directly from source.
+- `npm run typecheck` — strictly check the library without emitting files.
+- `npm run build` — emit ESM JavaScript, declarations, and source maps into
+  ignored `dist/`. Relative runtime imports are rewritten to `.js`.
+- `npm test` — build, check public declarations, and run runtime and
+  packed-package tests, including the palette curve regressions.
+- `npm run test:types` — check Node and browser consumer types against an
+  existing build.
+- `npm run test:package` — build through the pack hook and check the archive
+  outside the checkout; no publishing or registry access is involved.
+- `npm run build:template` — regenerate checked-in semantic CSS using native
+  TypeScript execution.
+- `npm run prettier` / `npm run prettier:fix` — check or apply formatting.
+
+`npm pack` and publishing run the build automatically through `prepack`.
+Published exports and `bin/argot.js` use `dist/`; run the build before invoking
+that executable directly from a checkout. For normal development use
+`npm run dev -- ...` instead. Tests and website files remain JavaScript. The
+`./palette` entrypoint is browser-safe and exports its public types; filesystem
+adapters live separately at `./palette/node`.
+
 ## Documentation website
 
 The Eleventy site lives in `website/`. Token reference pages are generated at
 build time from `tokens/*.json`, using the same loader as the CSS generator.
 Group introductions and CSS examples live separately in `website/lib/guides.js`.
+The site imports the token loader directly from TypeScript source: website
+development, tests, and builds do not require `dist/` or a compiler-watch
+process. An explicit watch hook reloads the native token loader when TypeScript
+source changes, avoiding Eleventy's JavaScript-only dependency parser.
 
 - `npm run website:dev` — serve locally with live reload, including token edits.
 - `npm run website:build` — build static files into `website/_site/`.
