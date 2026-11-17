@@ -109,10 +109,10 @@ function checkObject(
 function checkName(name: unknown, field: string): asserts name is string {
   if (
     typeof name !== 'string' ||
-    !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(name)
+    !/^[a-zA-Z][a-zA-Z0-9]*(?:-[a-zA-Z0-9]+)*$/.test(name)
   ) {
     throw new Error(
-      `${field}: expected a lowercase name such as "blue" or "brand-primary"`,
+      `${field}: expected an alphanumeric name such as "blue" or "BrandPrimary"`,
     );
   }
 }

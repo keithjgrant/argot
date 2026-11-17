@@ -187,6 +187,22 @@ describe('normalizePaletteDefinition', () => {
       /hex output requires srgb/,
     );
   });
+
+  test('should preserve name capitalization', () => {
+    const definition: PaletteDefinition = {
+      version: 1,
+      seedColors: [
+        { name: 'brand', l: 0.6, c: 0.1, h: 240 },
+        { name: 'Azure', l: 0.6, c: 0.1, h: 240 },
+        { name: 'BlUe', l: 0.6, c: 0.1, h: 240 },
+      ],
+    };
+    const normalized = normalizePaletteDefinition(definition);
+
+    assert.equal(normalized.seedColors[0].name, 'brand');
+    assert.equal(normalized.seedColors[1].name, 'Azure');
+    assert.equal(normalized.seedColors[2].name, 'BlUe');
+  });
 });
 
 describe('serializePaletteDefinition', () => {
