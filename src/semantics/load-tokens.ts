@@ -77,7 +77,7 @@ function loadTokens(options: TokenOptions = {}): TokenSection[] {
   });
 }
 
-function getTokensDir(packageRoot = path.join(import.meta.dirname, '..')) {
+function getTokensDir(packageRoot = path.join(import.meta.dirname, '../..')) {
   return path.join(packageRoot, 'tokens');
 }
 

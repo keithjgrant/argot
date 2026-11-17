@@ -89,7 +89,7 @@ describe('packed package', () => {
     });
 
     test('should include tokens, templates, and load-tokens', () => {
-      assert.ok(files.includes('dist/load-tokens.js'));
+      assert.ok(files.includes('dist/semantics/load-tokens.js'));
       assert.ok(files.includes('tokens/color-text.json'));
       assert.ok(files.includes('templates/semantics.css'));
     });
@@ -126,7 +126,7 @@ describe('packed package', () => {
       for (const entrypoint of [
         '@keithjgrant/argot/palette',
         '@keithjgrant/argot/palette/node',
-        '@keithjgrant/argot/generate',
+        '@keithjgrant/argot/semantics',
         '@keithjgrant/argot/stylelint',
         '@keithjgrant/argot/stylelint/config',
       ]) {
@@ -145,7 +145,7 @@ describe('packed package', () => {
         `
 import assert from 'node:assert/strict';
 import stylelint from 'stylelint';
-import { generateCss } from '@keithjgrant/argot/generate';
+import { generateCss } from '@keithjgrant/argot/semantics';
 import {
   generatePalette, generatePaletteCss, parseCssColor, serializePaletteDefinition,
 } from '@keithjgrant/argot/palette';

@@ -22,7 +22,7 @@ const meta = {
  * their own custom properties. Re-enable checks here when we have rules that
  * fit that workflow (not a closed token allowlist).
  *
- * Token index helpers remain in `src/token-index.ts` for future rules.
+ * Token index helpers remain in `src/semantics/token-index.ts` for future rules.
  */
 const ruleFunction: Rule = (primary) => {
   return (_root, result) => {

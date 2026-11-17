@@ -7,10 +7,11 @@ below are provisional. See the [roadmap](./roadmap.md) for sequencing.
 
 ## Current foundation
 
-`tokens/` defines the semantic vocabulary. `src/load-tokens.ts` loads it for CSS
-generation and the existing Eleventy website. `src/generate.ts` already
-separates rendering from writing files. The CLI currently generates semantic
-templates; Stylelint entrypoints exist, but the token rule is a placeholder.
+`tokens/` defines the semantic vocabulary. `src/semantics/load-tokens.ts` loads
+it for CSS generation and the existing Eleventy website.
+`src/semantics/generate.ts` already separates rendering from writing files. The
+CLI currently generates semantic templates; Stylelint entrypoints exist, but the
+token rule is a placeholder.
 
 The PostCSS sibling contains a proposed pipeline, not an implementation. Theme
 Machine contains reusable palette algorithms, but its current palette module
@@ -87,7 +88,7 @@ before the first feature:
 - `src/cli/` and `src/stylelint/`: command dispatch and optional lint
   integration.
 - `tokens/`: existing vocabulary JSON.
-- `presets/`: starter values and semantic mappings.
+- `semantics/`: starter values and semantic mappings.
 - `templates/project/`: entrypoint, reset, and minimal base templates.
 - `test/fixtures/`: generated-project and processing integration cases.
 - `website/`: existing Eleventy site.

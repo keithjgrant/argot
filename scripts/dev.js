@@ -1,3 +1,3 @@
-import { run } from '../src/cli.ts';
+import { run } from '../src/semantics/cli.ts';
 
 await run();

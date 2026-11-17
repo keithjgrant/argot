@@ -75,8 +75,8 @@ and `tier` (`core` | `extended`). Optional `usage`, `pairsWith` (contrast), and
 **Naming:** CSS custom property name = `--` + path segments joined by `-` (e.g.
 `text.primary` → `--text-primary`).
 
-**Generator:** `argot generate [path]` (see `src/generate.ts`) reads `tokens/`
-and writes a `:root` CSS template. `npm run build:template` writes
+**Generator:** `argot generate [path]` (see `src/semantics/generate.ts`) reads
+`tokens/` and writes a `:root` CSS template. `npm run build:template` writes
 `templates/semantics.css` (core) and `templates/semantics-extended.css`.
 
 **Website:** The Eleventy token reference exists in `website/`. Keep its build

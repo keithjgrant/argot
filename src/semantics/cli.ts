@@ -31,7 +31,7 @@ function run(argv: string[] = process.argv.slice(2)): void | Promise<void> {
   }
 
   if (command === 'palette') {
-    return import('./palette/cli.ts')
+    return import('../palette/cli.ts')
       .then(({ runPalette }) => runPalette(rest))
       .catch((error) => {
         printError(error.message);
