@@ -203,6 +203,38 @@ describe('normalizePaletteDefinition', () => {
     assert.equal(normalized.seedColors[1].name, 'Azure');
     assert.equal(normalized.seedColors[2].name, 'BlUe');
   });
+
+  test('should generate color names', () => {
+    const definition: PaletteDefinition = {
+      version: 1,
+      seedColors: [
+        { l: 0.6, c: 0.1, h: 240 },
+        { l: 0.6, c: 0.1, h: 113 },
+        { l: 0.6, c: 0.1, h: 43.2 },
+      ],
+    };
+    const normalized = normalizePaletteDefinition(definition);
+
+    assert.equal(normalized.seedColors[0].name, 'azure');
+    assert.equal(normalized.seedColors[1].name, 'avocado');
+    assert.equal(normalized.seedColors[2].name, 'sienna');
+  });
+
+  test('should generate neutral color names', () => {
+    const definition: PaletteDefinition = {
+      version: 1,
+      seedColors: [
+        { l: 0.6, c: 0.03, h: 240 },
+        { l: 0.6, c: 0.04, h: 113 },
+        { l: 0.6, c: 0.01, h: 43.2 },
+      ],
+    };
+    const normalized = normalizePaletteDefinition(definition);
+
+    assert.equal(normalized.seedColors[0].name, 'slate');
+    assert.equal(normalized.seedColors[1].name, 'stone');
+    assert.equal(normalized.seedColors[2].name, 'sand');
+  });
 });
 
 describe('serializePaletteDefinition', () => {

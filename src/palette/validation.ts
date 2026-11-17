@@ -1,3 +1,4 @@
+import { generateName } from './generateName.ts';
 import type {
   NormalizedPaletteDefinition,
   NormalizedPaletteOptions,
@@ -35,8 +36,12 @@ function normalizePaletteDefinition(
   const colors = Array.from(entries, (entry, index) => {
     const field = `definition.seedColors[${index}]`;
     checkObject(entry, field, ['name', 'l', 'c', 'h']);
-    checkName(entry.name, `${field}.name`);
     checkCoordinates(entry, field);
+    if (!entry.name) {
+      entry.name = generateName(entry);
+      // throw new Error('name ' + entry.name);
+    }
+    checkName(entry.name, `${field}.name`);
     for (const name of [
       entry.name,
       ...Array.from({ length: 16 }, (_, i) => `${entry.name}-${i + 1}`),

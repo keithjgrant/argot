@@ -2,8 +2,8 @@ import { normalizePaletteDefinition } from './validation.ts';
 import type {
   Palette,
   PaletteDefinition,
-  SeedColor,
   PaletteOptions,
+  NormalizedSeedColor,
 } from './types.ts';
 
 const LIGHTNESS = Object.freeze([
@@ -29,7 +29,7 @@ function generatePalette(definition: PaletteDefinition): Palette {
 }
 
 // TODO skip normalizing, just fill in defaults here
-function generateScale(seed: SeedColor, options: PaletteOptions) {
+function generateScale(seed: NormalizedSeedColor, options: PaletteOptions) {
   const { lightnessCurve = 'uniform', chromaCurve = 'centered' } = options;
   const index = findTargetIndex(seed.l);
   const chromaScale =

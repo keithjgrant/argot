@@ -28,8 +28,9 @@ export interface OklchColor {
 
 /** Numeric OKLCH seed coordinates, matching Theme Machine's data model. */
 export interface SeedColor extends OklchColor {
-  name: string;
+  name?: string;
 }
+export type NormalizedSeedColor = Required<SeedColor>;
 
 export interface PaletteStep extends OklchColor {
   /** One-based index, from 1 through 16. */
@@ -45,7 +46,7 @@ export interface PaletteDefinition {
 // PaletteDefinition with all options filled in
 export interface NormalizedPaletteDefinition {
   version: 1;
-  seedColors: SeedColor[];
+  seedColors: NormalizedSeedColor[];
   options: NormalizedPaletteOptions;
 }
 

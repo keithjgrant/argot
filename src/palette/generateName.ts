@@ -1,4 +1,4 @@
-import type { SeedColor } from './types.ts';
+import type { OklchColor, SeedColor } from './types.ts';
 
 const NAMES = {
   0: 'raspberry',
@@ -37,7 +37,8 @@ const NEUTRAL_NAMES = {
   360: 'dust',
 };
 
-export function generateName(l: number, c: number, h: number): string {
+export function generateName(color: OklchColor): string {
+  const { c, h } = color;
   let rounded: number, names: { [k: number]: string };
   if (c >= 0.05) {
     names = NAMES;
