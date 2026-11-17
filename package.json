@@ -32,9 +32,9 @@
     "./tokens/*": "./tokens/*",
     "./templates/semantics.css": "./templates/semantics.css",
     "./templates/semantics-extended.css": "./templates/semantics-extended.css",
-    "./generate": {
-      "types": "./dist/generate.d.ts",
-      "import": "./dist/generate.js"
+    "./semantics": {
+      "types": "./dist/semantics/generate.d.ts",
+      "import": "./dist/semantics/generate.js"
     },
     "./palette": {
       "types": "./dist/palette/index.d.ts",

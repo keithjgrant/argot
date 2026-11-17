@@ -2,11 +2,14 @@ import guides from './guides.js';
 
 // Eleventy 3's dependency scanner only parses JavaScript. Keep this native
 // TypeScript import dynamic and reload it explicitly when watched source changes.
-let { loadTokens } = await import('../../src/load-tokens.ts');
+let { loadTokens } = await import('../../src/semantics/load-tokens.ts');
 
 async function reloadTokenLoader() {
   ({ loadTokens } = await import(
-    new URL(`../../src/load-tokens.ts?reload=${Date.now()}`, import.meta.url)
+    new URL(
+      `../../src/semantics/load-tokens.ts?reload=${Date.now()}`,
+      import.meta.url,
+    )
   ));
 }
 

@@ -12,7 +12,7 @@ describe('generateCss', () => {
       const file = extended ? 'semantics-extended.css' : 'semantics.css';
       assert.equal(
         generateCss({ extended }),
-        fs.readFileSync(path.join(root, 'templates', file), 'utf8'),
+        fs.readFileSync(path.join(root, '../templates', file), 'utf8'),
       );
     }
   });

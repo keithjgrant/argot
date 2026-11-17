@@ -7,7 +7,11 @@ import os from 'node:os';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { buildReference } from '../lib/reference.js';
-import { SECTIONS, loadTokens, getTokensDir } from '../../src/load-tokens.ts';
+import {
+  SECTIONS,
+  loadTokens,
+  getTokensDir,
+} from '../../src/semantics/load-tokens.ts';
 import { matchesToken, initializeSearch } from '../assets/token-search.js';
 
 const root = path.resolve(import.meta.dirname, '../..');
@@ -187,7 +191,7 @@ describe('watch mode', () => {
           }
         }
         await until(() => log.includes('Watching'));
-        const loader = path.join(cwd, 'src/load-tokens.ts');
+        const loader = path.join(cwd, 'src/semantics/load-tokens.ts');
         fs.writeFileSync(
           loader,
           fs

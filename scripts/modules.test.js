@@ -17,7 +17,7 @@ import {
   generateCss,
   renderCss,
   writeTemplate,
-} from '@keithjgrant/argot/generate';
+} from '@keithjgrant/argot/semantics';
 import { generatePalette } from '@keithjgrant/argot/palette';
 import plugins from '@keithjgrant/argot/stylelint';
 import config from '@keithjgrant/argot/stylelint/config';
@@ -49,7 +49,8 @@ describe('public package entrypoints', () => {
 
 describe('native TypeScript development entrypoints', () => {
   test('should match compiled generateCss', async () => {
-    const { generateCss: nativeCss } = await import('../src/generate.ts');
+    const { generateCss: nativeCss } =
+      await import('../src/semantics/generate.ts');
     assert.equal(nativeCss(), generateCss());
   });
 

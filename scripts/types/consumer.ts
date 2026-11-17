@@ -5,7 +5,7 @@ import {
   type TokenOptions,
   type TokenRecord,
   type TokenSection,
-} from '@keithjgrant/argot/generate';
+} from '@keithjgrant/argot/semantics';
 import {
   generatePalette,
   generatePaletteCss,

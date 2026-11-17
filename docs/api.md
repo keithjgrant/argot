@@ -35,7 +35,7 @@ mutate inputs or write files.
   definition validation/serialization, and optional CSS color parsing.
 - `@keithjgrant/argot/palette/node`: synchronous definition-file loading and CSS
   file writing. Node only.
-- `@keithjgrant/argot/generate`: semantic CSS template generation. Node only.
+- `@keithjgrant/argot/semantics`: semantic CSS template generation. Node only.
   Same behavior as [`argot generate`](#semantic-templates).
 - `@keithjgrant/argot/stylelint`: optional Stylelint plugin array.
 - `@keithjgrant/argot/stylelint/config`: optional shareable Stylelint config.
@@ -455,7 +455,7 @@ native TypeScript. The installed executable uses compiled JavaScript.
 
 ### Semantic templates
 
-Same behavior as [`@keithjgrant/argot/generate`](#semantic-generation-library):
+Same behavior as [`@keithjgrant/argot/semantics`](#semantic-generation-library):
 
 ```sh
 argot generate
@@ -471,7 +471,7 @@ files without `--force`.** Its CLI refuses output directories.
 
 ## Semantic generation library
 
-Import from `@keithjgrant/argot/generate` (CLI:
+Import from `@keithjgrant/argot/semantics` (CLI:
 [`argot generate`](#semantic-templates)):
 
 - `generateCss(options?: TokenOptions): string`: load packaged semantic tokens

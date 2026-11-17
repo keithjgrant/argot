@@ -6,7 +6,7 @@ import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { generateCss } from './generate.ts';
 
-const root = path.resolve(import.meta.dirname, '..');
+const root = path.resolve(import.meta.dirname, '../..');
 const cli = path.join(root, 'bin/argot.js');
 
 function workspace(t: TestContext): string {
