@@ -2,10 +2,10 @@
 export {
   normalizePaletteDefinition,
   serializePaletteDefinition,
-} from './definition.ts';
-export { generatePalette } from './generate.ts';
+} from './validation.ts';
+export { generatePalette } from './generatePalette.ts';
 export { renderPaletteCss, generatePaletteCss } from './render.ts';
-export { parseCssColor } from './parse.ts';
+export { parseCssColor } from './parseCssColor.ts';
 export type {
   ChromaCurve,
   ColorFormat,

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { normalizePaletteDefinition } from './definition.ts';
+import { normalizePaletteDefinition } from './validation.ts';
 import { generatePaletteCss } from './render.ts';
 import type {
   NormalizedPaletteDefinition,

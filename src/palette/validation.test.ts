@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {
   normalizePaletteDefinition,
   serializePaletteDefinition,
-} from './definition.ts';
-import { generatePalette } from './generate.ts';
+} from './validation.ts';
+import { generatePalette } from './generatePalette.ts';
 import type { OklchColor, PaletteDefinition, PaletteOptions } from './types.ts';
 
 function definition(

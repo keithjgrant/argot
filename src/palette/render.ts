@@ -1,6 +1,6 @@
 import Color from 'colorjs.io';
-import { checkName, normalizeOptions } from './definition.ts';
-import { generatePalette } from './generate.ts';
+import { checkName, normalizeOptions } from './validation.ts';
+import { generatePalette } from './generatePalette.ts';
 import type {
   NormalizedPaletteOptions,
   OklchColor,

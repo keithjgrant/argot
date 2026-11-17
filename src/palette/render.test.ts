@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import Color from 'colorjs.io';
 import postcss from 'postcss';
-import { generatePalette } from './generate.ts';
+import { generatePalette } from './generatePalette.ts';
 import { generatePaletteCss, renderPaletteCss } from './render.ts';
 import type { OklchColor, PaletteDefinition, PaletteOptions } from './types.ts';
 

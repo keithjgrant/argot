@@ -1,5 +1,5 @@
 import Color from 'colorjs.io';
-import { checkCoordinates } from './definition.ts';
+import { checkCoordinates } from './validation.ts';
 import type { OklchColor } from './types.ts';
 
 /**

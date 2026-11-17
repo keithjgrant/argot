@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { normalizePaletteDefinition } from './definition.ts';
+import { normalizePaletteDefinition } from './validation.ts';
 import { generatePaletteCss } from './render.ts';
 import { loadPaletteDefinition, writePalette } from './node.ts';
 import type { PaletteDefinition } from './types.ts';

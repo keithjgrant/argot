@@ -3,10 +3,15 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
-import { generatePalette } from './generate.ts';
+import { generatePalette } from './generatePalette.ts';
 import { generatePaletteCss } from './render.ts';
 import type { OklchColor, PaletteDefinition, PaletteOptions } from './types.ts';
 
+/*
+  Validates functional parity with a previous implementation of the shade
+  generation algorithm against a large data set imported from
+  https://tools.keithjgrant.com/theme-machine
+*/
 const golden = JSON.parse(
   readFileSync(
     fileURLToPath(

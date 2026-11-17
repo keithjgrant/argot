@@ -1,4 +1,4 @@
-import { normalizePaletteDefinition } from './definition.ts';
+import { normalizePaletteDefinition } from './validation.ts';
 import type {
   Palette,
   PaletteDefinition,

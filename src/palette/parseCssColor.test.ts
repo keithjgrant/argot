@@ -1,10 +1,10 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import Color from 'colorjs.io';
-import { parseCssColor } from './parse.ts';
-import { normalizePaletteDefinition } from './definition.ts';
+import { parseCssColor } from './parseCssColor.ts';
+import { normalizePaletteDefinition } from './validation.ts';
 import { generatePaletteCss } from './render.ts';
-import { serializePaletteDefinition } from './definition.ts';
+import { serializePaletteDefinition } from './validation.ts';
 import type { OklchColor, PaletteDefinition, PaletteOptions } from './types.ts';
 
 function definition(
