@@ -5,3 +5,4 @@ npm-debug.log*
 .DS_Store
 website/_site/
 website/.test-output/
+.vscode
