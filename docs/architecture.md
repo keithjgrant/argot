@@ -157,9 +157,14 @@ A proposed scaffold has `styles/style.css`, `styles/tokens/primitives.css`,
 component styles added by the consumer. Build output goes to a separate location
 such as `dist/style.css`.
 
-The entrypoint declares cascade-layer order before importing files into their
-intended layers. The source remains native CSS with no proprietary directives,
-so consumers can replace Argot's processor.
+The root stylesheet declares cascade-layer order, then pulls files into those
+layers. Argot's processor treats local `@import` as an inline embed (Sass-like)
+that may appear anywhere in a file, including after other rules, and supports
+`layer(name)`. That is processor semantics, not browser `@import`: mid-file
+imports must be processed by Argot (or another inliner with the same rules).
+Consumers who skip Argot can keep imports at the top of the file for a
+spec-following bundler such as `postcss-import`, or accept that mid-file
+`@import` will not work in the browser.
 
 Ownership rules:
 
