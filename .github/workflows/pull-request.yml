@@ -1,0 +1,133 @@
+name: Pull Request
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24
+
+jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache node_modules
+        uses: actions/cache/save@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+
+  eslint:
+    name: Eslint
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - name: Eslint
+        run: npm run eslint
+
+  prettier:
+    name: Prettier
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - name: Prettier
+        run: npm run prettier
+
+  tsc:
+    name: Typecheck
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - name: Typecheck
+        run: npm run tsc
+
+  test:
+    name: Test
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - name: Test
+        run: npm test
