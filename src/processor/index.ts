@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import path from 'path';
 import postcss from 'postcss';
 import cssnano from 'cssnano';
 import stylelint from 'stylelint';
@@ -23,14 +24,13 @@ async function processStylesheet(sourceFile: string, destFile: string) {
     );
   }
 
-  const result = await postcss([
-    atImport(),
-    stylelint({/*option*/}),
-    cssnano(),
-  ]).process(css, {
-    from: sourceFile,
-    to: destFile,
-  });
+  const result = await postcss([atImport(), getStylelint(), cssnano()]).process(
+    css,
+    {
+      from: sourceFile,
+      to: destFile,
+    },
+  );
 
   try {
     await fs.writeFile(destFile, result.css);
@@ -41,6 +41,30 @@ async function processStylesheet(sourceFile: string, destFile: string) {
       { cause: error },
     );
   }
+}
+
+function getStylelint() {
+  // try {
+  // . // TODO: doesn't throw until postcss().process() called
+  //   const plugin = stylelint();
+  //   // return plugin;
+  // } catch (error) {
+  //   if (
+  //     error instanceof Error &&
+  //     error.name === 'ConfigurationError' &&
+  //     error.message.includes('No configuration provided')
+  //   ) {
+  //     //
+  //   }
+  //   throw error;
+  // }
+
+  const defaultConfigPath = path.resolve(
+    import.meta.dirname,
+    'stylelintDefaultConfig.ts',
+  );
+
+  return stylelint({ configFile: defaultConfigPath });
 }
 
 export { processStylesheet };

@@ -9,6 +9,7 @@
 - destFile
 - browserlist (for cssnano)
 - minify flag
+- eslintconfig file (overrides argot defaults)
 
 ## atImport test gaps
 

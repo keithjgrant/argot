@@ -87,8 +87,8 @@ before the first feature:
 - `src/postcss/` and `src/build/`: processing and filesystem/CLI adaptation.
 - `src/cli/` and `src/stylelint/`: command dispatch and optional lint
   integration.
+- `src/semantics/`: starter values and semantic mappings.
 - `tokens/`: existing vocabulary JSON.
-- `semantics/`: starter values and semantic mappings.
 - `templates/project/`: entrypoint, reset, and minimal base templates.
 - `test/fixtures/`: generated-project and processing integration cases.
 - `website/`: existing Eleventy site.
