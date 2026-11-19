@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import postcss, { type AtRule, type PluginCreator, type Root } from 'postcss';
-import { parseImportParams } from './parseImportParams.ts';
+import { parseImportParams, type ParsedImport } from './parseImportParams.ts';
 
 export type ImportOptions = Record<string, never>;
 
@@ -51,18 +51,18 @@ async function processImport(
   stack: string[],
   importedFiles: Set<string>,
 ): Promise<void> {
-  const parsed = parseImportParams(atRule.params);
-  if (!parsed) {
+  const importParams = parseImportParams(atRule.params);
+  if (!importParams) {
     throw atRule.error(
       `Invalid @import parameters '${atRule.params}'. ` +
-        `Expected a local path or url(), optionally followed by layer(name).`,
+        `Expected a local path or url(), optionally followed by layer, scope, supports, and media conditions.`,
     );
   }
-  if (isRemote(parsed.uri)) {
+  if (isRemote(importParams.uri)) {
     return;
   }
 
-  const importFile = path.resolve(path.dirname(fromFile), parsed.uri);
+  const importFile = path.resolve(path.dirname(fromFile), importParams.uri);
 
   if (stack.includes(importFile)) {
     const chain = [...stack, importFile]
@@ -80,9 +80,12 @@ async function processImport(
   try {
     css = await fs.readFile(importFile, 'utf8');
   } catch {
-    throw atRule.error(`Failed to find CSS file to import: ${parsed.uri}`, {
-      word: parsed.uri,
-    });
+    throw atRule.error(
+      `Failed to find CSS file to import: ${importParams.uri}`,
+      {
+        word: importParams.uri,
+      },
+    );
   }
 
   importedFiles.add(importFile);
@@ -96,31 +99,61 @@ async function processImport(
     stack.pop();
   }
 
-  replaceImportWithContents(atRule, childRoot.nodes, parsed.layer);
+  replaceImportWithContents(atRule, childRoot.nodes, importParams);
 }
 
 function replaceImportWithContents(
   atRule: AtRule,
   nodes: Root['nodes'],
-  layer: string | undefined,
+  importParams: ParsedImport,
 ): void {
+  const { layer, scope, supports, media } = importParams;
+  let contents: Root['nodes'] | AtRule[] = nodes;
+
+  // Nest outside-in as layer → scope → supports → media → content.
+  if (media !== undefined) {
+    const mediaRule = postcss.atRule({
+      name: 'media',
+      params: media,
+      source: atRule.source,
+    });
+    mediaRule.append(contents);
+    contents = [mediaRule];
+  }
+  if (supports !== undefined) {
+    const supportsRule = postcss.atRule({
+      name: 'supports',
+      params: `(${supports})`,
+      source: atRule.source,
+    });
+    supportsRule.append(contents);
+    contents = [supportsRule];
+  }
+  if (scope !== undefined) {
+    const scopeRule = postcss.atRule({
+      name: 'scope',
+      params: scope,
+      source: atRule.source,
+    });
+    scopeRule.append(contents);
+    contents = [scopeRule];
+  }
   if (layer !== undefined) {
     const layerRule = postcss.atRule({
       name: 'layer',
       params: layer,
       source: atRule.source,
     });
-    layerRule.append(nodes);
-    atRule.replaceWith(layerRule);
-    return;
+    layerRule.append(contents);
+    contents = [layerRule];
   }
 
-  if (nodes.length === 0) {
+  if (contents.length === 0) {
     atRule.remove();
     return;
   }
 
-  atRule.replaceWith(nodes);
+  atRule.replaceWith(contents);
 }
 
 function isRemote(uri: string): boolean {

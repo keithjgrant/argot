@@ -61,6 +61,105 @@ describe('at-import', () => {
     assert.doesNotMatch(css, /@import\b/);
   });
 
+  test('should wrap inlined content in @supports when supports() is present', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' supports(foo: bar);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@supports\s*\(foo:\sbar\)\s*\{/);
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
+  test('should wrap inlined content in @scope when scope() is present', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' scope(.card);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@scope\s*\(\.card\)\s*\{/);
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
+  test('should wrap inlined content in @layer and @supports', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' layer(base) supports(foo: bar);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@layer\s+base\s*\{/);
+    assert.match(css, /@supports\s*\(foo:\sbar\)\s*\{/);
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
+  test('should wrap inlined content in media query', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' (width > 500px);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@media\s*\(width\s*>\s*500px\)\s*\{/);
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
+  test('should wrap inlined content in @layer and media query', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' layer(base) screen and (width > 500px);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@layer\s+base\s*\{/);
+    assert.match(css, /@media\s*screen\s+and\s*\(width\s*>\s*500px\)\s*\{/);
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
+  test('should wrap inlined content in @supports and media query', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' supports(foo: bar) (pointer: fine);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@supports\s*\(foo:\sbar\)\s*\{/);
+    assert.match(css, /@media\s*\(pointer:\s*fine\)\s*\{/);
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
+  test('should wrap inlined content in @layer, @supports, and media query', async () => {
+    const css = await processEntry({
+      'entry.css': `@import './base.css' layer(base) supports(foo: bar) (pointer: fine), (width > 500px);
+`,
+      'base.css': `body { margin: 0; }
+`,
+    });
+
+    assert.match(css, /@layer\s+base\s*\{/);
+    assert.match(css, /@supports\s*\(foo:\sbar\)\s*\{/);
+    assert.match(
+      css,
+      /@media\s*\(pointer:\s*fine\),\s*\(width\s*>\s*500px\)\s*\{/,
+    );
+    assert.match(css, /body\s*\{\s*margin:\s*0/);
+    assert.doesNotMatch(css, /@import\b/);
+  });
+
   test('should resolve imports relative to the including file', async () => {
     const css = await processEntry({
       'entry.css': `@import './nested/mid.css';
