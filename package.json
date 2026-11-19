@@ -56,12 +56,15 @@
   "scripts": {
     "cli": "node scripts/dev.js",
     "build": "tsc -p tsconfig.build.json",
+    "checks": "npm run build && npm run eslint && npm run test",
     "tsc": "tsc --noEmit",
     "test:types": "tsc --project scripts/types/tsconfig.json && tsc --project scripts/types/tsconfig.browser.json",
     "test:package": "node --test scripts/package.test.js",
     "pretest": "npm run build && npm run tsc && npm run test:types",
     "prepack": "npm run build",
     "eslint": "eslint .",
+    "prepublishOnly": "npm run checks",
+    "preversion": "npm run checks",
     "prettier": "prettier --check . --ignore-unknown",
     "prettier:fix": "prettier --write . --ignore-unknown",
     "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
@@ -92,13 +95,14 @@
     "eslint": "^10.15.0",
     "postcss-import": "^17.0.1",
     "prettier": "^3.10.1",
-    "stylelint": "^16.0.0",
     "stylelint-config-recommended": "^16.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2"
   },
   "dependencies": {
     "colorjs.io": "0.7.1",
-    "postcss": "^8.5.33"
+    "cssnano": "^9.9.0",
+    "postcss": "^8.5.33",
+    "stylelint": "^16.0.0"
   }
 }

@@ -1,4 +1,13 @@
 #!/usr/bin/env node
-import { run } from '../dist/semantics/cli.js';
+import fs from 'node:fs/promises';
+import path from 'path';
+import { processStylesheet } from '../src/processor/index.ts';
 
-await run();
+console.log(process.argv);
+
+const [sourceFile, destFile] = process.argv.slice(2);
+
+const source = path.resolve(process.cwd(), sourceFile);
+const dest = path.resolve(process.cwd(), destFile);
+await fs.mkdir(path.dirname(dest), { recursive: true });
+await processStylesheet(source, dest);

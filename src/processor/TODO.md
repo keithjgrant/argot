@@ -1,13 +1,19 @@
 # Processor TODO
 
+## Core
+
+1. Import .argot.json
+2. Support key cli args -- cli should override .argot.json
+
+- sourceFile
+- destFile
+- browserlist (for cssnano)
+- minify flag
+
 ## atImport test gaps
 
 Code already claims these behaviors; add coverage:
 
-4. **Invalid prelude** — media / `supports(...)` (and other non-path+layer
-   forms) should surface `Invalid @import parameters`.
-5. **Empty imported file** — `@import` of an empty file should be removed with
-   no leftover rule.
 6. **`data:` and protocol-relative `//…`** — leave remote/data URIs unchanged
    (only `https://` is tested today).
 7. **Self-import** — `@import` of the entry file should cycle (or dedupe)
@@ -32,8 +38,5 @@ Fixtures and tests do not stress the scaffold pattern:
 
 Document or reject-test (do not expand support unless the contract changes):
 
-- **`supports(...)` and media conditions** — valid CSS `@import`, rejected today
-  (path + optional layer only).
 - **Bare unquoted paths** (`@import base.css`) — not string/`url()`; parser
-  returns null.
-- **`scope()`** (newer cascade drafts) — same rejection story.
+  returns null. -- what does CSS spec allow?
