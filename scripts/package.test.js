@@ -25,6 +25,7 @@ const LINKED_DEPENDENCIES = [
   'stylelint-config-standard',
   '@types',
   'postcss',
+  'postcss-reporter',
   'cssnano',
 ];
 
@@ -280,7 +281,6 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
 describe('native development commands', () => {
   /** @type {string} */
   let cwd;
-  const LINKED_DEPENDENCIES = ['colorjs.io', 'postcss', 'cssnano', 'stylelint'];
 
   before(() => {
     cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-distribution-'));

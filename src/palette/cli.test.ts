@@ -6,7 +6,6 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { generatePaletteCss } from './render.ts';
 import type { PaletteDefinition } from './types.ts';
-import { ANSI_RED } from '../cli/ansiColors.ts';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const definition: PaletteDefinition = {

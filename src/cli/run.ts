@@ -4,7 +4,7 @@ import { USAGE } from './usage.ts';
 import { runSemantics } from '../semantics/cli.ts';
 import { runPalette } from '../palette/cli.ts';
 import { processStylesheet } from '../processor/index.ts';
-import { ANSI_RED, ANSI_WHITE } from './ansiColors.ts';
+import { printError } from './print.ts';
 
 async function run() {
   try {
@@ -44,10 +44,6 @@ async function handleArgs(args: string[]) {
 
   printError(`Unknown command: ${command}`);
   process.exit(1);
-}
-
-function printError(message: string): void {
-  console.error(`${ANSI_RED}argot: ${message}\n${ANSI_WHITE}`);
 }
 
 export { run };

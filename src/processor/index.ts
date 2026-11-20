@@ -1,10 +1,12 @@
 import fs from 'node:fs/promises';
 import path from 'path';
 import postcss from 'postcss';
+import reporter from 'postcss-reporter';
 import cssnano from 'cssnano';
 import stylelint from 'stylelint';
 import atImport from './atImport.ts';
-import { ANSI_GREEN, ANSI_WHITE } from '../cli/ansiColors.ts';
+import { print } from '../cli/print.ts';
+import { ANSI_GREEN } from '../cli/ansiColors.ts';
 
 /**
  * Processes stylesheet and outputs destination css
@@ -22,17 +24,19 @@ async function processStylesheet(sourceFile: string, destFile: string) {
     );
   }
 
-  const result = await postcss([atImport(), getStylelint(), cssnano()]).process(
-    css,
-    {
-      from: sourceFile,
-      to: destFile,
-    },
-  );
+  const result = await postcss([
+    atImport(),
+    getStylelint(),
+    // cssnano(),
+    reporter({ clearReportedMessages: true }),
+  ]).process(css, {
+    from: sourceFile,
+    to: destFile,
+  });
 
   try {
     await fs.writeFile(destFile, result.css);
-    console.log(`${ANSI_GREEN}Wrote output CSS: ${destFile}\n${ANSI_WHITE}`);
+    print(`Wrote output CSS: ${destFile}`, ANSI_GREEN);
   } catch (error) {
     throw new Error(
       `Cannot write stylesheet ${destFile}: ${(error as NodeJS.ErrnoException).code}`,
