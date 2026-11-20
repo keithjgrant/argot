@@ -22,7 +22,7 @@ const root = path.resolve(import.meta.dirname, '..');
 const LINKED_DEPENDENCIES = [
   'colorjs.io',
   'stylelint',
-  'stylelint-config-standard',
+  'stylelint-config-recommended',
   '@types',
   'postcss',
   'postcss-reporter',
