@@ -31,18 +31,17 @@ mutate inputs or write files.
 
 ## Entrypoints
 
-- `@keithjgrant/argot/palette`: browser-safe palette calculation, CSS rendering,
+- `argot-css/palette`: browser-safe palette calculation, CSS rendering,
   definition validation/serialization, and optional CSS color parsing.
-- `@keithjgrant/argot/palette/node`: synchronous definition-file loading and CSS
-  file writing. Node only.
-- `@keithjgrant/argot/semantics`: semantic CSS template generation. Node only.
-  Same behavior as [`argot semantics`](#semantic-templates).
-- `@keithjgrant/argot/stylelint`: optional Stylelint plugin array.
-- `@keithjgrant/argot/stylelint/config`: optional shareable Stylelint config.
-- `@keithjgrant/argot/tokens/*`: packaged DTCG-shaped JSON files.
-- `@keithjgrant/argot/templates/semantics.css` and
-  `@keithjgrant/argot/templates/semantics-extended.css`: static semantic
-  templates.
+- `argot-css/palette/node`: synchronous definition-file loading and CSS file
+  writing. Node only.
+- `argot-css/semantics`: semantic CSS template generation. Node only. Same
+  behavior as [`argot semantics`](#semantic-templates).
+- `argot-css/stylelint`: optional Stylelint plugin array.
+- `argot-css/stylelint/config`: optional shareable Stylelint config.
+- `argot-css/tokens/*`: packaged DTCG-shaped JSON files.
+- `argot-css/templates/semantics.css` and
+  `argot-css/templates/semantics-extended.css`: static semantic templates.
 
 There is no root JavaScript entrypoint. Import from the named subpaths rather
 than internal `src/` or `dist/` paths. Browser-safe means the palette entrypoint
@@ -129,7 +128,7 @@ accessible contrast for semantic pairings.
 
 ## Browser-safe palette functions
 
-Import these from `@keithjgrant/argot/palette`.
+Import these from `argot-css/palette`.
 
 ### `normalizePaletteDefinition(value: unknown): NormalizedPaletteDefinition`
 
@@ -137,7 +136,7 @@ Validate external input and return fresh color records with all option defaults
 explicit. Does not calculate steps or map gamut.
 
 ```js
-import { normalizePaletteDefinition } from '@keithjgrant/argot/palette';
+import { normalizePaletteDefinition } from 'argot-css/palette';
 
 const definition = normalizePaletteDefinition({
   version: 1,
@@ -165,7 +164,7 @@ trailing newline and explicit defaults. Serializes generation inputs, not
 generated steps or CSS.
 
 ```js
-import { serializePaletteDefinition } from '@keithjgrant/argot/palette';
+import { serializePaletteDefinition } from 'argot-css/palette';
 
 const portableJson = serializePaletteDefinition({
   version: 1,
@@ -202,7 +201,7 @@ at the lightness endpoints caused by conversion are tolerated and clamped here,
 not in numeric definition validation. No output-gamut mapping is performed.
 
 ```js
-import { parseCssColor } from '@keithjgrant/argot/palette';
+import { parseCssColor } from 'argot-css/palette';
 
 const seed = parseCssColor('#663399');
 // => { l: 0.4402…, c: 0.1602…, h: 303.37… }
@@ -234,7 +233,7 @@ Color order follows input order. `step` and `baseStep` are **one-based**, from 1
 through 16. Array indexes remain zero-based.
 
 ```js
-import { generatePalette } from '@keithjgrant/argot/palette';
+import { generatePalette } from 'argot-css/palette';
 
 const palette = generatePalette({
   version: 1,
@@ -280,7 +279,7 @@ Pass a model from `generatePalette()`. This is not a general-purpose validator
 for arbitrary imported palette models; import portable definitions instead.
 
 ```js
-import { generatePalette, renderPaletteCss } from '@keithjgrant/argot/palette';
+import { generatePalette, renderPaletteCss } from 'argot-css/palette';
 
 const css = renderPaletteCss(
   generatePalette({
@@ -304,7 +303,7 @@ const css = renderPaletteCss(
 Convenience composition of `generatePalette()` and `renderPaletteCss()`:
 
 ```js
-import { generatePaletteCss } from '@keithjgrant/argot/palette';
+import { generatePaletteCss } from 'argot-css/palette';
 
 const css = generatePaletteCss({
   version: 1,
@@ -330,10 +329,7 @@ const css = generatePaletteCss({
 - Option unions: `LightnessCurve`, `ChromaCurve`, `ColorFormat`, `ColorGamut`.
 
 ```ts
-import {
-  generatePaletteCss,
-  type PaletteDefinition,
-} from '@keithjgrant/argot/palette';
+import { generatePaletteCss, type PaletteDefinition } from 'argot-css/palette';
 
 const definition = {
   version: 1,
@@ -346,8 +342,8 @@ TypeScript types do not replace runtime validation of imported JSON.
 
 ## Node palette file functions
 
-Import these from `@keithjgrant/argot/palette/node`. Neither is part of the
-browser-safe entrypoint. Relative paths resolve against `process.cwd()`.
+Import these from `argot-css/palette/node`. Neither is part of the browser-safe
+entrypoint. Relative paths resolve against `process.cwd()`.
 
 ### `loadPaletteDefinition(filename: string): NormalizedPaletteDefinition`
 
@@ -355,7 +351,7 @@ Read UTF-8 JSON synchronously, parse it, and validate/normalize it. Read, JSON,
 and definition errors include the resolved input path.
 
 ```js
-import { loadPaletteDefinition } from '@keithjgrant/argot/palette/node';
+import { loadPaletteDefinition } from 'argot-css/palette/node';
 
 // ./palette.json:
 // {
@@ -408,11 +404,8 @@ other project files. Choose distinct input and output locations.
 
 ```js
 import { writeFileSync } from 'node:fs';
-import { serializePaletteDefinition } from '@keithjgrant/argot/palette';
-import {
-  loadPaletteDefinition,
-  writePalette,
-} from '@keithjgrant/argot/palette/node';
+import { serializePaletteDefinition } from 'argot-css/palette';
+import { loadPaletteDefinition, writePalette } from 'argot-css/palette/node';
 
 const definition = loadPaletteDefinition('./palette.json');
 
@@ -434,7 +427,7 @@ entrypoint.
 ## CLI
 
 Install the package and use `argot` in npm scripts, or invoke it with
-`npm exec --package=@keithjgrant/argot -- argot ...`.
+`npm exec --package=argot-css -- argot ...`.
 
 ```sh
 argot palette ./palette.json
@@ -455,7 +448,7 @@ native TypeScript. The installed executable uses compiled JavaScript.
 
 ### Semantic templates
 
-Same behavior as [`@keithjgrant/argot/semantics`](#semantic-generation-library):
+Same behavior as [`argot-css/semantics`](#semantic-generation-library):
 
 ```sh
 argot generate
@@ -471,7 +464,7 @@ files without `--force`.** Its CLI refuses output directories.
 
 ## Semantic generation library
 
-Import from `@keithjgrant/argot/semantics` (CLI:
+Import from `argot-css/semantics` (CLI:
 [`argot generate`](#semantic-templates)):
 
 - `generateCss(options?: TokenOptions): string`: load packaged semantic tokens
@@ -494,12 +487,12 @@ Requires the optional Stylelint 16 peer dependency:
 
 ```js
 export default {
-  extends: ['@keithjgrant/argot/stylelint/config'],
+  extends: ['argot-css/stylelint/config'],
 };
 ```
 
-`@keithjgrant/argot/stylelint` default-exports the plugin array. The config
-entrypoint registers it and enables `argot/valid-token`.
+`argot-css/stylelint` default-exports the plugin array. The config entrypoint
+registers it and enables `argot/valid-token`.
 
 **The rule is currently a no-op placeholder**, not token-name enforcement,
 contrast validation, or build-time linting.
@@ -511,7 +504,7 @@ tiers, and optional relationship metadata. It is not a promise of full DTCG
 interchange support.
 
 ```js
-import textTokens from '@keithjgrant/argot/tokens/color-text.json' with { type: 'json' };
+import textTokens from 'argot-css/tokens/color-text.json' with { type: 'json' };
 ```
 
 The two CSS templates export core or core-plus-extended semantic property names

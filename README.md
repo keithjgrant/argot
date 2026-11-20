@@ -56,9 +56,9 @@ TypeScript declarations, so consumers do not need a TypeScript compiler.
 1. Emit a template into your project:
 
    ```bash
-   npx @keithjgrant/argot semantics              # core tokens → ./semantics.css
-   npx @keithjgrant/argot semantics --extended   # core + extended
-   npx @keithjgrant/argot semantics ./tokens.css # custom output path
+   npx argot-css semantics              # core tokens → ./semantics.css
+   npx argot-css semantics --extended   # core + extended
+   npx argot-css semantics ./tokens.css # custom output path
    ```
 
 2. Assign values — typically by mapping to your own primitive palette.
@@ -75,7 +75,7 @@ project with `"type": "module"`, or a `stylelint.config.mjs` file).
 ```js
 // stylelint.config.js
 export default {
-  extends: ['@keithjgrant/argot/stylelint/config'],
+  extends: ['argot-css/stylelint/config'],
 };
 ```
 
@@ -123,7 +123,7 @@ In a checkout, try
 the [sample definition](./scripts/fixtures/palette.json). Existing output
 requires `--force` to replace; `--dry-run` validates without writing.
 
-The browser-safe `@keithjgrant/argot/palette` entrypoint exports `SeedColor`,
+The browser-safe `argot-css/palette` entrypoint exports `SeedColor`,
 `OklchColor`, `PaletteDefinition`, and the generation functions. If an input
 interface accepts CSS strings, call the separate `parseCssColor()` helper and
 compose a numeric seed such as `{ name: 'brand', ...parseCssColor('#663399') }`.

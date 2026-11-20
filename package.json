@@ -1,5 +1,5 @@
 {
-  "name": "@keithjgrant/argot",
+  "name": "argot-css",
   "version": "0.0.1",
   "description": "Primitive palette generation, semantic CSS custom property names, and optional Stylelint integration",
   "license": "MIT",

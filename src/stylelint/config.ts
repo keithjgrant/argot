@@ -7,7 +7,7 @@ import type { Config } from 'stylelint';
  * @example
  * // stylelint.config.js
  * export default {
- *   extends: ['@keithjgrant/argot/stylelint/config'],
+ *   extends: ['argot-css/stylelint/config'],
  * };
  */
 export default {

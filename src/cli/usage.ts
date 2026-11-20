@@ -9,9 +9,9 @@ Options:
   --extended   Include extended-tier tokens (default: core only)
 
 Examples:
-  npx @keithjgrant/argot semantics
-  npx @keithjgrant/argot semantics --extended
-  npx @keithjgrant/argot semantics ./styles/tokens.css --extended
+  npx argot-css semantics
+  npx argot-css semantics --extended
+  npx argot-css semantics ./styles/tokens.css --extended
 `;
 
 export { USAGE };

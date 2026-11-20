@@ -1,7 +1,7 @@
 /**
  * Package-entrypoint checks against the in-repo package, not src/ unit tests.
  *
- * Imports of `@keithjgrant/argot/...` use Node's package self-resolution: they
+ * Imports of `argot-css/...` use Node's package self-resolution: they
  * follow this package's `exports` map into compiled `dist/` the same way a
  * consumer would after install. The native TypeScript cases import `src/`
  * directly and compare that output to the compiled entrypoints, and exercise
@@ -13,14 +13,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import {
-  generateCss,
-  renderCss,
-  writeTemplate,
-} from '@keithjgrant/argot/semantics';
-import { generatePalette } from '@keithjgrant/argot/palette';
-import plugins from '@keithjgrant/argot/stylelint';
-import config from '@keithjgrant/argot/stylelint/config';
+import { generateCss, renderCss, writeTemplate } from 'argot-css/semantics';
+import { generatePalette } from 'argot-css/palette';
+import plugins from 'argot-css/stylelint';
+import config from 'argot-css/stylelint/config';
 
 const root = path.resolve(import.meta.dirname, '..');
 const devCli = path.join(root, 'scripts/devCli.js');
