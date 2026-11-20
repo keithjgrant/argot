@@ -51,6 +51,10 @@
     "./stylelint/config": {
       "types": "./dist/stylelint/config.d.ts",
       "import": "./dist/stylelint/config.js"
+    },
+    "stylelint-default": {
+      "import": "./dist/processor/stylelintDefault.js",
+      "types": "./dist/processor/stylelintDefault.d.ts"
     }
   },
   "scripts": {
@@ -102,6 +106,6 @@
     "postcss": "^8.5.33",
     "postcss-reporter": "^7.1.0",
     "stylelint": "^18.0.0",
-    "stylelint-config-standard": "^41.0.0"
+    "stylelint-config-recommended": "^19.0.0"
   }
 }

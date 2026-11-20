@@ -1,1 +1,1 @@
-declare module 'stylelint-config-standard';
+declare module 'stylelint-config-recommended';

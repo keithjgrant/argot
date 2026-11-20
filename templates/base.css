@@ -6,9 +6,9 @@
   }
 
   html {
-    /* -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    font-synthesis: none; */
+    font-synthesis: none;
 
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
@@ -36,9 +36,6 @@
     block-size: auto;
   }
 
-  /* TODO: radio? textarea? 
-    see Eric Meyer's opt-in list: https://meyerweb.com/eric/tools/css/reset/
-  */
   *:not(dialog) {
     margin: unset;
   }
@@ -54,9 +51,3 @@
     }
   }
 }
-
-/*
-andy bell: https://piccalil.li/blog/a-more-modern-css-reset/
-
-great list of resets: https://kilianvalkhof.com/2022/css-html/your-css-reset-needs-text-size-adjust-probably/
-*/
