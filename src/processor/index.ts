@@ -63,7 +63,7 @@ function getStylelint() {
 
   const defaultConfigPath = path.resolve(
     import.meta.dirname,
-    'stylelintDefaultConfig.js',
+    'stylelintDefault.js',
   );
 
   return stylelint({ configFile: defaultConfigPath });
