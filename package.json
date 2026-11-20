@@ -54,7 +54,7 @@
     }
   },
   "scripts": {
-    "cli": "node scripts/dev.js",
+    "cli": "node scripts/devCli.js",
     "build": "tsc -p tsconfig.build.json",
     "checks": "npm run build && npm run eslint && npm run test",
     "tsc": "tsc --noEmit",
@@ -67,7 +67,7 @@
     "preversion": "npm run checks",
     "prettier": "prettier --check . --ignore-unknown",
     "prettier:fix": "prettier --write . --ignore-unknown",
-    "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
+    "build:template": "node scripts/devCli.js semantics ./templates/semantics.css && node scripts/devCli.js semantics --extended ./templates/semantics-extended.css",
     "test": "node --test 'src/**/*.test.ts' 'scripts/**/*.test.js' 'website/**/*.test.js'",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",
     "prewebsite:build": "npm run website:lint",

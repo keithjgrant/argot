@@ -4,9 +4,7 @@ import postcss from 'postcss';
 import cssnano from 'cssnano';
 import stylelint from 'stylelint';
 import atImport from './atImport.ts';
-
-const ANSI_GREEN = '\x1b[32m';
-const ANSI_WHITE = '\x1b[37m';
+import { ANSI_GREEN, ANSI_WHITE } from '../cli/ansiColors.ts';
 
 /**
  * Processes stylesheet and outputs destination css
@@ -61,7 +59,7 @@ function getStylelint() {
 
   const defaultConfigPath = path.resolve(
     import.meta.dirname,
-    'stylelintDefaultConfig.ts',
+    'stylelintDefaultConfig.js',
   );
 
   return stylelint({ configFile: defaultConfigPath });

@@ -98,12 +98,12 @@ as internals move.
 
 ## Public interfaces
 
-Preserve `argot generate` and the current `./generate` entrypoint. Proposed
+Preserve `argot semantics` and the current `./semantics` entrypoint. Proposed
 additional command responsibilities are:
 
+- `argot`: process an existing CSS entrypoint.
 - `argot init`: create the project scaffold.
 - `argot palette`: generate or regenerate primitive properties independently.
-- `argot build`: process an existing CSS entrypoint.
 
 Expose palette and PostCSS library entrypoints separately from their CLI
 adapters. Exact flags, configuration discovery, and export names remain to be

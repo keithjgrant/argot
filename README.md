@@ -56,9 +56,9 @@ TypeScript declarations, so consumers do not need a TypeScript compiler.
 1. Emit a template into your project:
 
    ```bash
-   npx @keithjgrant/argot generate              # core tokens → ./semantics.css
-   npx @keithjgrant/argot generate --extended   # core + extended
-   npx @keithjgrant/argot generate ./tokens.css # custom output path
+   npx @keithjgrant/argot semantics              # core tokens → ./semantics.css
+   npx @keithjgrant/argot semantics --extended   # core + extended
+   npx @keithjgrant/argot semantics ./tokens.css # custom output path
    ```
 
 2. Assign values — typically by mapping to your own primitive palette.

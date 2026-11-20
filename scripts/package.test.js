@@ -6,7 +6,7 @@
  * TypeScript consumers against that install—without a registry. Shared `before`
  * setup packs once per suite so those cases stay focused without re-packing.
  *
- * Native development commands copy `src/` and `scripts/dev.js` into a workspace
+ * Native development commands copy `src/` and `scripts/devCli.js` into a workspace
  * with no `dist/`, confirming the strip-types CLI works as a consumer of source.
  */
 import assert from 'node:assert/strict';
@@ -19,6 +19,16 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(import.meta.dirname, '..');
 
+const LINKED_DEPENDENCIES = [
+  'colorjs.io',
+  'stylelint',
+  'stylelint-config-standard',
+  '@types',
+  'postcss',
+  'cssnano',
+];
+
+// link a dependency into node_modules so imports resolve while running from dist
 function linkDependency(cwd, name) {
   const destination = path.join(cwd, 'node_modules', name);
   fs.mkdirSync(path.dirname(destination), { recursive: true });
@@ -56,7 +66,7 @@ describe('packed package', () => {
       '--strip-components=1',
     ]);
     fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
-    for (const dependency of ['colorjs.io', 'stylelint', '@types']) {
+    for (const dependency of LINKED_DEPENDENCIES) {
       linkDependency(cwd, dependency);
     }
     for (const file of [
@@ -185,13 +195,31 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
   });
 
   describe('CLI', () => {
+    test('should process a stylesheet to the destination file', () => {
+      fs.writeFileSync(path.join(cwd, 'input.css'), 'a {\n  color: red;\n}\n');
+      execFileSync(
+        process.execPath,
+        [
+          '--no-experimental-strip-types',
+          path.join(installed, 'bin/argot.js'),
+          'input.css',
+          'output.css',
+        ],
+        { cwd, stdio: 'pipe' },
+      );
+      assert.match(
+        fs.readFileSync(path.join(cwd, 'output.css'), 'utf8'),
+        /a\s*\{\s*color:\s*red/,
+      );
+    });
+
     test('should generate semantics.css', () => {
       execFileSync(
         process.execPath,
         [
           '--no-experimental-strip-types',
           path.join(installed, 'bin/argot.js'),
-          'generate',
+          'semantics',
           'semantics.css',
         ],
         { cwd, stdio: 'pipe' },
@@ -252,6 +280,7 @@ assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
 describe('native development commands', () => {
   /** @type {string} */
   let cwd;
+  const LINKED_DEPENDENCIES = ['colorjs.io', 'postcss', 'cssnano', 'stylelint'];
 
   before(() => {
     cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-distribution-'));
@@ -262,11 +291,13 @@ describe('native development commands', () => {
     }
     fs.mkdirSync(path.join(cwd, 'scripts'));
     fs.copyFileSync(
-      path.join(root, 'scripts/dev.js'),
-      path.join(cwd, 'scripts/dev.js'),
+      path.join(root, 'scripts/devCli.js'),
+      path.join(cwd, 'scripts/devCli.js'),
     );
     fs.writeFileSync(path.join(cwd, 'package.json'), '{"type":"module"}');
-    linkDependency(cwd, 'colorjs.io');
+    for (const dependency of LINKED_DEPENDENCIES) {
+      linkDependency(cwd, dependency);
+    }
     fs.writeFileSync(
       path.join(cwd, 'palette.json'),
       JSON.stringify({
@@ -276,12 +307,12 @@ describe('native development commands', () => {
     );
     execFileSync(
       process.execPath,
-      ['scripts/dev.js', 'generate', 'semantics.css'],
+      ['scripts/devCli.js', 'semantics', 'semantics.css'],
       { cwd, stdio: 'pipe' },
     );
     execFileSync(
       process.execPath,
-      ['scripts/dev.js', 'palette', 'palette.json'],
+      ['scripts/devCli.js', 'palette', 'palette.json'],
       { cwd, stdio: 'pipe' },
     );
   });

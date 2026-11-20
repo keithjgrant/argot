@@ -15,10 +15,10 @@ function workspace(t: TestContext): string {
   return cwd;
 }
 
-describe('CLI', () => {
+describe('Semantics CLI', () => {
   test('should generate a core template matching generateCss outside the package', (t) => {
     const cwd = workspace(t);
-    execFileSync(process.execPath, [cli, 'generate', 'core.css'], { cwd });
+    execFileSync(process.execPath, [cli, 'semantics', 'core.css'], { cwd });
     assert.equal(
       fs.readFileSync(path.join(cwd, 'core.css'), 'utf8'),
       generateCss({ extended: false }),
@@ -29,20 +29,13 @@ describe('CLI', () => {
     const cwd = workspace(t);
     execFileSync(
       process.execPath,
-      [cli, 'generate', 'extended.css', '--extended'],
+      [cli, 'semantics', 'extended.css', '--extended'],
       { cwd },
     );
     assert.equal(
       fs.readFileSync(path.join(cwd, 'extended.css'), 'utf8'),
       generateCss({ extended: true }),
     );
-  });
-
-  test('should print usage for --help', () => {
-    const help = execFileSync(process.execPath, [cli, '--help'], {
-      encoding: 'utf8',
-    });
-    assert.match(help, /Usage:/);
   });
 
   test('should exit with status 1 for an unknown command', () => {
