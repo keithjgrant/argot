@@ -6,7 +6,7 @@ import {
   renderPaletteCss,
   serializePaletteDefinition,
   type PaletteDefinition,
-} from '@keithjgrant/argot/palette';
+} from 'argot-css/palette';
 
 const definition: PaletteDefinition = {
   version: 1,

@@ -20,15 +20,15 @@ The CLI requires Node.js 22.16 or newer.
 Run this from your project directory:
 
 ```sh
-npx @keithjgrant/argot generate
+npx argot-css generate
 ```
 
 This writes the core tokens to `semantics.css`. To include extended tokens or
 choose another output file:
 
 ```sh
-npx @keithjgrant/argot generate --extended
-npx @keithjgrant/argot generate ./styles/tokens.css
+npx argot-css generate --extended
+npx argot-css generate ./styles/tokens.css
 ```
 
 Treat generation as a starting step: generating again at the same path

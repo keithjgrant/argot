@@ -13,7 +13,7 @@ describe('integration', () => {
   test('should report no warnings when stylelint extends the published config', async () => {
     const result = await stylelint.lint({
       code: 'a { color: var(--text-primry); --my-extra: 1rem; }\n',
-      config: { extends: ['@keithjgrant/argot/stylelint/config'] },
+      config: { extends: ['argot-css/stylelint/config'] },
     });
     assert.equal(result.errored, false);
     assert.equal(

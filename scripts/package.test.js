@@ -57,7 +57,7 @@ describe('packed package', () => {
     );
     const [packed] = JSON.parse(output.slice(output.indexOf('[')));
     files = packed.files.map(({ path: filename }) => filename);
-    installed = path.join(cwd, 'node_modules/@keithjgrant/argot');
+    installed = path.join(cwd, 'node_modules/argot-css');
     fs.mkdirSync(installed, { recursive: true });
     execFileSync('tar', [
       '-xzf',
@@ -135,11 +135,11 @@ describe('packed package', () => {
         'utf8',
       );
       for (const entrypoint of [
-        '@keithjgrant/argot/palette',
-        '@keithjgrant/argot/palette/node',
-        '@keithjgrant/argot/semantics',
-        '@keithjgrant/argot/stylelint',
-        '@keithjgrant/argot/stylelint/config',
+        'argot-css/palette',
+        'argot-css/palette/node',
+        'argot-css/semantics',
+        'argot-css/stylelint',
+        'argot-css/stylelint/config',
       ]) {
         assert.ok(
           apiReference.includes(entrypoint),
@@ -156,13 +156,13 @@ describe('packed package', () => {
         `
 import assert from 'node:assert/strict';
 import stylelint from 'stylelint';
-import { generateCss } from '@keithjgrant/argot/semantics';
+import { generateCss } from 'argot-css/semantics';
 import {
   generatePalette, generatePaletteCss, parseCssColor, serializePaletteDefinition,
-} from '@keithjgrant/argot/palette';
-import { loadPaletteDefinition, writePalette } from '@keithjgrant/argot/palette/node';
-import plugins from '@keithjgrant/argot/stylelint';
-import config from '@keithjgrant/argot/stylelint/config';
+} from 'argot-css/palette';
+import { loadPaletteDefinition, writePalette } from 'argot-css/palette/node';
+import plugins from 'argot-css/stylelint';
+import config from 'argot-css/stylelint/config';
 const definition = { version: 1, seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }] };
 assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), { l: 0.6, c: 0.2, h: 250 });
 const palette = generatePalette(definition);
@@ -177,7 +177,7 @@ fs.writeFileSync('palette.json', serializePaletteDefinition(definition));
 assert.equal(loadPaletteDefinition('palette.json').version, 1);
 const lint = await stylelint.lint({
   code: 'a { color: var(--text-primary); }',
-  config: { extends: ['@keithjgrant/argot/stylelint/config'] },
+  config: { extends: ['argot-css/stylelint/config'] },
   cwd: process.cwd(),
 });
 assert.equal(lint.errored, false);

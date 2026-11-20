@@ -5,7 +5,7 @@ import {
   type TokenOptions,
   type TokenRecord,
   type TokenSection,
-} from '@keithjgrant/argot/semantics';
+} from 'argot-css/semantics';
 import {
   generatePalette,
   generatePaletteCss,
@@ -22,15 +22,15 @@ import {
   type Palette,
   type PaletteDefinition,
   type PaletteOptions,
-} from '@keithjgrant/argot/palette';
+} from 'argot-css/palette';
 import {
   loadPaletteDefinition,
   writePalette,
   type WritePaletteOptions,
   type WritePaletteResult,
-} from '@keithjgrant/argot/palette/node';
-import plugins from '@keithjgrant/argot/stylelint';
-import config from '@keithjgrant/argot/stylelint/config';
+} from 'argot-css/palette/node';
+import plugins from 'argot-css/stylelint';
+import config from 'argot-css/stylelint/config';
 import type { Config, Plugin } from 'stylelint';
 
 const lightness: LightnessCurve = 'centered';
