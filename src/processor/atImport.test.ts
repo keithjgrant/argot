@@ -244,4 +244,42 @@ describe('at-import', () => {
     assert.match(css, /@import\s+'https:\/\/example\.com\/styles\.css'/);
     assert.match(css, /\.local\s*\{\s*display:\s*block/);
   });
+
+  test('should produce clean whitespace', async () => {
+    const layerCss = await processEntry({
+      'entry.css': `@import './local.css' layer(base);\n`,
+      'local.css': `.local {\n  display: block;\n}\n`,
+    });
+    assert.equal(
+      layerCss,
+      `@layer base {\n.local {\n  display: block;\n}\n}\n\n`,
+    );
+
+    const mediaCss = await processEntry({
+      'entry.css': `@import './local.css' (width > 500px);\n`,
+      'local.css': `.local {\n  display: block;\n}\n`,
+    });
+    assert.equal(
+      mediaCss,
+      `@media (width > 500px) {\n.local {\n  display: block;\n}\n}\n\n`,
+    );
+
+    const supportCss = await processEntry({
+      'entry.css': `@import './local.css' supports(foo: bar);\n`,
+      'local.css': `.local {\n  display: block;\n}\n`,
+    });
+    assert.equal(
+      supportCss,
+      `@supports (foo: bar) {\n.local {\n  display: block;\n}\n}\n\n`,
+    );
+
+    const scopeCss = await processEntry({
+      'entry.css': `@import './local.css' scope(.base);\n`,
+      'local.css': `.local {\n  display: block;\n}\n`,
+    });
+    assert.equal(
+      scopeCss,
+      `@scope (.base) {\n.local {\n  display: block;\n}\n}\n\n`,
+    );
+  });
 });

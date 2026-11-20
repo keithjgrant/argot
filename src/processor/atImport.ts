@@ -117,6 +117,7 @@ function replaceImportWithContents(
       params: media,
       source: atRule.source,
     });
+    prependNewline(contents);
     mediaRule.append(contents);
     contents = [mediaRule];
   }
@@ -126,6 +127,7 @@ function replaceImportWithContents(
       params: `(${supports})`,
       source: atRule.source,
     });
+    prependNewline(contents);
     supportsRule.append(contents);
     contents = [supportsRule];
   }
@@ -135,6 +137,7 @@ function replaceImportWithContents(
       params: scope,
       source: atRule.source,
     });
+    prependNewline(contents);
     scopeRule.append(contents);
     contents = [scopeRule];
   }
@@ -144,6 +147,7 @@ function replaceImportWithContents(
       params: layer,
       source: atRule.source,
     });
+    prependNewline(contents);
     layerRule.append(contents);
     contents = [layerRule];
   }
@@ -153,11 +157,34 @@ function replaceImportWithContents(
     return;
   }
 
+  // keep pretty formatting to lint rule isn't triggered by output
+  appendNewline(atRule);
   atRule.replaceWith(contents);
 }
 
 function isRemote(uri: string): boolean {
   return REMOTE_URI.test(uri) || DATA_URI.test(uri);
+}
+
+function prependNewline(nodes: Root['nodes'] | AtRule[]): void {
+  if (nodes.length === 0) {
+    return;
+  }
+  nodes[0].raws.before = '\n';
+}
+
+function appendNewline(atRule: AtRule): void {
+  // Space after a node lives on the next sibling's `before`, or the parent's
+  // `after` when this is the last child (Root trailing newline / before `}`).
+  const next = atRule.next();
+  if (next) {
+    next.raws.before = `\n${next.raws.before ?? ''}`;
+    return;
+  }
+  const parent = atRule.parent;
+  if (parent) {
+    parent.raws.after = `\n${parent.raws.after ?? ''}`;
+  }
 }
 
 export default atImport;

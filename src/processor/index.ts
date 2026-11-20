@@ -27,7 +27,7 @@ async function processStylesheet(sourceFile: string, destFile: string) {
   const result = await postcss([
     atImport(),
     getStylelint(),
-    // cssnano(),
+    cssnano(),
     reporter({ clearReportedMessages: true }),
   ]).process(css, {
     from: sourceFile,
