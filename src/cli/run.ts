@@ -10,7 +10,7 @@ async function run() {
   try {
     await handleArgs(process.argv.slice(2));
   } catch (e) {
-    printError(e instanceof Error ? e.message : (e as string));
+    printError(e);
     process.exit(1);
   }
 }
