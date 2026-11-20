@@ -6,7 +6,7 @@ import validToken from './valid-token.ts';
 describe('argot/valid-token', () => {
   test('should be a no-op that reports no warnings for unknown tokens', async () => {
     const result = await stylelint.lint({
-      code: 'a { color: var(--text-primry); --my-extra: 1rem; }\n',
+      code: 'a { color: var(--text-primary); --my-extra: 1rem; }\n',
       config: {
         plugins: [validToken],
         rules: { 'argot/valid-token': true },
