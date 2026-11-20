@@ -54,17 +54,20 @@
     }
   },
   "scripts": {
-    "cli": "node scripts/dev.js",
+    "cli": "node scripts/devCli.js",
     "build": "tsc -p tsconfig.build.json",
+    "checks": "npm run build && npm run eslint && npm run test",
     "tsc": "tsc --noEmit",
     "test:types": "tsc --project scripts/types/tsconfig.json && tsc --project scripts/types/tsconfig.browser.json",
     "test:package": "node --test scripts/package.test.js",
     "pretest": "npm run build && npm run tsc && npm run test:types",
     "prepack": "npm run build",
     "eslint": "eslint .",
+    "prepublishOnly": "npm run checks",
+    "preversion": "npm run checks",
     "prettier": "prettier --check . --ignore-unknown",
     "prettier:fix": "prettier --write . --ignore-unknown",
-    "build:template": "node scripts/dev.js generate ./templates/semantics.css && node scripts/dev.js generate --extended ./templates/semantics-extended.css",
+    "build:template": "node scripts/devCli.js semantics ./templates/semantics.css && node scripts/devCli.js semantics --extended ./templates/semantics-extended.css",
     "test": "node --test 'src/**/*.test.ts' 'scripts/**/*.test.js' 'website/**/*.test.js'",
     "website:dev": "eleventy --config=website/eleventy.config.js --serve",
     "prewebsite:build": "npm run website:lint",
@@ -74,9 +77,6 @@
     "website:lint:fix": "npm run website:lint -- --fix",
     "website:format": "prettier --write website --ignore-unknown",
     "website:format:check": "prettier --check website --ignore-unknown"
-  },
-  "peerDependencies": {
-    "stylelint": "^16.0.0"
   },
   "peerDependenciesMeta": {
     "stylelint": {
@@ -88,16 +88,20 @@
     "@eslint/js": "^10.0.1",
     "@jgarber/eleventy-plugin-postcss": "^3.0.1",
     "@types/node": "^22.20.5",
+    "@types/postcss-import": "^14.0.3",
+    "@types/postcss-reporter": "^7.0.5",
     "eslint": "^10.15.0",
-    "postcss": "^8.5.33",
     "postcss-import": "^17.0.1",
     "prettier": "^3.10.1",
-    "stylelint": "^16.0.0",
-    "stylelint-config-recommended": "^16.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2"
   },
   "dependencies": {
-    "colorjs.io": "0.7.1"
+    "colorjs.io": "0.7.1",
+    "cssnano": "^9.9.0",
+    "postcss": "^8.5.33",
+    "postcss-reporter": "^7.1.0",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0"
   }
 }

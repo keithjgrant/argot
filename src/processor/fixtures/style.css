@@ -1,0 +1,13 @@
+@layer reset, base, modules;
+
+@layer reset {
+  * {
+    box-sizing: border-box;
+  }
+}
+
+:root {
+  --border-color: oklch(0.3 0.01 140);
+}
+
+@import './base.css' layer(base) (pointer: fine), (width > 500px);

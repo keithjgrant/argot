@@ -36,7 +36,7 @@ mutate inputs or write files.
 - `@keithjgrant/argot/palette/node`: synchronous definition-file loading and CSS
   file writing. Node only.
 - `@keithjgrant/argot/semantics`: semantic CSS template generation. Node only.
-  Same behavior as [`argot generate`](#semantic-templates).
+  Same behavior as [`argot semantics`](#semantic-templates).
 - `@keithjgrant/argot/stylelint`: optional Stylelint plugin array.
 - `@keithjgrant/argot/stylelint/config`: optional shareable Stylelint config.
 - `@keithjgrant/argot/tokens/*`: packaged DTCG-shaped JSON files.

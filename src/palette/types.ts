@@ -3,6 +3,13 @@ export type ChromaCurve = 'centered' | 'weighted';
 export type ColorFormat = 'oklch' | 'hex';
 export type ColorGamut = 'p3' | 'srgb';
 
+// TODO convert to enums?
+// export const LightnessCurveEnum = {
+//   UNIFORM: 'uniform',
+//   INCLUSIVE: 'inclusive',
+//   CENTERED: 'centered',
+// } as const;
+
 // Seed - input l,c,h (and optional name) to generate steps
 // Step - tint/shade of a certain hue
 // Scale - set of 16 steps

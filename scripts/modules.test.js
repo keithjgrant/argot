@@ -5,7 +5,7 @@
  * follow this package's `exports` map into compiled `dist/` the same way a
  * consumer would after install. The native TypeScript cases import `src/`
  * directly and compare that output to the compiled entrypoints, and exercise
- * `scripts/dev.js` without requiring a separate install.
+ * `scripts/devCli.js` without requiring a separate install.
  */
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
@@ -23,7 +23,7 @@ import plugins from '@keithjgrant/argot/stylelint';
 import config from '@keithjgrant/argot/stylelint/config';
 
 const root = path.resolve(import.meta.dirname, '..');
-const devCli = path.join(root, 'scripts/dev.js');
+const devCli = path.join(root, 'scripts/devCli.js');
 
 const paletteInput = {
   version: 1,
@@ -66,7 +66,7 @@ describe('native TypeScript development entrypoints', () => {
   test('should generate semantics.css via the dev CLI', (t) => {
     const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'argot-native-'));
     t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
-    execFileSync(process.execPath, [devCli, 'generate', 'semantics.css'], {
+    execFileSync(process.execPath, [devCli, 'semantics', 'semantics.css'], {
       cwd,
     });
     assert.equal(

@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { run } from '../dist/semantics/cli.js';
+import { run } from '../dist/cli/run.js';
 
 await run();
