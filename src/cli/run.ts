@@ -1,9 +1,7 @@
-import fs from 'node:fs/promises';
-import path from 'path';
 import { USAGE } from './usage.ts';
 import { runSemantics } from '../semantics/cli.ts';
 import { runPalette } from '../palette/cli.ts';
-import { processStylesheet } from '../processor/index.ts';
+import { runProcessor } from '../processor/cli.ts';
 import { printError } from './print.ts';
 
 async function run() {
@@ -32,14 +30,7 @@ async function handleArgs(args: string[]) {
   }
 
   if (command.endsWith('.css')) {
-    if (!rest[0]) {
-      throw new Error('No destination file specified');
-    }
-    const source = path.resolve(process.cwd(), command);
-    const dest = path.resolve(process.cwd(), rest[0]);
-    await fs.mkdir(path.dirname(dest), { recursive: true });
-
-    return await processStylesheet(source, dest);
+    return await runProcessor(args);
   }
 
   printError(`Unknown command: ${command}`);

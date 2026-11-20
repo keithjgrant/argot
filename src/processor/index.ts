@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-import path from 'path';
 import postcss from 'postcss';
 import reporter from 'postcss-reporter';
 import cssnano from 'cssnano';
@@ -7,13 +6,18 @@ import stylelint from 'stylelint';
 import atImport from './atImport.ts';
 import { print } from '../cli/print.ts';
 import { ANSI_GREEN } from '../cli/ansiColors.ts';
+import lintConfig from './stylelintDefault.ts';
 
 /**
  * Processes stylesheet and outputs destination css
  * @param sourceFile fully-qualified source filename
  * @param destFile  fully-qualified destination filename
  */
-async function processStylesheet(sourceFile: string, destFile: string) {
+async function processStylesheet(
+  sourceFile: string,
+  destFile: string,
+  lintConfigFile?: string,
+) {
   let css;
   try {
     css = await fs.readFile(sourceFile, 'utf8');
@@ -26,7 +30,7 @@ async function processStylesheet(sourceFile: string, destFile: string) {
 
   const result = await postcss([
     atImport(),
-    getStylelint(),
+    getStylelint(lintConfigFile),
     cssnano(),
     reporter({ clearReportedMessages: true }),
   ]).process(css, {
@@ -45,28 +49,11 @@ async function processStylesheet(sourceFile: string, destFile: string) {
   }
 }
 
-function getStylelint() {
-  // try {
-  // . // TODO: doesn't throw until postcss().process() called
-  //   const plugin = stylelint();
-  //   // return plugin;
-  // } catch (error) {
-  //   if (
-  //     error instanceof Error &&
-  //     error.name === 'ConfigurationError' &&
-  //     error.message.includes('No configuration provided')
-  //   ) {
-  //     //
-  //   }
-  //   throw error;
-  // }
-
-  const defaultConfigPath = path.resolve(
-    import.meta.dirname,
-    'stylelintDefault.js',
-  );
-
-  return stylelint({ configFile: defaultConfigPath });
+function getStylelint(configFile?: string) {
+  if (configFile) {
+    return stylelint({ configFile });
+  }
+  return stylelint({ config: lintConfig });
 }
 
 export { processStylesheet };

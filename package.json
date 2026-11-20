@@ -52,7 +52,7 @@
       "types": "./dist/stylelint/config.d.ts",
       "import": "./dist/stylelint/config.js"
     },
-    "stylelint-default": {
+    "./stylelint-default": {
       "import": "./dist/processor/stylelintDefault.js",
       "types": "./dist/processor/stylelintDefault.d.ts"
     }
