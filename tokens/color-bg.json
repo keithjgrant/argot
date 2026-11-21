@@ -15,14 +15,6 @@
       "usage": "main column, article, panel",
       "pairsWith": ["text-primary", "text-secondary", "text-interactive"]
     },
-    "raised": {
-      "$type": "color",
-      "$value": "",
-      "$description": "Surface elevated above the main background.",
-      "tier": "core",
-      "usage": "cards, menus, dropdowns, raised panels",
-      "pairsWith": ["text-primary", "border-color"]
-    },
     "inset": {
       "$type": "color",
       "$value": "",
@@ -31,16 +23,24 @@
       "usage": "asides, wells, form fields, inputs",
       "pairsWith": ["text-primary", "border-color"]
     },
-    "raised-strong": {
+    "raised": {
       "$type": "color",
       "$value": "",
-      "$description": "Stronger elevation than raised when two raised levels are needed.",
-      "tier": "extended"
+      "$description": "Surface elevated above the main background.",
+      "tier": "core",
+      "usage": "cards, menus, dropdowns, raised panels",
+      "pairsWith": ["text-primary", "border-color"]
     },
     "inset-strong": {
       "$type": "color",
       "$value": "",
       "$description": "Deeper inset than inset when two recessed levels are needed.",
+      "tier": "extended"
+    },
+    "raised-strong": {
+      "$type": "color",
+      "$value": "",
+      "$description": "Stronger elevation than raised when two raised levels are needed.",
       "tier": "extended"
     },
     "brand": {
