@@ -13,6 +13,8 @@
 //   },
 // };
 
+import recommended from 'stylelint-config-recommended';
+
 export default {
-  extends: ['stylelint-config-recommended'],
+  extends: [recommended],
 };

@@ -16,6 +16,7 @@ export async function runProcessor(args: string[]) {
     options: {
       'lint-config': { type: 'string', short: 'c' },
       help: { type: 'boolean', short: 'h', default: false },
+      verbose: { type: 'boolean' },
     },
   });
   if (positionals.length !== 2) {

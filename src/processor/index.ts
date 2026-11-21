@@ -6,7 +6,7 @@ import stylelint from 'stylelint';
 import atImport from './atImport.ts';
 import { print } from '../cli/print.ts';
 import { ANSI_GREEN } from '../cli/ansiColors.ts';
-import lintConfig from './stylelintDefault.ts';
+import defaultLintConfig from './stylelintDefault.ts';
 
 /**
  * Processes stylesheet and outputs destination css
@@ -49,11 +49,12 @@ async function processStylesheet(
   }
 }
 
-function getStylelint(configFile?: string) {
-  if (configFile) {
-    return stylelint({ configFile });
+function getStylelint(userConfigFile?: string) {
+  if (userConfigFile) {
+    return stylelint({ configFile: userConfigFile });
   }
-  return stylelint({ config: lintConfig });
+
+  return stylelint({ config: defaultLintConfig });
 }
 
 export { processStylesheet };
