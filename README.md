@@ -1,5 +1,42 @@
 # Argot
 
+A CSS preprocessor, streamlined for an era when we barely need preprocessors
+anymore.
+
+Usage:
+
+```
+argot <input.css> <output.css> [--lint-config="path/to/stylelint-config"]
+```
+
+What the processor does:
+
+- Assemble — Embed CSS file partials using `@import`
+- Lint — uses [stylelint](https://stylelint.io/)
+- Minify — uses[cssnano](https://cssnano.github.io/cssnano/)
+
+The `@import` at-rule can be used anywhere in your stylesheets. It supports all
+_preludes_ the native CSS `@import` supports:
+
+```
+@import 'partial.css';
+@import 'partial.css' layer(modules);
+@import 'partial.css' supports(contrast-color(#ccc));
+@import 'partial.css' scope(.aside);
+@import 'partial.css' (min-width: 500px);
+```
+
+Layer, supports, and scope may be specified in any order. Media queries must be
+listed last.
+
+## Project scaffolding
+
+In addition to the preprocessor, Argot offers a number of tools for project
+scaffolding and design. The full pipeline is still very much under construction,
+but some of the pieces below are working.
+
+## Semantic CSS custom properties
+
 A standardized set of **semantic design token names**, plus headless **primitive
 color palette generation**, packaged for modern CSS projects. Use either
 independently, or generate a palette and map semantic properties to it.
@@ -65,7 +102,7 @@ TypeScript declarations, so consumers do not need a TypeScript compiler.
 3. Style with semantic names (`var(--text-primary)`) instead of primitives
    (`var(--gray-6)`).
 
-### Stylelint (optional)
+### Stylelint rule
 
 Noop lint rule for now. Functionality remains TODO.
 
