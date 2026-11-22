@@ -13,7 +13,7 @@ What the processor does:
 
 - Assemble — Embed CSS file partials using `@import`
 - Lint — uses [stylelint](https://stylelint.io/)
-- Minify — uses[cssnano](https://cssnano.github.io/cssnano/)
+- Minify — uses [cssnano](https://cssnano.github.io/cssnano/)
 
 The `@import` at-rule can be used anywhere in your stylesheets. It supports all
 _preludes_ the native CSS `@import` supports:
@@ -23,7 +23,7 @@ _preludes_ the native CSS `@import` supports:
 @import 'partial.css' layer(modules);
 @import 'partial.css' supports(contrast-color(#ccc));
 @import 'partial.css' scope(.aside);
-@import 'partial.css' (min-width: 500px);
+@import 'partial.css' (width >= 500px);
 ```
 
 Layer, supports, and scope may be specified in any order. Media queries must be
