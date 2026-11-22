@@ -111,6 +111,7 @@
     "eslint": "^10.15.0",
     "postcss-import": "^17.0.1",
     "prettier": "^3.10.1",
+    "stylelint-test-rule-node": "^2.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2"
   }
