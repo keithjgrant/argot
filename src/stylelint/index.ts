@@ -1,4 +1,4 @@
-import validToken from './rules/valid-token.ts';
+import colorContrast from './rules/colorContrast.ts';
 
 /** Stylelint plugins shipped by Argot. */
-export default [validToken];
+export default [colorContrast];
