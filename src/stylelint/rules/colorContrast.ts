@@ -77,9 +77,17 @@ const ruleFunction: stylelint.Rule = () => {
 
         reportedPairs.add(pairKey);
 
-        const contrast = new Color(colorString).contrastWCAG21(
-          new Color(pairColor),
-        );
+        let contrast;
+        try {
+          contrast = new Color(colorString).contrastWCAG21(
+            new Color(pairColor),
+          );
+        } catch (err) {
+          if (err instanceof TypeError) {
+            continue;
+          }
+          throw err;
+        }
         if (contrast >= AAA_CONTRAST) continue;
         const rounded = contrast.toFixed(2);
 
