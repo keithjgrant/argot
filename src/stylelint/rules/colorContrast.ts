@@ -24,16 +24,6 @@ const ruleMessages = stylelint.utils.ruleMessages(ruleName, {
 const ruleFunction: stylelint.Rule = (method, opts, context) => {
   const tokens = loadTokens();
 
-  console.log(tokens[0].tokens);
-  // sources to import custom selectors from
-  // const importFrom = [].concat(Object(opts).importFrom || []);
-  // const resolver = Object(opts).resolver || {};
-
-  // // promise any custom selectors are imported
-  // const customPropertiesPromise = isMethodEnabled(method)
-  //   ? getCustomPropertiesFromImports(importFrom, resolver)
-  //   : {};
-
   return async (root, result) => {
     const primitives: PropValues = {};
     const semantics: Semantics = {};
@@ -46,6 +36,7 @@ const ruleFunction: stylelint.Rule = (method, opts, context) => {
 
         if (isColorPrimitive(rule.prop, rule.value)) {
           primitives[rule.prop] = rule.value;
+          return;
         }
 
         const token = getToken(rule.prop, tokens);

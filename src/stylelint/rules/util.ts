@@ -47,7 +47,10 @@ export function isColor(value: string) {
 
 export function getToken(name: string, tokens: TokenSection[]) {
   for (const section of tokens) {
-    return section.tokens.find((t) => t.name === name);
+    const match = section.tokens.find((t) => t.name === name);
+    if (match) {
+      return match;
+    }
   }
 
   return null;
