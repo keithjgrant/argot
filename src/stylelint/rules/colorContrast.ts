@@ -1,8 +1,17 @@
 import stylelint from 'stylelint';
-import type { ChildNode, Declaration } from 'postcss';
+import {
+  isCustomPropertyDeclaration,
+  isColorPrimitive,
+  getToken,
+} from './util.ts';
+import { loadTokens } from '../../semantics/load-tokens.ts';
 
 interface PropValues {
   [key: string]: string;
+}
+
+interface Semantics {
+  [key: string]: any;
 }
 
 export const ruleName = 'argot/color-contrast';
@@ -13,7 +22,9 @@ const ruleMessages = stylelint.utils.ruleMessages(ruleName, {
 });
 
 const ruleFunction: stylelint.Rule = (method, opts, context) => {
-  console.log('INIT');
+  const tokens = loadTokens();
+
+  console.log(tokens[0].tokens);
   // sources to import custom selectors from
   // const importFrom = [].concat(Object(opts).importFrom || []);
   // const resolver = Object(opts).resolver || {};
@@ -25,7 +36,7 @@ const ruleFunction: stylelint.Rule = (method, opts, context) => {
 
   return async (root, result) => {
     const primitives: PropValues = {};
-    const semantics: PropValues = {};
+    const semantics: Semantics = {};
 
     root.walkRules((ruleNode) => {
       ruleNode.each((rule) => {
@@ -37,8 +48,19 @@ const ruleFunction: stylelint.Rule = (method, opts, context) => {
           primitives[rule.prop] = rule.value;
         }
 
-        if (isKnownSemantic(rule.prop)) {
-          // todo
+        const token = getToken(rule.prop, tokens);
+        if (token) {
+          semantics[rule.prop] = token;
+        }
+        if (token?.pairsWith && token?.pairsWith.length) {
+          stylelint.utils.report({
+            ruleName,
+            result,
+            message: `${rule.prop} pairs with ${token.pairsWith.join(', ')}`,
+            node: ruleNode,
+            // start: { line: warning.line, column: warning.column },
+            // end: { line: warning.endLine, column: warning.endColumn },
+          });
         }
       });
     });
@@ -50,52 +72,6 @@ ruleFunction.messages = ruleMessages;
 ruleFunction.meta = {
   url: 'https://github.com/keithjgrant/argot/blob/main/README.md',
 };
-
-function isCustomPropertyDeclaration(rule: ChildNode): rule is Declaration {
-  return rule.type === 'decl' && rule.prop.startsWith('--');
-}
-
-const primNamePattern = /^--[a-zA-Z0-9-_]+-[0-9]+$/;
-
-export function isColorPrimitive(prop: string, value: string) {
-  const match = primNamePattern.exec(prop);
-  if (!match) {
-    return false;
-  }
-  return isColor(value);
-}
-
-const hexColorPattern = /^#([0-9a-f]{3,8})$/;
-const colorFuncs = [
-  'oklch(',
-  'hsl(',
-  'hsla(',
-  'rgb(',
-  'rgba(',
-  'hwb(',
-  'oklab(',
-  'lch(',
-  'lab(',
-];
-// TODO: keyword colors?
-
-/* loose color match; more permissive is ok */
-export function isColor(value: string) {
-  const hexMatch = hexColorPattern.exec(value);
-  if (hexMatch) {
-    return true;
-  }
-  for (const func of colorFuncs) {
-    if (value.startsWith(func)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function isKnownSemantic(value: string) {
-  return true;
-}
 
 export default stylelint.createPlugin(ruleName, ruleFunction);
 
