@@ -1,6 +1,6 @@
 import stylelint from 'stylelint';
 import Color from 'colorjs.io';
-import { Rule } from 'postcss';
+import type { Declaration } from 'postcss';
 import {
   isCustomPropertyDeclaration,
   isColorPrimitive,
@@ -13,8 +13,11 @@ import { loadTokens } from '../../semantics/load-tokens.ts';
 
 export const ruleName = 'argot/color-contrast';
 
-interface RulesHash {
-  [key: string]: Rule;
+const AA_CONTRAST = 4.5;
+const AAA_CONTRAST = 7;
+
+interface SemanticDeclarations {
+  [key: string]: Declaration;
 }
 
 const ruleMessages = stylelint.utils.ruleMessages(ruleName, {
@@ -28,69 +31,75 @@ const ruleFunction: stylelint.Rule = () => {
   return async (root, result) => {
     const primitives: PrimitiveValues = {};
     const semantics: Semantics = {};
-    const semanticRules: RulesHash = {};
+    const semanticDecls: SemanticDeclarations = {};
 
-    root.walkRules((ruleNode) => {
-      ruleNode.each((rule) => {
-        if (!isCustomPropertyDeclaration(rule)) {
-          return;
-        }
+    root.walkDecls((decl) => {
+      if (!isCustomPropertyDeclaration(decl)) {
+        return;
+      }
 
-        if (isColorPrimitive(rule.prop, rule.value)) {
-          primitives[rule.prop] = rule.value;
-          return;
-        }
+      if (isColorPrimitive(decl.prop, decl.value)) {
+        primitives[decl.prop] = decl.value;
+        return;
+      }
 
-        const token = getToken(rule.prop, tokens);
-        if (!token) {
-          return;
-        }
+      const token = getToken(decl.prop, tokens);
+      if (!token) {
+        return;
+      }
 
-        const colorString = resolveColor(rule.value, primitives, semantics);
-        semantics[rule.prop] = colorString || 'unknown';
-        semanticRules[rule.prop] = ruleNode;
-        if (colorString && token.pairsWith && token.pairsWith.length) {
-          const color = new Color(colorString);
-          for (const pair of token.pairsWith) {
-            const pairColor = resolveColor(
-              `var(--${pair})`,
-              primitives,
-              semantics,
-            );
-            if (!pairColor) return;
-            const contrast = color.contrastWCAG21(new Color(pairColor));
-
-            const message = `${rule.prop} has contrast of ${contrast} with --${pair}`;
-            stylelint.utils.report({
-              ruleName,
-              result,
-              message,
-              node: ruleNode,
-            });
-            const pairRule = semanticRules[`--${pair}`];
-            if (pairRule) {
-              console.log('reporting to ', pair, pairRule);
-              stylelint.utils.report({
-                ruleName,
-                result,
-                message,
-                node: pairRule,
-              });
-            }
-          }
-        }
-        // if (token?.pairsWith && token?.pairsWith.length) {
-        //   stylelint.utils.report({
-        //     ruleName,
-        //     result,
-        //     message: `${rule.prop} pairs with ${token.pairsWith.join(', ')}`,
-        //     node: ruleNode,
-        //     // start: { line: warning.line, column: warning.column },
-        //     // end: { line: warning.endLine, column: warning.endColumn },
-        //   });
-        // }
-      });
+      const colorString = resolveColor(decl.value, primitives, semantics);
+      semantics[decl.prop] = colorString || 'unknown';
+      semanticDecls[decl.prop] = decl;
     });
+
+    const reportedPairs = new Set<string>();
+
+    for (const [name, colorString] of Object.entries(semantics)) {
+      if (!colorString || colorString == 'unknown') continue;
+
+      const token = getToken(name, tokens);
+      if (!token?.pairsWith?.length) continue;
+
+      const decl = semanticDecls[name];
+      if (!decl) continue;
+
+      for (const pair of token.pairsWith) {
+        const pairName = `--${pair}`;
+        const pairKey = [name, pairName].sort().join('\0');
+        if (reportedPairs.has(pairKey)) continue;
+
+        const pairColor = semantics[pairName];
+        if (!pairColor || pairColor === 'unknown') continue;
+
+        const pairDecl = semanticDecls[pairName];
+        if (!pairDecl) continue;
+
+        reportedPairs.add(pairKey);
+
+        const contrast = new Color(colorString).contrastWCAG21(
+          new Color(pairColor),
+        );
+        if (contrast >= AAA_CONTRAST) continue;
+        const rounded = contrast.toFixed(2);
+
+        const message = `"${name}" does not meet WCAG AAA contrast ratio of 7:1 with "${pairName}" (${rounded}:1)`;
+        const message2 = `"${pairName}" does not meet WCAG AAA contrast ratio of 7:1 with with "${name}" (${rounded}:1)`;
+
+        stylelint.utils.report({
+          ruleName,
+          result,
+          message,
+          node: decl,
+        });
+        stylelint.utils.report({
+          ruleName,
+          result,
+          message: message2,
+          node: pairDecl,
+        });
+      }
+    }
   };
 };
 
@@ -101,6 +110,3 @@ ruleFunction.meta = {
 };
 
 export default stylelint.createPlugin(ruleName, ruleFunction);
-
-// const isMethodEnabled = (method) => method === true;
-// const isMethodDisabled = (method) => method === null || method === false;
