@@ -12,8 +12,8 @@ export interface TokenRecord {
   tier: 'core' | 'extended';
   type: string;
   usage: string;
-  pairsWith: string[];
-  related: string[];
+  pairsWith?: string[];
+  related?: string[];
 }
 
 export interface TokenSection {
