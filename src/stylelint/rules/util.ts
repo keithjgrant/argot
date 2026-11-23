@@ -1,6 +1,14 @@
 import type { ChildNode, Declaration } from 'postcss';
 import type { TokenSection } from '../../semantics/load-tokens.ts';
 
+export interface PrimitiveValues {
+  [key: string]: string;
+}
+
+export interface Semantics {
+  [key: string]: string;
+}
+
 export function isCustomPropertyDeclaration(
   rule: ChildNode,
 ): rule is Declaration {
@@ -54,4 +62,31 @@ export function getToken(name: string, tokens: TokenSection[]) {
   }
 
   return null;
+}
+
+export function resolveColor(
+  value: string,
+  primitives: PrimitiveValues,
+  semantics: Semantics,
+) {
+  if (isColor(value)) {
+    return value;
+  }
+  if (!value.startsWith('var(')) {
+    return;
+  }
+
+  for (const key of Object.keys(primitives)) {
+    if (`var(${key})` === value) {
+      return resolveColor(primitives[key], primitives, semantics);
+    }
+  }
+
+  for (const key of Object.keys(semantics)) {
+    if (`var(${key})` === value) {
+      return resolveColor(semantics[key], primitives, semantics);
+    }
+  }
+
+  return;
 }

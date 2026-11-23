@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isColorPrimitive, isColor, getToken } from './util.ts';
+import { isColorPrimitive, isColor, getToken, resolveColor } from './util.ts';
 import type { TokenSection } from '../../semantics/load-tokens.ts';
 
 describe('stylelint utils', () => {
@@ -114,6 +114,30 @@ describe('stylelint utils', () => {
 
     test('should return null for no match', () => {
       assert.equal(getToken('--text-custom', tokens), null);
+    });
+  });
+
+  describe('resolveColor', () => {
+    test('should resolve plain color', () => {
+      assert.equal(resolveColor('#369', {}, {}), '#369');
+    });
+
+    test('should resolve primitive value', () => {
+      assert.equal(
+        resolveColor('var(--blue-3)', { '--blue-3': '#009' }, {}),
+        '#009',
+      );
+    });
+
+    test('should resolve semantic value', () => {
+      assert.equal(
+        resolveColor(
+          'var(--text-primary)',
+          { '--blue-3': '#009' },
+          { '--text-primary': 'var(--blue-3)' },
+        ),
+        '#009',
+      );
     });
   });
 });
