@@ -3,16 +3,11 @@ import {
   isCustomPropertyDeclaration,
   isColorPrimitive,
   getToken,
+  resolveColor,
+  type PrimitiveValues,
+  type Semantics,
 } from './util.ts';
 import { loadTokens } from '../../semantics/load-tokens.ts';
-
-interface PropValues {
-  [key: string]: string;
-}
-
-interface Semantics {
-  [key: string]: any;
-}
 
 export const ruleName = 'argot/color-contrast';
 
@@ -25,7 +20,7 @@ const ruleFunction: stylelint.Rule = (method, opts, context) => {
   const tokens = loadTokens();
 
   return async (root, result) => {
-    const primitives: PropValues = {};
+    const primitives: PrimitiveValues = {};
     const semantics: Semantics = {};
 
     root.walkRules((ruleNode) => {
@@ -41,7 +36,12 @@ const ruleFunction: stylelint.Rule = (method, opts, context) => {
 
         const token = getToken(rule.prop, tokens);
         if (token) {
-          semantics[rule.prop] = token;
+          // semantics[rule.prop] = token;
+          semantics[rule.prop] = resolveColor(
+            token.value,
+            primitives,
+            semantics,
+          );
         }
         if (token?.pairsWith && token?.pairsWith.length) {
           stylelint.utils.report({
