@@ -88,10 +88,28 @@ describe('stylelint utils', () => {
           },
         ],
       },
+      {
+        file: 'color-bg.json',
+        label: 'color - background',
+        tokens: [
+          {
+            name: '--bg-main',
+            value: '',
+            tier: 'core',
+            type: 'color',
+            usage: '',
+            description: '',
+          },
+        ],
+      },
     ];
 
     test('should return token', () => {
       assert.deepEqual(getToken('--text-primary', tokens), tokens[0].tokens[0]);
+    });
+
+    test('should return token from second group', () => {
+      assert.deepEqual(getToken('--bg-main', tokens), tokens[1].tokens[0]);
     });
 
     test('should return null for no match', () => {
