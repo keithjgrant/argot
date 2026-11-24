@@ -1,0 +1,11 @@
+.hero {
+  background-color: var(--gray-11);
+}
+
+.home-section {
+  padding-block: var(--space-xl);
+
+  &:nth-child(2n) {
+    background-color: var(--bg-raised);
+  }
+}

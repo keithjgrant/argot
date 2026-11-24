@@ -1,9 +1,10 @@
 :root {
   /* color — surfaces */
-  --bg-body: var(--azure-13);
-  --bg-main: var(--gray-13);
-  --bg-inset: var(--gray-15);
-  --bg-raised: var(--gray-11);
+  --bg-body: light-dark(var(--gray-3), var(--gray-13));
+  --bg-main: light-dark(var(--gray-2), var(--gray-13));
+  --bg-inset: light-dark(var(--gray-1), var(--gray-15));
+  --bg-raised: light-dark(var(--gray-3), var(--gray-11));
+  --bg-alt: light-dark(var(--azure-4), var(--azure-13));
 
   --bg-brand: var(--mint-7);
   --bg-brand-secondary: var(--mint-9);
@@ -16,15 +17,15 @@
   --bg-inverse: var(--gray-2);
 
   /* color — text */
-  --text-primary: var(--gray-1);
-  --text-secondary: var(--gray-3);
-  --text-subtle: var(--gray-5);
-  --text-interactive: var(--mint-4);
-  --text-interactive-hover: var(--mint-3);
-  --text-interactive-active: var(--mint-5);
+  --text-primary: light-dark(var(--gray-16), var(--gray-1));
+  --text-secondary: light-dark(var(--gray-14), var(--gray-3));
+  --text-subtle: light-dark(var(--gray-12), var(--gray-5));
+  --text-interactive: light-dark(var(--mint-13), var(--mint-4));
+  --text-interactive-hover: light-dark(var(--mint-14), var(--mint-3));
+  --text-interactive-active: light-dark(var(--mint-12), var(--mint-5));
 
-  --text-brand: var(--mint-5);
-  --text-brand-secondary: var(--mint-4);
+  --text-brand: light-dark(var(--mint-9), var(--mint-5));
+  --text-brand-secondary: light-dark(var(--mint-11), var(--mint-4));
 
   --text-success: var(--mint-4);
   --text-warning: var(--orange-4);

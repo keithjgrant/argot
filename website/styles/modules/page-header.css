@@ -1,12 +1,14 @@
 .page-header {
   --_container-padding: 0;
 
+  color-scheme: dark;
   position: sticky;
   inset-block-start: 0;
   z-index: var(--z-sticky);
   border-block-end: 1px solid var(--border-color-subtle);
-  background: color-mix(in oklch, var(--bg-body) 92%, transparent);
+  background: color-mix(in oklch, var(--bg-alt) 92%, transparent);
   backdrop-filter: blur(10px);
+  box-shadow: var(--box-shadow);
 }
 
 .page-header__inner {
