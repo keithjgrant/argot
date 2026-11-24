@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url';
 import type { Config } from 'stylelint';
+import { colorContrast } from './index.ts';
 
 /**
  * Shareable Stylelint config for Argot token usage.
@@ -11,15 +11,8 @@ import type { Config } from 'stylelint';
  * };
  */
 export default {
-  plugins: [
-    fileURLToPath(
-      new URL(
-        import.meta.url.endsWith('.ts') ? './index.ts' : './index.js',
-        import.meta.url,
-      ),
-    ),
-  ],
+  plugins: [colorContrast],
   rules: {
-    'argot/valid-token': true,
+    'argot/color-contrast': true,
   },
 } satisfies Config;

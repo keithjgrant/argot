@@ -4,8 +4,8 @@ import stylelint from 'stylelint';
 import config from './config.ts';
 
 describe('config', () => {
-  test('should enable the valid-token rule', () => {
-    assert.equal(config.rules['argot/valid-token'], true);
+  test('should enable the color-contrast rule', () => {
+    assert.equal(config.rules['argot/color-contrast'], true);
   });
 });
 
@@ -15,11 +15,15 @@ describe('integration', () => {
       code: 'a { color: var(--text-primary); --my-extra: 1rem; }\n',
       config: { extends: ['argot-css/stylelint/config'] },
     });
-    assert.equal(result.errored, false);
+    assert.equal(
+      result.errored,
+      false,
+      `stylelint reported errors: ${JSON.stringify(result.results[0]?.warnings ?? [], null, 2)}`,
+    );
     assert.equal(
       result.results[0].warnings.length,
       0,
-      `expected no warnings from no-op rule, got ${JSON.stringify(result.results[0].warnings)}`,
+      `expected no warnings, got ${JSON.stringify(result.results[0].warnings)}`,
     );
   });
 
@@ -28,7 +32,11 @@ describe('integration', () => {
       code: 'a { color: var(--text-primary); --my-extra: 1rem; }\n',
       config,
     });
-    assert.equal(result.errored, false);
+    assert.equal(
+      result.errored,
+      false,
+      `stylelint reported errors: ${JSON.stringify(result.results[0]?.warnings ?? [], null, 2)}`,
+    );
     assert.equal(result.results[0].warnings.length, 0);
   });
 });

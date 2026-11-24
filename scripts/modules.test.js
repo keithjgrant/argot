@@ -15,7 +15,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { generateCss, renderCss, writeTemplate } from 'argot-css/semantics';
 import { generatePalette } from 'argot-css/palette';
-import plugins from 'argot-css/stylelint';
+import { colorContrast } from 'argot-css/stylelint';
 import config from 'argot-css/stylelint/config';
 
 const root = path.resolve(import.meta.dirname, '..');
@@ -34,12 +34,12 @@ describe('public package entrypoints', () => {
     assert.equal(typeof writeTemplate, 'function');
   });
 
-  test('should expose the valid-token stylelint plugin', () => {
-    assert.equal(plugins[0].ruleName, 'argot/valid-token');
+  test('should expose the color-contrast stylelint plugin', () => {
+    assert.equal(colorContrast.ruleName, 'argot/color-contrast');
   });
 
-  test('should enable valid-token in the published config', () => {
-    assert.equal(config.rules['argot/valid-token'], true);
+  test('should enable color-contrast in the published config', () => {
+    assert.equal(config.rules['argot/color-contrast'], true);
   });
 });
 

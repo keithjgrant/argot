@@ -161,7 +161,7 @@ import {
   generatePalette, generatePaletteCss, parseCssColor, serializePaletteDefinition,
 } from 'argot-css/palette';
 import { loadPaletteDefinition, writePalette } from 'argot-css/palette/node';
-import plugins from 'argot-css/stylelint';
+import { colorContrast } from 'argot-css/stylelint';
 import config from 'argot-css/stylelint/config';
 const definition = { version: 1, seedColors: [{ name: 'brand', l: 0.6, c: 0.2, h: 250 }] };
 assert.deepEqual(parseCssColor('oklch(60% 0.2 250)'), { l: 0.6, c: 0.2, h: 250 });
@@ -169,7 +169,7 @@ const palette = generatePalette(definition);
 assert.equal(palette.colors[0].steps.length, 16);
 assert.match(generatePaletteCss(definition), /--brand-16:/);
 assert.match(generateCss(), /--text-primary:/);
-assert.equal(plugins[0].ruleName, 'argot/valid-token');
+assert.equal(colorContrast.ruleName, 'argot/color-contrast');
 const result = writePalette('palette.css', definition);
 assert.equal(result.written, true);
 const fs = await import('node:fs');
@@ -180,8 +180,12 @@ const lint = await stylelint.lint({
   config: { extends: ['argot-css/stylelint/config'] },
   cwd: process.cwd(),
 });
-assert.equal(lint.errored, false);
-assert.ok(config.plugins[0].endsWith('/dist/stylelint/index.js'));
+assert.equal(
+  lint.errored,
+  false,
+  \`stylelint reported errors: \${JSON.stringify(lint.results[0]?.warnings ?? [], null, 2)}\`,
+);
+assert.equal(config.plugins[0].ruleName, 'argot/color-contrast');
 `,
       );
       execFileSync(
