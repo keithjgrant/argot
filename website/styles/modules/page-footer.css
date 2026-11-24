@@ -1,0 +1,4 @@
+.page-footer {
+  padding-block: var(--space-lg) var(--space-xl);
+  border-block-start: 1px solid var(--border-color-subtle);
+}

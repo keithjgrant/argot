@@ -8,15 +8,16 @@
   margin-block-start: var(--_prose-flow, 1em);
 }
 
-.pile {
-  display: grid;
-  grid-template-areas: 'pile';
-  place-items: center;
-
-  > * {
-    grid-area: pile;
-  }
+.page-single-col {
+  --content-max-width: 1280px;
 }
+.content-container {
+  inline-size: min(100% - 2 * var(--space-lg), var(--content-max-width));
+  margin-inline: auto;
+  padding: var(--_container-padding, var(--space-xxl)) calc(1rem + 1svw);
+}
+
+/* ai generated below this point; review and refactor */
 
 .skip-link {
   position: absolute;

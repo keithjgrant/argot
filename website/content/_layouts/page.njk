@@ -1,0 +1,7 @@
+---
+layout: base.njk
+singleColumn: true
+---
+<div class="content-container">
+  <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
+</div>

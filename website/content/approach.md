@@ -1,5 +1,5 @@
 ---
-layout: base.njk
+layout: page.njk
 title: Mindset
 description: Mild opinions, held loosely—modularity, ownership, and three-tier custom properties.
 permalink: /approach/

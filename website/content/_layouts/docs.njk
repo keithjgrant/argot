@@ -1,5 +1,7 @@
 ---
 layout: base.njk
-docsLayout: true
 ---
-{{ content | safe }}
+<div class="site-body site-body--docs">
+  {% include "docs-nav.njk" %}
+  <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
+</div>

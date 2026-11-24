@@ -8,46 +8,24 @@
     <title>{% if title %}{{ title }} · {% endif %}Argot</title>
     <link rel="stylesheet" href="{{ '/assets/site.css' | url }}">
   </head>
-  <body>
+  <body{% if singleColumn %} class="page-single-col{% endif %}">
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-frame">
       <header class="page-header">
-        <div class="page-header__inner">
+        <div class="page-header__inner content-container">
           <div class="page-header__brand">
             <a class="wordmark" href="{{ '/' | url }}">Argot</a>
             <p class="page-header__tagline">Modern CSS toolset</p>
           </div>
           <nav class="page-header__nav" aria-label="Primary">
             <a href="{{ '/approach/' | url }}"{% if page.url == '/approach/' %} aria-current="page"{% endif %}>Mindset</a>
-            <a href="{{ '/docs/' | url }}"{% if page.url == '/docs/' %} aria-current="page"{% elif docsLayout or referenceLayout or page.url.indexOf('/docs/') == 0 %} aria-current="true"{% endif %}>Docs</a>
+            <a href="{{ '/docs/' | url }}"{% if page.url == '/docs/' %} aria-current="page"{% elif page.url.indexOf('/docs/') == 0 or page.url.indexOf('/tokens/') == 0 %} aria-current="true"{% endif %}>Docs</a>
             <a href="https://github.com/keithjgrant/argot" rel="noopener noreferrer">GitHub</a>
           </nav>
         </div>
       </header>
-      {% if docsLayout %}
-      <div class="site-body site-body--docs">
-        {% include "docs-nav.njk" %}
-        <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
-      </div>
-      {% elif referenceLayout %}
-      <div class="site-body site-body--reference">
-        <nav class="sidebar" aria-label="Token groups">
-          <a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% endif %}>All tokens</a>
-          <ul>
-            {% for group in reference.sections %}
-            <li><a href="{{ group.url | url }}"{% if page.url == group.url %} aria-current="page"{% endif %}>{{ group.title }} <span>{{ group.tokens.length }}</span></a></li>
-            {% endfor %}
-          </ul>
-        </nav>
-        <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
-      </div>
-      {% else %}
-      <div class="site-body">
-        <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
-      </div>
-      {% endif %}
-      <footer class="site-footer prose">
-        <p>Argot is in beta. <a href="https://github.com/keithjgrant/argot/issues">Share feedback from your projects.</a></p>
+      {{ content | safe }}
+      <footer class="page-footer content-container prose">
         <p>Created by <a href="https://keithjgrant.com">Keith J. Grant</a></p>
       </footer>
     </div>
