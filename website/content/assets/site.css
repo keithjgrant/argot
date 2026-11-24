@@ -1,8 +1,0 @@
-@layer reset, theme, base, layout, modules, utilities;
-
-@import './_reset.css' layer(reset);
-@import './_vars-primitive.css' layer(theme);
-@import './_vars-semantic.css' layer(theme);
-@import './_base.css' layer(base);
-@import './_layout.css' layer(layout);
-@import './_modules.css' layer(modules);
