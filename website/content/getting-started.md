@@ -1,8 +1,11 @@
 ---
 layout: base.njk
 title: Getting started
-description:
-  Generate a semantic token template, assign your own values, and use Argot in
-  your CSS.
+description: Moved to Docs.
 permalink: /getting-started/
+eleventyExcludeFromCollections: true
 ---
+
+# Getting started
+
+This page moved to [Docs → Getting started]({{ '/docs/getting-started/' | url }}).

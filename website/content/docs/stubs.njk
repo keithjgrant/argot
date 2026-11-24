@@ -1,0 +1,15 @@
+---
+layout: docs.njk
+pagination:
+  data: docsStubs
+  size: 1
+  alias: stub
+permalink: "{{ stub.permalink }}"
+eleventyComputed:
+  title: "{{ stub.title }}"
+  description: "{{ stub.description }}"
+---
+<h1>{{ stub.title }}</h1>
+<p class="lede">{{ stub.description }}</p>
+<div class="shell-placeholder">Stub page for site chrome. Real content lands with the feature.</div>
+<p><a href="{{ '/docs/' | url }}">← Docs overview</a></p>

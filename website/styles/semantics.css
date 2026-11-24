@@ -6,86 +6,86 @@
   --bg-raised: var(--gray-11);
 
   --bg-brand: var(--mint-7);
-  --bg-brand-secondary: ;
+  --bg-brand-secondary: var(--mint-9);
 
-  --bg-success: ;
-  --bg-warning: ;
-  --bg-danger: ;
-  --bg-info: ;
-  --bg-disabled: ;
-  --bg-inverse: ;
+  --bg-success: var(--mint-12);
+  --bg-warning: var(--orange-12);
+  --bg-danger: var(--raspberry-12);
+  --bg-info: var(--azure-12);
+  --bg-disabled: var(--gray-12);
+  --bg-inverse: var(--gray-2);
 
   /* color — text */
   --text-primary: var(--gray-1);
   --text-secondary: var(--gray-3);
-  --text-subtle: ;
-  --text-interactive: ;
-  --text-interactive-hover: ;
-  --text-interactive-active: ;
+  --text-subtle: var(--gray-5);
+  --text-interactive: var(--mint-4);
+  --text-interactive-hover: var(--mint-3);
+  --text-interactive-active: var(--mint-5);
 
-  --text-brand: ;
-  --text-brand-secondary: ;
+  --text-brand: var(--mint-5);
+  --text-brand-secondary: var(--mint-4);
 
-  --text-success: ;
-  --text-warning: ;
-  --text-danger: ;
-  --text-info: ;
-  --text-disabled: ;
-  --text-inverse: ;
+  --text-success: var(--mint-4);
+  --text-warning: var(--orange-4);
+  --text-danger: var(--raspberry-4);
+  --text-info: var(--azure-4);
+  --text-disabled: var(--gray-7);
+  --text-inverse: var(--gray-14);
 
   /* color — borders */
-  --border-color: ;
-  --border-color-subtle: ;
-  --border-brand: ;
-  --border-brand-secondary: ;
-  --border-success: ;
-  --border-warning: ;
-  --border-danger: ;
-  --border-info: ;
+  --border-color: var(--gray-10);
+  --border-color-subtle: var(--gray-12);
+  --border-brand: var(--mint-7);
+  --border-brand-secondary: var(--mint-9);
+  --border-success: var(--mint-8);
+  --border-warning: var(--orange-8);
+  --border-danger: var(--raspberry-8);
+  --border-info: var(--azure-8);
 
   /* typography */
   --font-body: system-ui, sans-serif;
   --font-display: var(--font-body);
   --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
 
-  --font-size-xs: ;
-  --font-size-sm: ;
-  --font-size-md: ;
-  --font-size-lg: ;
-  --font-size-xl: ;
-  --font-size-xxl: ;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+  --font-size-xxl: clamp(2rem, 4vw, 2.75rem);
 
-  --font-weight-light: ;
-  --font-weight-normal: ;
-  --font-weight-bold: ;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-bold: 600;
 
-  --line-height-normal: ;
-  --line-height-tight: ;
-  --letter-spacing-uppercase: ;
+  --line-height-normal: 1.6;
+  --line-height-tight: 1.2;
+  --letter-spacing-uppercase: 0.06em;
 
   /* spacing */
-  --space-xs: ;
-  --space-sm: ;
-  --space-md: ;
-  --space-lg: ;
-  --space-xl: ;
-  --space-xxl: ;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-xxl: 4rem;
 
   /* borders */
-  --border-radius-sm: ;
-  --border-radius-md: ;
-  --border-radius-lg: ;
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
 
   /* motion */
   --ease-in: ease-in;
   --ease-out: ease-out;
   --ease-linear: linear;
-  --duration-fast: ;
-  --duration-normal: ;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
 
   /* layout */
-  --content-max-width: ;
-  --overlay-max-width: ;
+  --content-max-width: 42rem;
+  --overlay-max-width: 72rem;
   --z-menu: 100;
   --z-sticky: 110;
   --z-fixed: 120;
@@ -96,6 +96,6 @@
   --z-toast: 170;
 
   /* misc */
-  --focus-ring: ;
-  --box-shadow: ;
+  --focus-ring: var(--mint-6);
+  --box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 0.25);
 }

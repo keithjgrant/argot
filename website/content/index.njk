@@ -1,55 +1,32 @@
 ---
 layout: base.njk
 prose: false
-title: A shared vocabulary for CSS
-description: Semantic design token names for any CSS project. Bring your own values and build with a shared vocabulary.
+title: An unobtrusive toolset for modern CSS
+description: Process CSS, scaffold a layered project, and adopt only the pieces you need. Scaffold output is yours to run with.
 ---
 <section class="hero prose">
-  <h1>Not a framework.<br>A foundation.</h1>
-  <p class="lede">Argot is a common vocabulary to use for any CSS project. Use a 
-    standardized set of custom property names to define your own
-    colors, typography, spacing, and more.</p>
-  <p>By using the same variable names between projects, you reduce the cost of
-    context switching and improve consistency. No dependencies needed; simply use the
-    Argot template near the beginning of your stylesheet, and extend it as needed.</p>
-  <div class="hero__actions">
-    <a class="button-cta" href="{{ '/getting-started/' | url }}">Get started</a>
-    <a href="{{ '/tokens/' | url }}">Explore the tokens →</a>
-  </div>
+  <h1>An unobtrusive toolset for modern CSS development</h1>
+  <p class="lede">Argot helps you process CSS and start from a small, layered architecture—without taking ownership of your styles. Use the pieces you want; leave the rest.</p>
+  <p>
+    <a href="{{ '/docs/getting-started/' | url }}">Get started</a>
+    ·
+    <a href="{{ '/docs/' | url }}">Docs</a>
+    ·
+    <a href="{{ '/approach/' | url }}">Mindset</a>
+  </p>
 </section>
-<section class="home-section prose">
-  <h2>Name the intent, not the value.</h2>
-  <p>A palette step tells you what a color is. A semantic token tells you what it’s for.
-    Change your palette or switch themes without rewriting every component.</p>
-  <pre><code class="language-css">:root {
-  /* Your primitives */
-  --neutral-950: #18242b;
-  --neutral-50: #f7fafb;
 
-  /* Shared semantic names */
-  --text-primary: var(--neutral-950);
-  --bg-main: var(--neutral-50);
-}
+<section class="home-section prose">
+  <h2>Processor, fast</h2>
+  <p>Assemble <code>@import</code>s (including mid-file), optionally lint, and minify. One command from source CSS to output.</p>
+  <pre><code class="language-bash">npx argot styles/index.css dist/styles.css</code></pre>
+  <p class="note">Example shape—flags and package name follow the shipped CLI. Details in <a href="{{ '/docs/processor/' | url }}">processor docs</a>.</p>
+  <div class="shell-placeholder">Homepage processor demo polish comes later.</div>
+</section>
 
-.card {
-  color: var(--text-primary);
-  background: var(--bg-main);
-}</code></pre>
-  <p class="note">Values shown here are illustrative. Argot supplies the vocabulary; you supply the design.</p>
-</section>
 <section class="home-section prose">
-  <h2>One layer of your design system.</h2>
-  <div class="tier-grid">
-    <article><p class="eyebrow">01 / Primitive</p><h3>The raw materials</h3><p>Your palette, font families, and static values. <code>--neutral-950</code></p></article>
-    <article><p class="eyebrow">02 / Semantic</p><h3>Where Argot fits</h3><p>Shared roles for those values, independent of components. <code>--text-primary</code></p></article>
-    <article><p class="eyebrow">03 / Component</p><h3>The local decisions</h3><p>Optional properties scoped to individual components. <code>--card-color</code></p></article>
-  </div>
-</section>
-<section class="home-section prose">
-  <h2>Ready for real projects.</h2>
-  <p>The token set is deliberately defined and ready to use. Real-world adoption will help prove it out and refine it.
-    Start with {{ reference.core }} core tokens, or include {{ reference.extended }} extended tokens for additional roles.</p>
-  <p><a href="{{ '/getting-started/' | url }}">Try Argot in your project</a>, then
-    <a href="https://github.com/keithjgrant/argot/issues">tell us what worked and what didn’t</a>.
-    Names may change during beta as that experience informs the library.</p>
+  <h2>Scaffold, then it’s yours</h2>
+  <p><code>argot scaffold</code> drops a layered CSS tree much like this site’s <code>website/styles/</code>: entrypoint, reset, base, primitives, semantics, layout, modules. After write, those files are ordinary project source—edit and run with.</p>
+  <p><a href="{{ '/docs/scaffold/' | url }}">Scaffold docs</a> · <a href="{{ '/approach/' | url }}">Why this shape (Mindset)</a></p>
+  <div class="shell-placeholder">Short file-tree illustration later.</div>
 </section>
