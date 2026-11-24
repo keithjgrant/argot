@@ -29,7 +29,7 @@ import {
   type WritePaletteOptions,
   type WritePaletteResult,
 } from 'argot-css/palette/node';
-import plugins from 'argot-css/stylelint';
+import { colorContrast } from 'argot-css/stylelint';
 import config from 'argot-css/stylelint/config';
 import type { Config, Plugin } from 'stylelint';
 
@@ -90,7 +90,7 @@ const semanticCss: string = generateCss(tokenOptions);
 const rendered: string = renderCss([section]);
 const filename: string = writeTemplate('semantics.css', tokenOptions);
 const lintConfig: Config = config;
-const lintPlugins: Plugin[] = plugins;
+const lintPlugins: Plugin[] = [colorContrast];
 
 // @ts-expect-error Curve options must be one of the supported named values.
 const invalidOptions: PaletteOptions = { lightnessCurve: 'custom' };

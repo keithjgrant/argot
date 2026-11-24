@@ -5,67 +5,107 @@ import plugin, { ruleName } from './colorContrast.ts';
 describe('colorContrast lint rule', () => {
   testRule({
     plugins: [plugin],
-    ruleName: ruleName,
+    ruleName,
     config: true,
-
     accept: [
       {
+        description: 'should accept non-token color declarations',
         code: 'a { color: red }',
       },
+    ],
+  });
+
+  testRule({
+    plugins: [plugin],
+    ruleName,
+    config: true,
+    accept: [
       {
         description: 'should ignore a token whose pair is not declared',
         code: ':root { --blue-1: #111111; --text-primary: var(--blue-1); }',
       },
     ],
+  });
 
+  testRule({
+    plugins: [plugin],
+    ruleName,
+    config: true,
+    accept: [
+      {
+        description: 'should ignore tokens with strong contrast',
+        code: `
+          :root {
+            --gray-1: #ffffff;
+            --gray-16: #000000;
+            --text-primary: var(--gray-1);
+            --bg-main: var(--gray-16);
+          }
+        `,
+      },
+    ],
+  });
+
+  testRule({
+    plugins: [plugin],
+    ruleName,
+    config: true,
     reject: [
       {
         description:
-          'should report contrast on both declarations when the pair is declared later',
+          'should report contrast on both declarations when the bg is declared later',
         code: `
           :root {
-            --blue-1: #ffffff;
-            --blue-2: #000000;
-            --text-primary: var(--blue-1);
-            --bg-main: var(--blue-2);
+            --gray-1: #ffffff;
+            --gray-16: #eeeeee;
+            --text-primary: var(--gray-1);
+            --bg-main: var(--gray-16);
           }
         `,
         warnings: [
           {
             message:
-              '--text-primary has contrast of 21 with --bg-main (argot/color-contrast)',
+              '"--text-primary" and "--bg-main" have an insufficient contrast ratio of 1.16:1 (goal: 4.5:1) (argot/color-contrast)',
             line: 5,
             column: 13,
           },
           {
             message:
-              '--bg-main has contrast of 21 with --text-primary (argot/color-contrast)',
+              '"--bg-main" and "--text-primary" have an insufficient contrast ratio of 1.16:1 (goal: 4.5:1) (argot/color-contrast)',
             line: 6,
             column: 13,
           },
         ],
       },
+    ],
+  });
+
+  testRule({
+    plugins: [plugin],
+    ruleName,
+    config: true,
+    reject: [
       {
         description:
-          'should report contrast on both declarations when the pair is declared first',
+          'should report contrast on both declarations when the bg is declared first',
         code: `
           :root {
-            --blue-1: #ffffff;
-            --blue-2: #000000;
-            --bg-main: var(--blue-2);
-            --text-primary: var(--blue-1);
+            --gray-1: #ffffff;
+            --gray-2: #eeeeee;
+            --bg-main: var(--gray-2);
+            --text-primary: var(--gray-1);
           }
         `,
         warnings: [
           {
             message:
-              '--bg-main has contrast of 21 with --text-primary (argot/color-contrast)',
+              '"--bg-main" and "--text-primary" have an insufficient contrast ratio of 1.16:1 (goal: 4.5:1) (argot/color-contrast)',
             line: 5,
             column: 13,
           },
           {
             message:
-              '--text-primary has contrast of 21 with --bg-main (argot/color-contrast)',
+              '"--text-primary" and "--bg-main" have an insufficient contrast ratio of 1.16:1 (goal: 4.5:1) (argot/color-contrast)',
             line: 6,
             column: 13,
           },

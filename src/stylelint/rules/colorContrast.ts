@@ -14,7 +14,7 @@ import { loadTokens } from '../../semantics/load-tokens.ts';
 export const ruleName = 'argot/color-contrast';
 
 const AA_CONTRAST = 4.5;
-const AAA_CONTRAST = 7;
+// const AAA_CONTRAST = 7;
 
 interface SemanticDeclarations {
   [key: string]: Declaration;
@@ -88,11 +88,11 @@ const ruleFunction: stylelint.Rule = () => {
           }
           throw err;
         }
-        if (contrast >= AAA_CONTRAST) continue;
+        if (contrast >= AA_CONTRAST) continue;
         const rounded = contrast.toFixed(2);
 
-        const message = `"${name}" does not meet WCAG AAA contrast ratio of 7:1 with "${pairName}" (${rounded}:1)`;
-        const message2 = `"${pairName}" does not meet WCAG AAA contrast ratio of 7:1 with with "${name}" (${rounded}:1)`;
+        const message = `"${name}" and "${pairName}" have an insufficient contrast ratio of ${rounded}:1 (goal: ${AA_CONTRAST}:1)`;
+        const message2 = `"${pairName}" and "${name}" have an insufficient contrast ratio of ${rounded}:1 (goal: ${AA_CONTRAST}:1)`;
 
         stylelint.utils.report({
           ruleName,

@@ -492,10 +492,7 @@ export default {
 ```
 
 `argot-css/stylelint` default-exports the plugin array. The config entrypoint
-registers it and enables `argot/valid-token`.
-
-**The rule is currently a no-op placeholder**, not token-name enforcement,
-contrast validation, or build-time linting.
+registers it and enables `argot/color-contrast`.
 
 ## Static data and styles
 
