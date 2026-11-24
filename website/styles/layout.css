@@ -17,30 +17,13 @@
   padding: var(--_container-padding, var(--space-xxl)) calc(1rem + 1svw);
 }
 
-/* ai generated below this point; review and refactor */
-
-.skip-link {
-  position: absolute;
-  inset-block-start: var(--space-sm);
-  inset-inline-start: var(--space-sm);
-  z-index: var(--z-toast);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--border-radius-md);
-  background: var(--bg-raised);
-  color: var(--text-primary);
-  text-decoration: none;
-  transform: translateY(-200%);
-}
-
-.skip-link:focus {
-  transform: translateY(0);
-}
-
 .site-frame {
   display: flex;
   flex-direction: column;
-  min-block-size: 100dvb;
+  min-block-size: 100lvb;
 }
+
+/* ai generated below this point; review and refactor */
 
 .site-body {
   flex: 1;
@@ -66,15 +49,6 @@
 
 .site-body > main {
   min-width: 0;
-}
-
-.site-footer {
-  width: min(100% - 2 * var(--space-lg), var(--content-max-width));
-  margin-inline: auto;
-  padding-block: var(--space-lg) var(--space-xl);
-  border-block-start: 1px solid var(--border-color-subtle);
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
 }
 
 .site-body--docs ~ .site-footer,
