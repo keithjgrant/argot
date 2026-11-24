@@ -1,4 +1,3 @@
-// import postcssPlugin from '@jgarber/eleventy-plugin-postcss';
 import { buildReference, reloadTokenLoader } from './lib/reference.js';
 
 // Eleventy's dependency scanner only parses JavaScript. Keep this native
@@ -9,7 +8,6 @@ const CSS_IN = './website/styles/index.css';
 const CSS_OUT = './website/_site/styles.css';
 
 export default function (eleventyConfig) {
-  // eleventyConfig.addPlugin(postcssPlugin, { templateFormats: ['css'] });
   eleventyConfig.addGlobalData('reference', () => buildReference());
   eleventyConfig.addWatchTarget('./tokens/');
   eleventyConfig.addWatchTarget('./src/**/*.ts');
@@ -23,9 +21,9 @@ export default function (eleventyConfig) {
       await reloadTokenLoader();
     }
   });
-  eleventyConfig.addPassthroughCopy({
-    'website/assets': 'assets',
-  });
+  // eleventyConfig.addPassthroughCopy({
+  //   'website/assets': 'assets',
+  // });
   eleventyConfig.setNunjucksEnvironmentOptions({ autoescape: true });
 
   return {
