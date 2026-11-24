@@ -1,0 +1,19 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_stack-gap, 1rem);
+}
+
+.prose > * + * {
+  margin-block-start: var(--_prose-flow, 1em);
+}
+
+.pile {
+  display: grid;
+  grid-template-areas: 'pile';
+  place-items: center;
+
+  > * {
+    grid-area: pile;
+  }
+}
