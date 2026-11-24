@@ -1,5 +1,5 @@
 ---
-layout: base.njk
+layout: page.njk
 title: Getting started
 description: Moved to Docs.
 permalink: /getting-started/

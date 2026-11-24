@@ -1,0 +1,14 @@
+---
+layout: base.njk
+---
+<div class="site-body site-body--reference">
+  <nav class="sidebar" aria-label="Token groups">
+    <a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% endif %}>All tokens</a>
+    <ul>
+      {% for group in reference.sections %}
+      <li><a href="{{ group.url | url }}"{% if page.url == group.url %} aria-current="page"{% endif %}>{{ group.title }} <span>{{ group.tokens.length }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+  <main id="main" class="{% if prose != false %}prose{% endif %}">{{ content | safe }}</main>
+</div>

@@ -1,11 +1,11 @@
 ---
-layout: base.njk
+layout: page.njk
 prose: false
-title: An unobtrusive toolset for modern CSS
-description: Process CSS, scaffold a layered project, and adopt only the pieces you need. Scaffold output is yours to run with.
+title: Argot · Modern CSS toolset
+description: Streamlined CSS processor, scaffolding for new projects, guidance for custom properties. 
 ---
 <section class="hero prose">
-  <h1>An unobtrusive toolset for modern CSS development</h1>
+  <h1>A toolset for modern CSS development</h1>
   <p class="lede">Argot helps you process CSS and start from a small, layered architecture—without taking ownership of your styles. Use the pieces you want; leave the rest.</p>
   <p>
     <a href="{{ '/docs/getting-started/' | url }}">Get started</a>
@@ -17,15 +17,22 @@ description: Process CSS, scaffold a layered project, and adopt only the pieces 
 </section>
 
 <section class="home-section prose">
-  <h2>Processor, fast</h2>
+  <h2>Streamlined CSS processor</h2>
   <p>Assemble <code>@import</code>s (including mid-file), optionally lint, and minify. One command from source CSS to output.</p>
-  <pre><code class="language-bash">npx argot styles/index.css dist/styles.css</code></pre>
+  <pre><code class="language-bash">npx argot styles/input.css dist/output.css</code></pre>
   <p class="note">Example shape—flags and package name follow the shipped CLI. Details in <a href="{{ '/docs/processor/' | url }}">processor docs</a>.</p>
   <div class="shell-placeholder">Homepage processor demo polish comes later.</div>
 </section>
 
 <section class="home-section prose">
-  <h2>Scaffold, then it’s yours</h2>
+  <h2>Scaffolding for new projects</h2>
+  <p><code>argot scaffold</code> drops a layered CSS tree much like this site’s <code>website/styles/</code>: entrypoint, reset, base, primitives, semantics, layout, modules. After write, those files are ordinary project source—edit and run with.</p>
+  <p><a href="{{ '/docs/scaffold/' | url }}">Scaffold docs</a> · <a href="{{ '/approach/' | url }}">Why this shape (Mindset)</a></p>
+  <div class="shell-placeholder">Short file-tree illustration later.</div>
+</section>
+
+<section class="home-section prose">
+  <h2>Guidance for custom properties</h2>
   <p><code>argot scaffold</code> drops a layered CSS tree much like this site’s <code>website/styles/</code>: entrypoint, reset, base, primitives, semantics, layout, modules. After write, those files are ordinary project source—edit and run with.</p>
   <p><a href="{{ '/docs/scaffold/' | url }}">Scaffold docs</a> · <a href="{{ '/approach/' | url }}">Why this shape (Mindset)</a></p>
   <div class="shell-placeholder">Short file-tree illustration later.</div>

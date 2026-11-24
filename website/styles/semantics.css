@@ -72,9 +72,9 @@
   --space-xxl: 4rem;
 
   /* borders */
-  --border-radius-sm: 0.25rem;
-  --border-radius-md: 0.5rem;
-  --border-radius-lg: 0.75rem;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
 
   /* motion */
   --ease-in: ease-in;
@@ -84,8 +84,9 @@
   --duration-normal: 250ms;
 
   /* layout */
-  --content-max-width: 42rem;
+  --content-max-width: 1700px;
   --overlay-max-width: 72rem;
+
   --z-menu: 100;
   --z-sticky: 110;
   --z-fixed: 120;
