@@ -1,11 +1,11 @@
 ---
 layout: docs.njk
-title: Preprocessor
+title: Processor
 description: Assemble local @import, lint with Stylelint, and minify CSS.
 permalink: /docs/processor/
 ---
 
-# Preprocessor
+# Processor
 
 The Argot preprocessor turns a CSS **input file** into a single **output file**.
 It is token-agnostic: it does not require Argot’s semantic vocabulary, palette,
