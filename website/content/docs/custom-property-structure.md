@@ -101,7 +101,7 @@ Generate only core, or core plus extended, when you emit a template.
 | Vocabulary + metadata | `tokens/*.json`, browsable at [Browse tokens]({{ '/docs/tokens/' | url }}) |
 | Empty semantic template | `argot semantics` / [Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}) |
 | Primitive scales | `argot palette` / [Palette generator]({{ '/docs/scaffold/palette-generator/' | url }}) |
-| Starter file layout | [Scaffold]({{ '/docs/scaffold/' | url }}) (planned) |
+| Starter file layout | [Scaffold]({{ '/docs/scaffold/' | url }}) |
 | Contrast of paired semantics | [Color contrast rule]({{ '/docs/processor/linting/color-contrast/' | url }}) |
 
 ## Mild opinion, held loosely

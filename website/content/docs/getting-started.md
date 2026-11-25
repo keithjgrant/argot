@@ -100,7 +100,7 @@ Define seed colors as numeric OKLCH, then emit `--name-1` … `--name-16` scales
 ```json
 {
   "version": 1,
-  "colors": [
+  "seedColors": [
     { "name": "gray", "l": 0.6, "c": 0.015, "h": 250 },
     { "name": "brand", "l": 0.6, "c": 0.2, "h": 250 }
   ],
@@ -120,7 +120,18 @@ into your semantic file from step 2.
 
 Details: [Palette generator]({{ '/docs/scaffold/palette-generator/' | url }}).
 
-## 4. Optional: standalone Stylelint
+## 4. Optional: start from a scaffold
+
+```bash
+argot scaffold
+```
+
+Drops a layered CSS tree (entrypoint, reset, base, primitives/semantics hooks,
+modules). Fill values, then process the entry file. See
+[Scaffold]({{ '/docs/scaffold/' | url }}) and
+[Architecture]({{ '/docs/scaffold/architecture/' | url }}).
+
+## 5. Optional: standalone Stylelint
 
 Lint without running the full processor:
 
@@ -131,7 +142,7 @@ export default {
 };
 ```
 
-That enables `argot/color-contrast` today. More rules are planned. See
+Enables `argot/color-contrast`. See
 [Linting]({{ '/docs/processor/linting/' | url }}).
 
 ## Suggested npm scripts
@@ -145,14 +156,6 @@ That enables `argot/color-contrast` today. More rules are planned. See
   }
 }
 ```
-
-## What is not in this walkthrough yet
-
-**Project scaffold** (`argot scaffold` / `init`)—a starter layered CSS tree—is
-documented as the target shape under
-[Scaffold]({{ '/docs/scaffold/' | url }}) but is not shipped. Until then, copy a
-layout you like (including this site’s `website/styles/`) or grow files by hand
-and keep using the processor.
 
 ## Next reading
 
