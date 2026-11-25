@@ -1,0 +1,95 @@
+---
+layout: docs.njk
+title: Linting
+description: Optional Stylelint rules and how they run with the Argot processor.
+permalink: /docs/processor/linting/
+---
+
+# Linting
+
+Argot’s lint rules are **Stylelint** plugins. They can run:
+
+1. **Inside the processor** — every `argot input.css output.css` build
+2. **Standalone** — `stylelint` CLI or your editor, using Argot’s shareable config
+   or plugins
+
+Lint is optional as a *product* dependency: generation and palette tools do not
+require Stylelint. The processor currently always runs Stylelint as one pipeline
+step; use a custom `--lint-config` if you need different rules.
+
+## Shareable config
+
+```js
+// stylelint.config.js  (ESM — "type": "module" or .mjs)
+export default {
+  extends: ['argot-css/stylelint/config'],
+};
+```
+
+That config:
+
+- Registers Argot’s Stylelint plugins
+- Enables `argot/color-contrast`
+
+It does **not** extend `stylelint-config-recommended` by itself. The processor’s
+**built-in default** (when you omit `--lint-config`) does extend recommended and
+enables color-contrast. For standalone lint that matches the processor default
+more closely:
+
+```js
+import { colorContrast } from 'argot-css/stylelint';
+
+export default {
+  extends: ['stylelint-config-recommended'],
+  plugins: [colorContrast],
+  rules: {
+    'argot/color-contrast': true,
+  },
+};
+```
+
+(This site’s `website/stylelint.config.js` follows that shape.)
+
+## Package entrypoints
+
+| Import | Provides |
+| --- | --- |
+| `argot-css/stylelint` | Plugin exports (e.g. `colorContrast`) |
+| `argot-css/stylelint/config` | Shareable config object |
+
+Stylelint is an optional peer of the package; install it in the consumer project
+when you lint outside the bundled processor path.
+
+## Rules
+
+| Rule | Status | Docs |
+| --- | --- | --- |
+| [`argot/color-contrast`]({{ '/docs/processor/linting/color-contrast/' | url }}) | Shipped | Checks WCAG 2.1 contrast between paired semantic color tokens |
+| [`Property naming`]({{ '/docs/processor/linting/property-naming/' | url }}) | Planned | Stub |
+| [`Property usage`]({{ '/docs/processor/linting/property-usage/' | url }}) | Planned | Stub |
+
+A placeholder `argot/valid-token` exists in source but is a no-op and is not
+enabled in the shareable config.
+
+## With the processor
+
+```bash
+# Built-in default (recommended + color-contrast)
+argot styles/index.css dist/styles.css
+
+# Your config file
+argot styles/index.css dist/styles.css --lint-config=./stylelint.config.js
+```
+
+Messages are reported through PostCSS’s reporter after minify. Failures follow
+Stylelint/PostCSS behavior for your Stylelint version and severity settings.
+
+## Design notes
+
+- Rules that know about Argot tokens load vocabulary metadata from the packaged
+  token JSON. They do not rewrite CSS.
+- Contrast checks use explicit `pairsWith` relationships on semantic tokens—not
+  a blanket “every color vs every background” matrix. See
+  [Color contrast]({{ '/docs/processor/linting/color-contrast/' | url }}).
+- Passing lint is not a full accessibility audit; it catches paired token
+  assignments that resolve to weak contrast.

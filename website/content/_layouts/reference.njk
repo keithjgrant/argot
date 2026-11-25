@@ -9,7 +9,7 @@ layout: base.njk
       <ul>
         <li><a href="{{ '/docs/tokens/' | url }}"{% if page.url == '/docs/tokens/' %} aria-current="page"{% endif %}>All tokens</a></li>
         {% for group in reference.sections %}
-        <li><a href="/docs{{ group.url | url }}"{% if page.url == '/docs' + group.url %} aria-current="page"{% endif %}>{{ group.title }}</a></li>
+        <li><a href="{{ group.href | url }}"{% if page.url == group.href %} aria-current="page"{% endif %}>{{ group.title }} <span>{{ group.tokens.length }}</span></a></li>
         {% endfor %}
       </ul>
     </nav>

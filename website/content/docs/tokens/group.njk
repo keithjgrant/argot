@@ -33,7 +33,7 @@ eleventyComputed:
     <h3>Pairs with</h3>
     <ul>
       {% for partner in token.pairsWith %}
-      <li>{% if partner.url %}<a href="{{ partner.url | url }}"><code>{{ partner.name }}</code></a>{% else %}<code>{{ partner.name }}</code>{% endif %}</li>
+      <li>{% if partner.href %}<a href="{{ partner.href | url }}"><code>{{ partner.name }}</code></a>{% else %}<code>{{ partner.name }}</code>{% endif %}</li>
       {% endfor %}
     </ul>
     <p class="note">Check contrast using your assigned values. These relationships do not guarantee a passing contrast ratio.</p>
@@ -44,7 +44,7 @@ eleventyComputed:
     <h3>Related tokens</h3>
     <ul>
       {% for partner in token.related %}
-      <li>{% if partner.url %}<a href="{{ partner.url | url }}"><code>{{ partner.name }}</code></a>{% else %}<code>{{ partner.name }}</code>{% endif %}</li>
+      <li>{% if partner.href %}<a href="{{ partner.href | url }}"><code>{{ partner.name }}</code></a>{% else %}<code>{{ partner.name }}</code>{% endif %}</li>
       {% endfor %}
     </ul>
   </div>

@@ -1,22 +1,5 @@
 /** Planned docs URLs rendered as shell stubs until real pages exist. */
 export const docsStubs = [
-  // Processor — filled in a later increment; keep resolvable now
-  {
-    title: 'Processor',
-    description: 'Assemble imports, lint, and minify CSS.',
-    permalink: '/docs/processor/',
-  },
-  {
-    title: 'Linting',
-    description:
-      'Optional Stylelint integration with the processor and standalone config.',
-    permalink: '/docs/processor/linting/',
-  },
-  {
-    title: 'Color contrast rule',
-    description: 'Check WCAG contrast between paired semantic color tokens.',
-    permalink: '/docs/processor/linting/color-contrast/',
-  },
   {
     title: 'Property naming rule',
     description: 'Planned: conventions for custom property names.',

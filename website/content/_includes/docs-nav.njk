@@ -10,11 +10,11 @@
   <ul class="docs-sidebar__list">
     <li><a href="{{ '/docs/processor/' | url }}"{% if page.url == '/docs/processor/' %} aria-current="page"{% endif %}>Overview</a></li>
     <li>
-      <a href="{{ '/docs/processor/linting/' | url }}"{% if page.url == '/docs/processor/linting/' %} aria-current="page"{% endif %}>Linting</a>
+      <a href="{{ '/docs/processor/linting/' | url }}"{% if page.url == '/docs/processor/linting/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Linting</a>
       <ul>
-        <li><a href="{{ '/docs/processor/linting/color-contrast/' | url }}"{% if page.url == '/docs/processor/linting/color-contrast/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Color contrast rule</a></li>
-        <li><a href="{{ '/docs/processor/linting/property-naming/' | url }}"{% if page.url == '/docs/processor/linting/property-naming/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Property naming rule</a></li>
-        <li><a href="{{ '/docs/processor/linting/property-usage/' | url }}"{% if page.url == '/docs/processor/linting/property-usage/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Property usage rule</a></li>
+        <li><a href="{{ '/docs/processor/linting/color-contrast/' | url }}"{% if page.url == '/docs/processor/linting/color-contrast/' %} aria-current="page"{% endif %}>Color contrast rule</a></li>
+        <li><a href="{{ '/docs/processor/linting/property-naming/' | url }}"{% if page.url == '/docs/processor/linting/property-naming/' %} aria-current="page"{% endif %}>Property naming rule</a></li>
+        <li><a href="{{ '/docs/processor/linting/property-usage/' | url }}"{% if page.url == '/docs/processor/linting/property-usage/' %} aria-current="page"{% endif %}>Property usage rule</a></li>
       </ul>
     </li>
   </ul>
@@ -24,7 +24,7 @@
     <li><a href="{{ '/docs/scaffold/architecture/' | url }}"{% if page.url == '/docs/scaffold/architecture/' %} aria-current="page"{% endif %}>Architecture</a></li>
     <li><a href="{{ '/docs/scaffold/palette-generator/' | url }}"{% if page.url == '/docs/scaffold/palette-generator/' %} aria-current="page"{% endif %}>Palette generator</a></li>
     <li>
-      <a href="{{ '/docs/scaffold/semantic-tokens/' | url }}"{% if page.url == '/docs/scaffold/semantic-tokens/' %} aria-current="page"{% endif %}>Semantic tokens</a>
+      <a href="{{ '/docs/scaffold/semantic-tokens/' | url }}"{% if page.url == '/docs/scaffold/semantic-tokens/' %} aria-current="page"{% elif page.url.indexOf('/docs/tokens/') == 0 %} aria-current="true"{% endif %}>Semantic tokens</a>
       <ul>
         <li><a href="{{ '/docs/tokens/' | url }}"{% if page.url == '/docs/tokens/' %} aria-current="page"{% elif page.url.indexOf('/docs/tokens/') == 0 %} aria-current="true"{% endif %}>Browse tokens</a></li>
       </ul>
