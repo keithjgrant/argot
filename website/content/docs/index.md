@@ -1,19 +1,45 @@
 ---
 layout: docs.njk
 title: What is Argot?
-description: Getting started, processor, scaffold, and reference for Argot.
+description: A modular CSS toolset—processor, optional lint, palette, semantic tokens, and a planned scaffold.
 permalink: /docs/
 ---
 
 # What is Argot?
 
-Argot is modular. Start with a quick process or scaffold, then go deeper only
-where you need it.
+Argot is a **modular CSS toolset** for projects that already lean on modern CSS.
+It helps with the parts that stay hard: assembling stylesheets, agreeing on
+custom-property names, and (soon) starting from a small layered architecture.
 
-- [Getting started]({{ '/docs/getting-started/' | url }}) — install and first
-  commands
-- [Processor]({{ '/docs/processor/' | url }}) — imports, build output
-- [Scaffold]({{ '/docs/scaffold/' | url }}) — project structure and ownership
-- [Browse semantic tokens]({{ '/tokens/' | url }}) — live name reference
+Use the pieces you need. Nothing silently pulls in the rest.
 
-<div class="shell-placeholder">Docs hub cards and search can land later. Sidebar lists the full planned tree; stub pages exist so navigation resolves.</div>
+## What’s available now
+
+- **[Processor]({{ '/docs/processor/' | url }})** — resolve local `@import`s
+  (including mid-file and `layer()`), lint, and minify to a single CSS file.
+- **[Palette generator]({{ '/docs/scaffold/palette-generator/' | url }})** —
+  turn numeric OKLCH seeds into primitive color scales.
+- **[Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }})** — a shared
+  vocabulary of intent-based custom properties, plus a
+  [browsable reference]({{ '/docs/tokens/' | url }}).
+- **[Linting]({{ '/docs/processor/linting/' | url }})** — optional Stylelint
+  rules; color contrast ships today.
+
+## What’s still cooking
+
+- **[Stylesheet scaffold]({{ '/docs/scaffold/' | url }})** — a starter CSS tree
+  (layers, reset, primitives, semantics, modules). Documented as the target
+  shape; the `scaffold` / `init` command is not shipped yet.
+- Additional lint rules for property naming and usage.
+
+## Start here
+
+1. [Getting started]({{ '/docs/getting-started/' | url }}) — process CSS, adopt
+   tokens, optional palette and lint.
+2. [Installation]({{ '/docs/installation/' | url }}) — requirements and package
+   entrypoints.
+3. [Custom property structure]({{ '/docs/custom-property-structure/' | url }}) —
+   the three-tier model Argot is built around.
+
+For the product mindset (modularity, ownership, mild opinions), see
+[Mindset]({{ '/approach/' | url }}).

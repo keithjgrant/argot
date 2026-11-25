@@ -1,13 +1,37 @@
 /** Planned docs URLs rendered as shell stubs until real pages exist. */
 export const docsStubs = [
+  // Processor — filled in a later increment; keep resolvable now
   {
     title: 'Processor',
-    description: 'Assemble imports, optional lint, minify, and source maps.',
+    description: 'Assemble imports, lint, and minify CSS.',
     permalink: '/docs/processor/',
   },
   {
+    title: 'Linting',
+    description:
+      'Optional Stylelint integration with the processor and standalone config.',
+    permalink: '/docs/processor/linting/',
+  },
+  {
+    title: 'Color contrast rule',
+    description: 'Check WCAG contrast between paired semantic color tokens.',
+    permalink: '/docs/processor/linting/color-contrast/',
+  },
+  {
+    title: 'Property naming rule',
+    description: 'Planned: conventions for custom property names.',
+    permalink: '/docs/processor/linting/property-naming/',
+  },
+  {
+    title: 'Property usage rule',
+    description: 'Planned: guardrails for how tokens are referenced.',
+    permalink: '/docs/processor/linting/property-usage/',
+  },
+  // Scaffold
+  {
     title: 'Scaffold',
-    description: 'What scaffold writes, ownership, and regeneration rules.',
+    description:
+      'What scaffold will write, ownership, and regeneration (not shipped yet).',
     permalink: '/docs/scaffold/',
   },
   {
@@ -16,33 +40,29 @@ export const docsStubs = [
     permalink: '/docs/scaffold/architecture/',
   },
   {
-    title: 'Custom properties',
-    description: 'Primitive → semantic → module inside the scaffold.',
-    permalink: '/docs/scaffold/custom-properties/',
-  },
-  {
-    title: 'Primitives & palette',
-    description: 'Headless palette generation and portable definitions.',
-    permalink: '/docs/scaffold/primitives-palette/',
+    title: 'Palette generator',
+    description: 'Headless OKLCH palette generation and CSS output.',
+    permalink: '/docs/scaffold/palette-generator/',
   },
   {
     title: 'Semantic tokens',
     description: 'Vocabulary overview; browse the live reference from here.',
     permalink: '/docs/scaffold/semantic-tokens/',
   },
+  // Reference
   {
-    title: 'Modules',
-    description: 'Component-scoped custom properties.',
-    permalink: '/docs/scaffold/modules/',
-  },
-  {
-    title: 'Stylelint',
-    description: 'Optional configs and rules (stubs until rules ship).',
-    permalink: '/docs/stylelint/',
-  },
-  {
-    title: 'Reference',
-    description: 'CLI and package export reference.',
+    title: 'CLI',
+    description: 'Command-line interface reference.',
     permalink: '/docs/reference/',
+  },
+  {
+    title: 'Configuration file',
+    description: 'Planned project configuration (.argot.json and related).',
+    permalink: '/docs/reference/configuration/',
+  },
+  {
+    title: 'Technical details',
+    description: 'Internals, package layout, and implementation notes.',
+    permalink: '/docs/reference/technical/',
   },
 ];

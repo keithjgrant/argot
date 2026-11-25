@@ -20,11 +20,11 @@ function buildReference() {
       ...section,
       ...guides[slug],
       slug,
-      url: `/tokens/${slug}/`,
+      url: `/docs/tokens/${slug}/`,
       tokens: section.tokens.map((token) => ({
         ...token,
         id: token.name.slice(2),
-        url: `/tokens/${slug}/#${token.name.slice(2)}`,
+        url: `/docs/tokens/${slug}/#${token.name.slice(2)}`,
         hasValue: token.value !== '' && token.value != null,
       })),
     };
