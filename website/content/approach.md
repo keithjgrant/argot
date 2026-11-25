@@ -37,4 +37,4 @@ Scaffold output is a starting point you own. Regeneration is explicit. The proce
 
 <div class="shell-placeholder">Fuller essay and diagrams later. File-level detail lives in Docs → Scaffold.</div>
 
-<p><a href="{{ '/docs/scaffold/custom-properties/' | url }}">Custom properties in docs</a> · <a href="{{ '/docs/getting-started/' | url }}">Get started</a></p>
+<p><a href="{{ '/docs/custom-property-structure/' | url }}">Custom properties in docs</a> · <a href="{{ '/docs/getting-started/' | url }}">Get started</a></p>
