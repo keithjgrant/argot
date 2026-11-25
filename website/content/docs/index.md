@@ -5,7 +5,7 @@ description:
   A modular CSS toolset—processor, optional lint, palette, semantic tokens, and
   stylesheet scaffold.
 permalink: /docs/
-hand-reviewed: true
+human-reviewed: true
 ---
 
 # What is Argot?
