@@ -90,3 +90,8 @@ select {
   font-weight: var(--font-weight-bold);
   text-decoration-thickness: 0.15em;
 }
+
+aside {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}

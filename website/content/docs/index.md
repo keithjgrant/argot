@@ -10,18 +10,18 @@ human-reviewed: true
 
 # What is Argot?
 
-Argot is a **modular CSS toolset** built for developing with modern CSS.
+Argot is a modular **CSS toolset** built for developing with modern CSS.
 
 The era of the CSS preprocessor has essentially passed, as native CSS can do
 nearly everything developers once relied on preprocessors to do: variables,
-color manipulation, nesting, and mathematical calculations.
+color manipulation, nesting, mathematical calculations, and mixins.
 
 Argot is a toolset designed not to get in the way of modern CSS, but instead
 supplement your development workflow to streamline daily development, guide CSS
 architecture, and speed the early stages of project setup.
 
-- **[Processor]({{ '/docs/processor/' | url }})** — resolve local `@import`s,
-  lint, and minify to a single CSS file.
+- **[Processor]({{ '/docs/processor/' | url }})** — resolve `@import`s locally,
+  lint, and minify to an output CSS file.
 - **[Stylesheet scaffold]({{ '/docs/scaffold/' | url }})** — create a starter
   CSS tree (layers, reset, primitives, semantics). Incorporates color palettes
   and "semantic" custom properties.
