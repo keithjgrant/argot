@@ -1,27 +1,37 @@
 <nav class="docs-sidebar" aria-label="Documentation">
-  <p class="docs-sidebar__group">Start</p>
+  <p class="docs-sidebar__group">About</p>
   <ul class="docs-sidebar__list">
-    <li><a href="{{ '/docs/' | url }}"{% if page.url == '/docs/' %} aria-current="page"{% endif %}>Overview</a></li>
-    <li><a href="{{ '/docs/getting-started/' | url }}"{% if page.url == '/docs/getting-started/' %} aria-current="page"{% endif %}>Getting started</a></li>
-    <li><a href="{{ '/docs/processor/' | url }}"{% if page.url == '/docs/processor/' %} aria-current="page"{% endif %}>Processor</a></li>
+    <li><a href="{{ '/docs/' | url }}"{% if page.url == '/docs/' %} aria-current="page"{% endif %}>What is Argot?</a></li>
+    <li><a href="{{ '/docs/custom-property-structure/' | url }}"{% if page.url == '/docs/custom-property-structure/' %} aria-current="page"{% endif %}>Custom property structure</a></li>
+    <li><a href="{{ '/docs/installation/' | url }}"{% if page.url == '/docs/installation/' %} aria-current="page"{% endif %}>Installation</a></li>
   </ul>
-  <p class="docs-sidebar__group">Scaffold</p>
+  <p class="docs-sidebar__group">Processor</p>
+  <ul class="docs-sidebar__list">
+    <li><a href="{{ '/docs/processor/' | url }}"{% if page.url == '/docs/processor/' %} aria-current="page"{% endif %}>Overview</a></li>
+    <li>
+      <a href="{{ '/docs/processor/linting/' | url }}"{% if page.url == '/docs/processor/linting/' %} aria-current="page"{% endif %}>Linting</a>
+      <ul>
+        <li><a href="{{ '/docs/processor/linting/color-contrast/' | url }}"{% if page.url == '/docs/processor/linting/color-contrast/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Color contrast rule</a></li>
+        <li><a href="{{ '/docs/processor/linting/property-naming/' | url }}"{% if page.url == '/docs/processor/linting/property-naming/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Property naming rule</a></li>
+        <li><a href="{{ '/docs/processor/linting/property-usage/' | url }}"{% if page.url == '/docs/processor/linting/property-usage/' %} aria-current="page"{% elif page.url.indexOf('/docs/processor/linting/') == 0 %} aria-current="true"{% endif %}>Property usage rule</a></li>
+      </ul>
+    </li>
+  <p class="docs-sidebar__group">Stylesheet scaffold</p>
   <ul class="docs-sidebar__list">
     <li><a href="{{ '/docs/scaffold/' | url }}"{% if page.url == '/docs/scaffold/' %} aria-current="page"{% endif %}>Overview</a></li>
     <li><a href="{{ '/docs/scaffold/architecture/' | url }}"{% if page.url == '/docs/scaffold/architecture/' %} aria-current="page"{% endif %}>Architecture</a></li>
-    <li><a href="{{ '/docs/scaffold/custom-properties/' | url }}"{% if page.url == '/docs/scaffold/custom-properties/' %} aria-current="page"{% endif %}>Custom properties</a></li>
-    <li><a href="{{ '/docs/scaffold/primitives-palette/' | url }}"{% if page.url == '/docs/scaffold/primitives-palette/' %} aria-current="page"{% endif %}>Primitives &amp; palette</a></li>
+    <li><a href="{{ '/docs/scaffold/palette-generator/' | url }}"{% if page.url == '/docs/scaffold/palette-generator/' %} aria-current="page"{% endif %}>Palette generator</a></li>
     <li>
       <a href="{{ '/docs/scaffold/semantic-tokens/' | url }}"{% if page.url == '/docs/scaffold/semantic-tokens/' %} aria-current="page"{% endif %}>Semantic tokens</a>
       <ul>
         <li><a href="{{ '/tokens/' | url }}"{% if page.url == '/tokens/' %} aria-current="page"{% elif page.url.indexOf('/tokens/') == 0 %} aria-current="true"{% endif %}>Browse tokens</a></li>
       </ul>
     </li>
-    <li><a href="{{ '/docs/scaffold/modules/' | url }}"{% if page.url == '/docs/scaffold/modules/' %} aria-current="page"{% endif %}>Modules</a></li>
   </ul>
-  <p class="docs-sidebar__group">Optional</p>
+  <p class="docs-sidebar__group">Reference</p>
   <ul class="docs-sidebar__list">
-    <li><a href="{{ '/docs/stylelint/' | url }}"{% if page.url == '/docs/stylelint/' %} aria-current="page"{% elif page.url.indexOf('/docs/stylelint/') == 0 %} aria-current="true"{% endif %}>Stylelint</a></li>
-    <li><a href="{{ '/docs/reference/' | url }}"{% if page.url == '/docs/reference/' %} aria-current="page"{% elif page.url.indexOf('/docs/reference/') == 0 %} aria-current="true"{% endif %}>Reference</a></li>
+    <li><a href="{{ '/docs/reference/' | url }}"{% if page.url == '/docs/reference/' %} aria-current="page"{% endif %}>CLI</a></li>
+    <li><a href="{{ '/docs/reference/configuration' | url }}"{% if page.url == '/docs/reference/configuration' %} aria-current="page"{% endif %}>Configuration file</a></li>
+    <li><a href="{{ '/docs/reference/technical' | url }}"{% if page.url == '/docs/reference/technical' %} aria-current="page"{% endif %}>Technical details</a></li>
   </ul>
 </nav>
