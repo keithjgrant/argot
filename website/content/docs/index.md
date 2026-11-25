@@ -1,32 +1,33 @@
 ---
 layout: docs.njk
 title: What is Argot?
-description: A modular CSS toolset—processor, optional lint, palette, semantic tokens, and a planned scaffold.
+description:
+  A modular CSS toolset—processor, optional lint, palette, semantic tokens, and
+  stylesheet scaffold.
 permalink: /docs/
 ---
 
 # What is Argot?
 
-Argot is a **modular CSS toolset** for projects that already lean on modern CSS.
-It helps with the parts that stay hard: assembling stylesheets, agreeing on
-custom-property names, and (soon) starting from a small layered architecture.
+Argot is a **modular CSS toolset** build for modern CSS.
 
-Use the pieces you need. Nothing silently pulls in the rest.
+The era of the CSS preprocessor has essentially passed, as native CSS can do
+nearly everything developers once relied on preprocessors to do: variables,
+color manipulation, nesting, and mathematical calculations.
 
-## What’s available now
+Argot is a toolset designed not to get in the way of modern CSS, but instead
+supplement your development workflow to streamline daily development, guide CSS
+architecture, and speed the early stages of project setup.
 
 - **[Processor]({{ '/docs/processor/' | url }})** — resolve local `@import`s
   (including mid-file and `layer()`), lint, and minify to a single CSS file.
 - **[Palette generator]({{ '/docs/scaffold/palette-generator/' | url }})** —
   turn numeric OKLCH seeds into primitive color scales.
-- **[Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }})** — a shared
-  vocabulary of intent-based custom properties, plus a
-  [browsable reference]({{ '/docs/tokens/' | url }}).
+- **[Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }})** — a
+  shared vocabulary of intent-based custom properties, plus a [browsable
+  reference]({{ '/docs/tokens/' | url }}).
 - **[Linting]({{ '/docs/processor/linting/' | url }})** — optional Stylelint
   rules; color contrast ships today.
-
-## What’s still cooking
-
 - **[Stylesheet scaffold]({{ '/docs/scaffold/' | url }})** — a starter CSS tree
   (layers, reset, primitives, semantics, modules). Documented as the target
   shape; the `scaffold` / `init` command is not shipped yet.

@@ -19,12 +19,12 @@ tokenSearch: true
 <p data-no-results hidden>No matching tokens. Try a different name or choose another tier.</p>
 {% for group in reference.sections %}
 <section class="token-group prose" data-token-group>
-  <h2><a href="{{ group.url | url }}">{{ group.title }}</a></h2>
+  <h2><a href="{{ group.href | url }}">{{ group.title }}</a></h2>
   <p>{{ group.intro }}</p>
   <ul class="token-directory">
     {% for token in group.tokens %}
     <li data-token-entry data-tier="{{ token.tier }}">
-      <a href="{{ token.url | url }}"><code>{{ token.name }}</code></a>
+      <a href="{{ token.href | url }}"><code>{{ token.name }}</code></a>
       <span class="badge">{{ token.tier }}</span>
       <p>{{ token.description }}</p>
       {% if token.usage %}<span class="note">Usage: {{ token.usage }}</span>{% endif %}

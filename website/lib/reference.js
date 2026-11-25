@@ -20,11 +20,13 @@ function buildReference() {
       ...section,
       ...guides[slug],
       slug,
-      url: `/docs/tokens/${slug}/`,
+      // Prefer `href` over `url`: Eleventy treats `url` as page-location data
+      // and can rewrite it (which broke nested /docs/tokens/ paths).
+      href: `/docs/tokens/${slug}/`,
       tokens: section.tokens.map((token) => ({
         ...token,
         id: token.name.slice(2),
-        url: `/docs/tokens/${slug}/#${token.name.slice(2)}`,
+        href: `/docs/tokens/${slug}/#${token.name.slice(2)}`,
         hasValue: token.value !== '' && token.value != null,
       })),
     };
@@ -36,7 +38,7 @@ function buildReference() {
     for (const field of ['pairsWith', 'related']) {
       token[field] = token[field].map((name) => {
         const id = name.replace(/^--/, '');
-        return { name: `--${id}`, url: byName.get(id)?.url || null };
+        return { name: `--${id}`, href: byName.get(id)?.href || null };
       });
     }
   }
