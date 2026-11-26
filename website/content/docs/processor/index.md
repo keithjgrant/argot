@@ -121,7 +121,7 @@ mid-file imports will not work in the browser).
 
 ## Linting in the pipeline
 
-Stylelint always runs as part of the processor.
+[Stylelint](https://stylelint.io/) always runs as part of the processor.
 
 - **Default config**: extends `stylelint-config-recommended`. This is
   [a minimal ruleset](https://github.com/stylelint/stylelint-config-recommended#readme)
