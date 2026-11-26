@@ -1,4 +1,13 @@
 .page-footer {
+  color: var(--text-subtle);
   padding-block: var(--space-lg) var(--space-xl);
   border-block-start: 1px solid var(--border-color-subtle);
+
+  & a:any-link {
+    color: inherit;
+  }
+
+  & a:hover {
+    color: var(--text-primary);
+  }
 }
