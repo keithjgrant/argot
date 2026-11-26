@@ -1,21 +1,40 @@
 ---
 layout: docs.njk
 title: Linting
-description: Optional Stylelint rules and how they run with the Argot processor.
+description: Stylelint configuration in the Argot processor.
 permalink: /docs/processor/linting/
 ---
 
 # Linting
 
-Argot’s lint rules are **Stylelint** plugins. They can run:
+The Argot processor lints your CSS using [Stylelint](https://stylelint.io/).
 
-1. **Inside the processor** — every `argot input.css output.css` build
-2. **Standalone** — `stylelint` CLI or your editor, using Argot’s shareable config
-   or plugins
+## Default configuration
 
-Lint is optional as a *product* dependency: generation and palette tools do not
-require Stylelint. The processor currently always runs Stylelint as one pipeline
-step; use a custom `--lint-config` if you need different rules.
+If you specify no stylelint config, Argot applies a default minimal config. This
+is simply the `stylelint-config-recommended` plugin, which applies
+[a minimal ruleset](https://github.com/stylelint/stylelint-config-recommended#readme)
+that does not impose any strong opinions.
+
+Default configuration:
+
+```js
+import recommended from 'stylelint-config-recommended';
+
+export default {
+  extends: [recommended],
+};
+```
+
+If you wish to add more rules, including the Argot lint rules, do so by
+providing your own config. This can be done via the `--lint-config` CLI
+parameter, or by specifying a pathname in the `lintConfig` key of your
+`.argot.json` [configuration file](/docs/reference/configuration/).
+
+## Argot Stylelint plugins
+
+Argot has three custom lint rules, each meant to enforce aspects of the
+three-tier [custom property structure](/docs/custom-property-structure/).
 
 ## Shareable config
 
@@ -52,21 +71,21 @@ export default {
 
 ## Package entrypoints
 
-| Import | Provides |
-| --- | --- |
-| `argot-css/stylelint` | Plugin exports (e.g. `colorContrast`) |
-| `argot-css/stylelint/config` | Shareable config object |
+| Import                       | Provides                              |
+| ---------------------------- | ------------------------------------- |
+| `argot-css/stylelint`        | Plugin exports (e.g. `colorContrast`) |
+| `argot-css/stylelint/config` | Shareable config object               |
 
 Stylelint is an optional peer of the package; install it in the consumer project
 when you lint outside the bundled processor path.
 
 ## Rules
 
-| Rule | Status | Docs |
-| --- | --- | --- |
+| Rule                                                                  | Status  | Docs    |
+| --------------------------------------------------------------------- | ------- | ------- |
 | [`argot/color-contrast`]({{ '/docs/processor/linting/color-contrast/' | url }}) | Shipped | Checks WCAG 2.1 contrast between paired semantic color tokens |
-| [`Property naming`]({{ '/docs/processor/linting/property-naming/' | url }}) | Planned | Stub |
-| [`Property usage`]({{ '/docs/processor/linting/property-usage/' | url }}) | Planned | Stub |
+| [`Property naming`]({{ '/docs/processor/linting/property-naming/'     | url }}) | Planned | Stub                                                          |
+| [`Property usage`]({{ '/docs/processor/linting/property-usage/'       | url }}) | Planned | Stub                                                          |
 
 A placeholder `argot/valid-token` exists in source but is a no-op and is not
 enabled in the shareable config.
@@ -89,7 +108,7 @@ Stylelint/PostCSS behavior for your Stylelint version and severity settings.
 - Rules that know about Argot tokens load vocabulary metadata from the packaged
   token JSON. They do not rewrite CSS.
 - Contrast checks use explicit `pairsWith` relationships on semantic tokens—not
-  a blanket “every color vs every background” matrix. See
-  [Color contrast]({{ '/docs/processor/linting/color-contrast/' | url }}).
+  a blanket “every color vs every background” matrix. See [Color
+  contrast]({{ '/docs/processor/linting/color-contrast/' | url }}).
 - Passing lint is not a full accessibility audit; it catches paired token
   assignments that resolve to weak contrast.
