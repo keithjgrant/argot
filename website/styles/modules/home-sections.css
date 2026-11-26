@@ -1,11 +1,43 @@
 .hero {
-  background-color: var(--gray-11);
+  background-color: var(--bg-info);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-info);
+  padding: var(--space-xl) var(--space-lg);
+  box-shadow: var(--box-shadow);
+
+  & h1 {
+    color: var(--text-primary);
+  }
 }
 
 .home-section {
   padding-block: var(--space-xl);
+  border-block-end: 1px solid var(--border-color);
+  box-shadow: var(--box-shadow);
 
-  &:nth-child(2n) {
+  &:nth-child(2n + 1) {
     background-color: var(--bg-raised);
+  }
+
+  & h2 {
+    font-size: var(--font-size-xxl);
+    text-align: center;
+    margin-block-end: var(--space-xl);
+  }
+
+  &:nth-child(4n) h2 {
+    color: var(--text-info);
+  }
+
+  &:nth-child(4n + 1) h2 {
+    color: var(--text-danger);
+  }
+
+  &:nth-child(4n + 2) h2 {
+    color: var(--text-success);
+  }
+
+  &:nth-child(4n + 3) h2 {
+    color: var(--text-warning);
   }
 }

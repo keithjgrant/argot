@@ -11,6 +11,7 @@
 .page-single-col {
   --content-max-width: 1280px;
 }
+
 .content-container {
   inline-size: min(100% - 2 * var(--space-lg), var(--content-max-width));
   margin-inline: auto;
@@ -142,16 +143,6 @@
   margin: var(--space-sm) 0 0;
   padding: 0;
   list-style: none;
-}
-
-.lede {
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
-}
-
-.note {
-  color: var(--text-subtle);
-  font-size: var(--font-size-sm);
 }
 
 .shell-placeholder {

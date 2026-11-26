@@ -5,3 +5,13 @@
   letter-spacing: -0.03em;
   text-decoration: none;
 }
+
+.lede {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.note {
+  color: var(--text-subtle);
+  font-size: var(--font-size-sm);
+}
