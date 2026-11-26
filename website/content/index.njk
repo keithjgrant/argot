@@ -6,10 +6,13 @@ title: Argot · Modern CSS toolset
 description: Streamlined CSS processor, scaffolding for new projects, guidance for custom properties. 
 ---
 <main id="main">
-<section class="hero">
-  <div class="content-container prose">
+<section class="content-container">
+  <div class="hero prose">
     <h1>A toolset for modern CSS development</h1>
-    <p class="lede">Argot helps you process CSS and start from a small, layered architecture—without taking ownership of your styles. Use the pieces you want; leave the rest.</p>
+    <p class="lede">Assemble your CSS partials, lint, and minify with one
+      command. Build color pallettes easily. Get stylesheets for new projects up
+      and running in a flash.
+    </p>
     <p>
       <a href="{{ '/docs/getting-started/' | url }}">Get started</a>
       ·
@@ -23,26 +26,55 @@ description: Streamlined CSS processor, scaffolding for new projects, guidance f
 <section class="home-section">
   <div class="content-container prose">
     <h2>Streamlined CSS processor</h2>
-    <p>Assemble <code>@import</code>s (including mid-file), optionally lint, and minify. One command from source CSS to output.</p>
+    <p>Assemble partials using <code>@import</code>, lint, and
+      minify. You don't need a heavy preprocessor to write modern CSS any more;
+      use modern CSS for variables, color functions, and math. The Argot
+      processor gets out of your way and lets you write modern CSS the way you
+      want.</p>
     <pre><code class="language-bash">npx argot styles/input.css dist/output.css</code></pre>
-    <p class="note">Example shape—flags and package name follow the shipped CLI. Details in <a href="{{ '/docs/processor/' | url }}">processor docs</a>.</p>
-    <div class="shell-placeholder">Homepage processor demo polish comes later.</div>
+    <p><a href="/docs/processor/">Learn more</a> ·
+      <a href="/docs/processor/linting/">Lint configuration</a></p>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="content-container prose">
+    <h2>Common language of design tokens</h2>
+    <p>Argot defines a shared vocabulary of CSS custom property names that
+      are usable for any web design project: backgrounds, text, borders, type,
+      space, motion, and more. Adopting a standardizing meaning of these
+      property names streamlines early development and eases context switching
+      between projects. It also enables some
+      <a href="/docs/processor/linting/color-contrast/">linting rules</a> that
+      wouldn't otherwise be possible.
+    </p>
+    <p><a href="{{ '/docs/tokens/' | url }}">Browse tokens</a> ·
+      <a href="{{ '/approach/' | url }}">Why this shape (Mindset)</a></p>
   </div>
 </section>
 
 <section class="home-section">
   <div class="content-container prose">
     <h2>Scaffolding for new projects</h2>
-    <p><code>argot scaffold</code> drops a layered CSS tree much like this site’s <code>website/styles/</code>: entrypoint, reset, base, primitives, semantics, layout, modules. After write, those files are ordinary project source—edit and run with.</p>
-    <p><a href="{{ '/docs/scaffold/' | url }}">Scaffold docs</a> · <a href="{{ '/approach/' | url }}">Why this shape (Mindset)</a></p>
-    <div class="shell-placeholder">Short file-tree illustration later.</div>
+    <p>Run <code>argot scaffold</code> one time to set up stylesheet partials
+      for a new project. It builds your color palettes, writes a
+      <a href="/docs/scaffold/semantic-tokens">semantic custom properties</a>
+      template file, and sets up layers, reset, and other basics every stylesheet
+      needs. The resulting CSS is yours to run with and modify however your
+      project requires.</p>
+    <p><a href="{{ '/docs/scaffold/' | url }}">Scaffold docs</a></a></p>
   </div>
 </section>
 
-<section class="home-section content-container prose">
-  <h2>Guidance for custom properties</h2>
-  <p><code>argot scaffold</code> drops a layered CSS tree much like this site’s <code>website/styles/</code>: entrypoint, reset, base, primitives, semantics, layout, modules. After write, those files are ordinary project source—edit and run with.</p>
-  <p><a href="{{ '/docs/scaffold/' | url }}">Scaffold docs</a> · <a href="{{ '/approach/' | url }}">Why this shape (Mindset)</a></p>
-  <div class="shell-placeholder">Short file-tree illustration later.</div>
+<section class="home-section">
+  <div class="content-container prose">
+    <h2>Guidance for custom properties</h2>
+    <p>Argot recommends (but does not require) a three-tier approach for
+      managing your CSS custom properties: Primitive values, semantic values,
+      and module-specific values. Optional Argot lint rules help enforce this
+      practice in your stylesheet.
+    </p>
+    <p><a href="/docs/custom-property-structure/">Custom property structure</a></a></p>
+    </div>
 </section>
 </main>
