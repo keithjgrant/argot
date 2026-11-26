@@ -3,13 +3,12 @@ layout: docs.njk
 title: Processor
 description: Assemble local @import, lint with Stylelint, and minify CSS.
 permalink: /docs/processor/
+human-reviewed: true
 ---
 
 # Processor
 
 The Argot preprocessor turns a CSS **input file** into a single **output file**.
-It is token-agnostic: it does not require Argot’s semantic vocabulary, palette,
-or scaffold. Point it at any project CSS that uses local `@import`.
 
 ## Command
 
@@ -19,18 +18,21 @@ argot <input.css> <output.css> [--lint-config=path/to/config.js]
 
 | Argument / flag        | Meaning                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------- |
-| `input.css`            | Entry stylesheet (required)                                                  |
-| `output.css`           | Destination path (required). Parent directories are created if needed.       |
+| first filepath         | Entry stylesheet (required)                                                  |
+| second filepath        | Destination path (required). Directories are created if needed.              |
 | `--lint-config` / `-c` | Optional Stylelint config file. When omitted, Argot uses a built-in default. |
 
-There is no separate `process` subcommand: if the first argument ends in `.css`,
-the CLI runs the processor.
+If the first argument ends in `.css`, the CLI runs the processor. See
+[CLI]({{ '/docs/reference/' | url }}) for other commands.
+
+The processor does not require Argot’s semantic vocabulary, palette, or
+scaffold. Point it at any project CSS that uses local `@import`.
 
 Examples:
 
 ```bash
 argot styles/index.css dist/styles.css
-argot styles/index.css dist/styles.css --lint-config=./stylelint.config.js
+argot styles/index.css dist/styles.css --lint-config="./stylelint.config.js"
 ```
 
 See [Getting started]({{ '/docs/getting-started/' | url }}) for a short
@@ -38,111 +40,112 @@ walkthrough and [CLI]({{ '/docs/reference/' | url }}) for the full command list.
 
 ## Pipeline
 
-In order:
+The processor performs the following things, in order:
 
 1. **Assemble** — resolve and inline local `@import`s (Argot’s import plugin).
 2. **Lint** — Stylelint against the assembled tree.
 3. **Minify** — cssnano.
-4. **Report** — postcss-reporter prints remaining messages.
-5. **Write** — UTF-8 CSS to the output path.
 
-Generation tools (`argot semantics`, `argot palette`) are **not** invoked. The
-processor only builds the CSS you give it.
+The final output is
 
 ## `@import` behavior
 
 Native CSS only allows `@import` at the top of a stylesheet. Argot treats local
 imports more like a lightweight preprocessor: **imports may appear anywhere** in
-a file, including after other rules. That matches how cascade-layer entrypoints
-are usually written:
+a file, including after other rules.
+
+Example usage:
 
 ```css
-@layer reset, base, theme, layout, modules;
-
-@import 'reset.css' layer(reset);
-@import 'base.css' layer(base);
-@import 'primitives.css' layer(theme);
-@import 'semantics.css' layer(theme);
+@import 'reset.css';
+@import 'base.css';
+@import 'modules/dialog.css';
+@import 'modules/dropdown.css';
 ```
 
 ### Supported preludes
 
-Quoted paths or `url(...)` are required. Bare unquoted paths
-(`@import base.css`) are **not** accepted.
+A quoted paths is required. The `url(…)` function may also be used. Bare
+unquoted paths (`@import base.css`) are not accepted.
 
-After the path, these modifiers may appear (layer, scope, and supports in any
-order; media last):
+After the path, prelude modifiers may appear. These apply `@layer`, `@scope`,
+`@supports`, and/or `@media` to the imported stylesheet. Layer, scope, and
+supports may be specified in any order; media queries must be listed last.
+
+Examples:
 
 ```css
 @import 'partial.css';
 @import 'partial.css' layer(modules);
-@import 'partial.css' layer;
+@import 'partial.css' layer; /* anonymous layer */
 @import 'partial.css' supports(contrast-color(#ccc));
 @import 'partial.css' scope(.aside);
-@import 'partial.css' scope((.a) to (.b));
+@import 'partial.css' scope((.a) to (.b)) screen and (min-width: 560px);
 @import 'partial.css' (width >= 500px);
 @import 'partial.css' layer(base) supports(display: grid) (width >= 40rem);
 ```
 
-When inlined, Argot wraps the imported nodes to preserve meaning:
+Argot wraps the imported styles to preserve meaning:
 
-- `layer(name)` → `@layer name { … }` (bare `layer` → anonymous `@layer { … }`)
-- `scope(...)` → `@scope … { … }`
-- `supports(...)` → `@supports (…) { … }`
-- media queries → `@media … { … }`
+| Prelude       | Result                |
+| ------------- | --------------------- |
+| `layer(name)` | `@layer name { … }`   |
+| `scope(…)`    | `@scope … { … }`      |
+| `supports(…)` | `@supports (…) { … }` |
+| media queries | `@media … { … }`      |
 
-Nesting order when several apply: **layer → scope → supports → media →
-content**.
+When multiple preludes are specified, they are applied layer, scope, supports,
+then media.
 
 ### Local vs remote
 
-| URI                                          | Behavior                                 |
-| -------------------------------------------- | ---------------------------------------- |
-| Relative / local file                        | Read, parse, inline (recursively)        |
-| `https:` / `http:` / protocol-relative `//…` | Left as a native `@import` (not inlined) |
-| `data:`                                      | Left unchanged                           |
+Import paths that do not appear to be local imports are ignored:
 
-Missing local files fail the build with a clear error. Circular import chains
-fail. A file imported more than once is **deduped**: the first occurrence wins;
-later `@import`s of the same resolved path are dropped (including any different
-`layer(...)` wrapper on the later import).
+| URI                                          | Behavior             |
+| -------------------------------------------- | -------------------- |
+| Relative / local file                        | Inlined by processor |
+| `https:` / `http:` / protocol-relative `//…` | Left unchanged       |
+| `data:`                                      | Left unchanged       |
+
+Missing local files fail the build with an error. Circular import chains fail. A
+file imported more than once is **deduplicated**: the first is imported as
+specified and later `@import`s of the same resolved path are dropped (including
+any different `layer(...)` wrapper on the later import).
 
 ### Spec vs browser
 
 Mid-file `@import` and Argot’s inlining are **processor semantics**, not what a
-browser does with raw source. If you skip Argot and ship source CSS directly,
-keep imports at the top for a spec-following tool (or accept that mid-file
-imports will not work in the browser).
+browser does with raw source. If you plan to later skip Argot and ship source
+CSS directly, keep imports at the top for a spec-following tool (or accept that
+mid-file imports will not work in the browser).
 
 ## Linting in the pipeline
 
-Stylelint always runs as part of the processor today.
+Stylelint always runs as part of the processor.
 
-- **Default config** (no `--lint-config`): extends
-  `stylelint-config-recommended` and enables `argot/color-contrast`.
-- **Custom config**: pass `--lint-config` to any Stylelint config file your
-  project already uses.
+- **Default config**: extends `stylelint-config-recommended`. This is
+  [a minimal ruleset](https://github.com/stylelint/stylelint-config-recommended#readme)
+  that does not impose any strong opinions.
+- **Custom config**: pass `--lint-config` to use any Stylelint config file of
+  your choosing.
 
-You can also lint **outside** the processor with the shareable package config.
-Details: [Linting]({{ '/docs/processor/linting/' | url }}).
+See [Linting]({{ '/docs/processor/linting/' | url }}) for more information.
 
 ## Minification
 
-cssnano runs with its defaults after lint. There is not yet a flag to disable
-minify, choose a browserslist, or emit source maps. Those are on the processor
-roadmap ([configuration]({{ '/docs/reference/configuration/' | url }}) is still
-a stub).
+[cssnano](https://cssnano.github.io/cssnano/) runs with its defaults after lint.
+
+There is not yet a flag to disable minify, choose a browserslist, or emit source
+maps. Those are on the processor roadmap.
 
 ## What the processor does not do
 
 - Create or regenerate scaffold / token / palette files
 - Understand portable palette or semantic definition JSON
 - Transpile or autoprefix as a product feature
-- Watch mode or a dev server (use your host tool)
+- Watch mode or a dev server (use your host tool for this)
 
 ## Related
 
 - [Linting]({{ '/docs/processor/linting/' | url }})
-- [Scaffold architecture]({{ '/docs/scaffold/architecture/' | url }}) — layer
-  file map this site uses
-- [Installation]({{ '/docs/installation/' | url }})
+- [Configuration file]({{ '/docs/reference/configuration/' | url }})

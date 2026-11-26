@@ -109,7 +109,7 @@ primitives  →  semantics  →  modules
 ## Core vs extended
 
 Argot's semantic properties are built from a set of [design
-tokens]({{ '/docs/scaffold/semantic-tokens | url }}). Each is are marked
+tokens]({{ '/docs/scaffold/semantic-tokens' | url }}). Each is are marked
 **core** or **extended**. Core properties to cover common UI needs; extended
 values add support for charts, icon colors, and other design needs.
 
