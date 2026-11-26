@@ -1,14 +1,16 @@
 ---
 layout: docs.njk
 title: Getting started
-description: First-hour walkthrough—process CSS, adopt semantic tokens, optional palette and lint.
+description:
+  First-hour walkthrough—process CSS, adopt semantic tokens, optional palette
+  and lint.
 permalink: /docs/getting-started/
 ---
 
 # Getting started
 
-This page is a short path through Argot’s shipped pieces. For package requirements,
-install options, and library entrypoints, see
+This page is a short path through Argot’s shipped pieces. For package
+requirements, install options, and library entrypoints, see
 [Installation]({{ '/docs/installation/' | url }}).
 
 You do not need every step. Pick the path that matches what you are doing.
@@ -19,12 +21,13 @@ You do not need every step. Pick the path that matches what you are doing.
 npm install argot-css
 ```
 
-Node.js **22.18+**. The CLI binary is `argot` (via `npx argot` or an npm script).
+Node.js **22.18+**. The CLI binary is `argot` (via `npx argot` or an npm
+script).
 
 ## 1. Process a stylesheet
 
-If you already have CSS with local `@import`s, point Argot at an entry file and an
-output path:
+If you already have CSS with local `@import`s, point Argot at an entry file and
+an output path:
 
 ```bash
 argot styles/index.css dist/styles.css
@@ -88,10 +91,9 @@ Use semantic names in components:
 }
 ```
 
-Browse the full vocabulary:
-[Browse tokens]({{ '/docs/tokens/' | url }}).
-Read the model:
-[Custom property structure]({{ '/docs/custom-property-structure/' | url }}).
+Browse the full vocabulary: [Browse tokens]({{ '/docs/tokens/' | url }}). Read
+the model: [Custom property
+structure]({{ '/docs/custom-property-structure/' | url }}).
 
 ## 3. Optional: generate a primitive palette
 
@@ -164,4 +166,3 @@ Enables `argot/color-contrast`. See
 - [Installation]({{ '/docs/installation/' | url }}) — library subpaths, checkout
   workflow
 - [CLI reference]({{ '/docs/reference/' | url }}) — command cheat sheet
-- [Mindset]({{ '/approach/' | url }}) — why the toolset is modular
