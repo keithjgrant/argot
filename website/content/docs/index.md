@@ -50,6 +50,3 @@ Use the features that are useful to you and disregard the rest.
    entrypoints.
 3. [Custom property structure]({{ '/docs/custom-property-structure/' | url }}) —
    the three-tier model Argot is built around.
-
-For the product mindset (modularity, ownership, mild opinions), see
-[Mindset]({{ '/approach/' | url }}).

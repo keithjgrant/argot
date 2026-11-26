@@ -1,7 +1,7 @@
 .hero {
   background-color: var(--bg-info);
   border-radius: var(--border-radius-sm);
-  border: 1px solid var(--border-info);
+  border: 3px solid var(--border-info);
   padding: var(--space-xl) var(--space-lg);
   box-shadow: var(--box-shadow);
 

@@ -23,22 +23,22 @@ This site’s entrypoint is the working model:
 @import 'modules/index.css' layer(modules);
 ```
 
-Packaged starter templates under `templates/` use the same layer list (layout may
-be omitted until you need it).
+Packaged starter templates under `templates/` use the same layer list (layout
+may be omitted until you need it).
 
 ## Layer order
 
 Layers are listed **weakest → strongest** in the `@layer` rule. Later layers win
 when specificity is equal.
 
-| Layer | Role |
-| --- | --- |
-| `reset` | Normalize box model, margins, media defaults, reduced-motion |
-| `base` | Document-level element styles (`body`, links, headings, form controls) using semantic tokens |
-| `theme` | Design tokens: primitives and semantic custom properties |
-| `layout` | Shared page structure (containers, stacks, docs chrome) |
-| `modules` | Component and feature styles |
-| `utilities` | Reserved for small, intentional overrides |
+| Layer       | Role                                                                                         |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| `reset`     | Normalize box model, margins, media defaults, reduced-motion                                 |
+| `base`      | Document-level element styles (`body`, links, headings, form controls) using semantic tokens |
+| `theme`     | Design tokens: primitives and semantic custom properties                                     |
+| `layout`    | Shared page structure (containers, stacks, docs chrome)                                      |
+| `modules`   | Component and feature styles                                                                 |
+| `utilities` | Reserved for small, intentional overrides                                                    |
 
 Put **token definitions in `theme`**, not in `modules`, so components consume
 `var(--text-primary)` instead of re-declaring palette steps.
@@ -52,9 +52,10 @@ reference them.
 ### `styles.css` (entry)
 
 Declares layer order and imports partials **into** those layers via
-`@import '…' layer(name)`. With Argot’s [processor]({{ '/docs/processor/' | url }}),
-imports may appear after the `@layer` statement (mid-file imports are supported
-when assembling). Keep this file short—it is a map, not a dumping ground.
+`@import '…' layer(name)`. With Argot’s
+[processor]({{ '/docs/processor/' | url }}), imports may appear after the
+`@layer` statement (mid-file imports are supported when assembling). Keep this
+file short—it is a map, not a dumping ground.
 
 ### `reset.css`
 
@@ -77,9 +78,9 @@ other non-semantic scales you choose to hand-author. Often produced by the
 ### `semantics.css`
 
 Intent names from Argot’s vocabulary (`--text-primary`, `--bg-raised`,
-`--space-md`, …) mapped to primitives or literals. Start from
-`argot semantics` or the packaged templates; see
-[Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}).
+`--space-md`, …) mapped to primitives or literals. Start from `argot semantics`
+or the packaged templates; see [Semantic
+tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}).
 
 ### `layout.css`
 
@@ -96,9 +97,9 @@ One partial per component or UI area, aggregated by `modules/index.css`:
 /* … */
 ```
 
-Module-tier custom properties stay **local** to the component
-(`--card-padding`) when they are not part of the shared vocabulary. See
-[Custom property structure]({{ '/docs/custom-property-structure/' | url }}).
+Module-tier custom properties stay **local** to the component (`--card-padding`)
+when they are not part of the shared vocabulary. See [Custom property
+structure]({{ '/docs/custom-property-structure/' | url }}).
 
 ## Build output vs source
 
@@ -114,7 +115,8 @@ scaffold source. Keep generated CSS out of the source tree you edit by hand.
 
 If you skip Argot’s assembler:
 
-- Prefer top-of-file `@import`s for native CSS or tools that follow the spec, **or**
+- Prefer top-of-file `@import`s for native CSS or tools that follow the spec,
+  **or**
 - Use another bundler that inlines imports the same way.
 
 Layer wrappers (`layer(name)` on `@import`) still need a tool that understands
@@ -124,4 +126,3 @@ them when inlining; Argot’s processor does.
 
 - [Scaffold overview]({{ '/docs/scaffold/' | url }}) — ownership and init
 - [Processor]({{ '/docs/processor/' | url }}) — assemble, lint, minify
-- [Mindset]({{ '/approach/' | url }}) — modularity and mild opinions
