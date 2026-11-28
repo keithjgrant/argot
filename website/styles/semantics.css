@@ -19,7 +19,7 @@
   /* color — text */
   --text-primary: light-dark(var(--gray-16), var(--gray-1));
   --text-secondary: light-dark(var(--gray-15), var(--gray-4));
-  --text-subtle: light-dark(var(--gray-12), var(--gray-5));
+  --text-subtle: light-dark(var(--gray-12), var(--gray-6));
   --text-interactive: light-dark(var(--mint-13), var(--mint-4));
   --text-interactive-hover: light-dark(var(--mint-14), var(--mint-3));
   --text-interactive-active: light-dark(var(--mint-12), var(--mint-5));

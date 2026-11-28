@@ -5,7 +5,7 @@ layout: base.njk
   {% include "docs-nav.njk" %}
   <main id="main" class="{% if prose != false %}prose{% endif %}">
     <nav class="token-group-nav" aria-label="Token groups">
-      <p class="token-group-nav__label">Token groups</p>
+      <p>Token groups</p>
       <ul>
         <li><a href="{{ '/docs/tokens/' | url }}"{% if page.url == '/docs/tokens/' %} aria-current="page"{% endif %}>All tokens</a></li>
         {% for group in reference.sections %}
