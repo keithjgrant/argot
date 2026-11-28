@@ -3,3 +3,7 @@
 @import 'home-sections.css';
 @import 'page-header.css';
 @import 'page-footer.css';
+@import 'docs-sidebar.css';
+@import 'token-directory.css';
+@import 'token-detail.css';
+@import 'token-nav.css';

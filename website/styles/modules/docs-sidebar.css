@@ -1,0 +1,49 @@
+.docs-sidebar {
+  --_stack-gap: var(--space-xs);
+
+  position: sticky;
+  inset-block-start: var(--space-md);
+  max-block-size: calc(100dvb - var(--space-xl));
+  overflow: auto;
+  padding: var(--space-md);
+  border: 1px solid var(--border-color-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-main);
+  font-size: var(--font-size-sm);
+
+  & > p {
+    color: var(--text-subtle);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-uppercase);
+    text-transform: uppercase;
+
+    &:not(:first-child) {
+      margin-block-start: var(--space-md);
+    }
+  }
+
+  & > ul {
+    padding-inline-start: 0;
+    list-style: none;
+
+    & ul {
+      margin-inline-start: var(--space-md);
+      padding: 0;
+      list-style: none;
+    }
+  }
+
+  & a:any-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  & a:hover {
+    color: var(--text-interactive-hover);
+  }
+
+  & a[aria-current] {
+    color: var(--text-primary);
+  }
+}
