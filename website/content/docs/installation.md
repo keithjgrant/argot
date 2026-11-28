@@ -1,7 +1,8 @@
 ---
 layout: docs.njk
 title: Installation
-description: Requirements, install options, package scripts, and library entrypoints.
+description:
+  Requirements, install options, package scripts, and library entrypoints.
 permalink: /docs/installation/
 ---
 
@@ -47,8 +48,8 @@ The binary name is `argot`. With a local install, prefer npm scripts or
 }
 ```
 
-Command details: [Getting started]({{ '/docs/getting-started/' | url }}),
-[CLI reference]({{ '/docs/reference/' | url }}).
+Command details: [Getting started]({{ '/docs/getting-started/' | url }}), [CLI
+reference]({{ '/docs/reference/' | url }}).
 
 ## Optional Stylelint config
 
@@ -67,16 +68,16 @@ omit `--lint-config`. See [Linting]({{ '/docs/processor/linting/' | url }}).
 
 There is **no root** `argot-css` JavaScript entrypoint. Import named subpaths:
 
-| Subpath | Role |
-| --- | --- |
-| `argot-css/palette` | Browser-safe palette generation |
-| `argot-css/palette/node` | Load/write palette files (Node) |
-| `argot-css/semantics` | Semantic CSS template helpers (Node) |
-| `argot-css/stylelint` | Plugin array |
-| `argot-css/stylelint/config` | Shareable Stylelint config |
-| `argot-css/tokens/*` | Packaged token JSON |
-| `argot-css/templates/semantics.css` | Static core template |
-| `argot-css/templates/semantics-extended.css` | Static core + extended template |
+| Subpath                                      | Role                                 |
+| -------------------------------------------- | ------------------------------------ |
+| `argot-css/palette`                          | Browser-safe palette generation      |
+| `argot-css/palette/node`                     | Load/write palette files (Node)      |
+| `argot-css/semantics`                        | Semantic CSS template helpers (Node) |
+| `argot-css/stylelint`                        | Plugin array                         |
+| `argot-css/stylelint/config`                 | Shareable Stylelint config           |
+| `argot-css/tokens/*`                         | Packaged token JSON                  |
+| `argot-css/templates/semantics.css`          | Static core template                 |
+| `argot-css/templates/semantics-extended.css` | Static core + extended template      |
 
 Full signatures live in the package’s
 [`docs/api.md`](https://github.com/keithjgrant/argot/blob/main/docs/api.md) and

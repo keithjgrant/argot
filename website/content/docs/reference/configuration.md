@@ -1,7 +1,8 @@
 ---
 layout: docs.njk
 title: Configuration
-description: CLI flags, Stylelint config, palette definitions, and project .argot.json.
+description:
+  CLI flags, Stylelint config, palette definitions, and project .argot.json.
 permalink: /docs/reference/configuration/
 ---
 
@@ -15,19 +16,19 @@ focused contract—not a kitchen-sink platform config.
 
 For the processor and related tools:
 
-1. **CLI flags** for the current invocation  
-2. **Project file** (`.argot.json`) when present  
+1. **CLI flags** for the current invocation
+2. **Project file** (`.argot.json`) when present
 3. **Built-in defaults**
 
 Flags always win over the project file for that run.
 
 ## CLI flags (no file required)
 
-| Area | Flags | Docs |
-| --- | --- | --- |
-| Processor | `--lint-config` / `-c` | [Processor]({{ '/docs/processor/' | url }}), [CLI]({{ '/docs/reference/' | url }}) |
-| Semantics | `--extended` | [Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}) |
-| Palette | `--force`, `--dry-run` | [Palette generator]({{ '/docs/scaffold/palette-generator/' | url }}) |
+| Area      | Flags                  | Docs                                                       |
+| --------- | ---------------------- | ---------------------------------------------------------- |
+| Processor | `--lint-config` / `-c` | [Processor]({{ '/docs/processor/'                          | url }}), [CLI]({{ '/docs/reference/' | url }}) |
+| Semantics | `--extended`           | [Semantic tokens]({{ '/docs/scaffold/semantic-tokens/'     | url }})                              |
+| Palette   | `--force`, `--dry-run` | [Palette generator]({{ '/docs/scaffold/palette-generator/' | url }})                              |
 
 Paths on the command line are resolved from `process.cwd()`.
 
@@ -82,8 +83,8 @@ Not project config—a **portable generation input** for `argot palette` and
 }
 ```
 
-Validated independently of any `.argot.json`. Schema and curves:
-[Palette generator]({{ '/docs/scaffold/palette-generator/' | url }}).
+Validated independently of any `.argot.json`. Schema and curves: [Palette
+generator]({{ '/docs/scaffold/palette-generator/' | url }}).
 
 Definitions carry no filesystem paths or browser state. Output paths belong on
 the CLI or in `writePalette()` options.
@@ -118,13 +119,13 @@ Example shape:
 }
 ```
 
-| Field area | Role |
-| --- | --- |
+| Field area                         | Role                                                    |
+| ---------------------------------- | ------------------------------------------------------- |
 | `processor.source` / `destination` | Default entry and build output when the CLI omits paths |
-| `processor.lintConfig` | Default Stylelint config path |
-| `processor.minify` | Whether cssnano runs (default on when unset) |
-| `scaffold.directory` | Where `argot scaffold` writes |
-| `palette.*` / `semantics.*` | Optional defaults for generation commands |
+| `processor.lintConfig`             | Default Stylelint config path                           |
+| `processor.minify`                 | Whether cssnano runs (default on when unset)            |
+| `scaffold.directory`               | Where `argot scaffold` writes                           |
+| `palette.*` / `semantics.*`        | Optional defaults for generation commands               |
 
 Notes:
 
@@ -140,12 +141,12 @@ defaults.
 
 ## What is not configuration
 
-| Thing | Where it lives |
-| --- | --- |
+| Thing                        | Where it lives                              |
+| ---------------------------- | ------------------------------------------- |
 | Token **names** and metadata | `tokens/*.json` in the package (vocabulary) |
-| Your **semantic values** | Project `semantics.css` (source you own) |
-| **Module** styles | Project `modules/*.css` |
-| npm **scripts** | Consumer `package.json` |
+| Your **semantic values**     | Project `semantics.css` (source you own)    |
+| **Module** styles            | Project `modules/*.css`                     |
+| npm **scripts**              | Consumer `package.json`                     |
 
 ## Related
 

@@ -1,7 +1,9 @@
 ---
 layout: docs.njk
 title: Color contrast rule
-description: Stylelint rule argot/color-contrast checks WCAG contrast for paired semantic tokens.
+description:
+  Stylelint rule argot/color-contrast checks WCAG contrast for paired semantic
+  tokens.
 permalink: /docs/processor/linting/color-contrast/
 ---
 
@@ -40,15 +42,14 @@ The processor’s default config enables this rule automatically.
 ## What it looks at
 
 1. **Custom properties** in the stylesheet (`--*`).
-2. **Primitives** — names matching a scale step pattern
-   (`--name-1`, `--gray-16`, …) whose values look like colors (hex or common
-   color functions such as `oklch()`, `rgb()`, …). These build a lookup table.
+2. **Primitives** — names matching a scale step pattern (`--name-1`,
+   `--gray-16`, …) whose values look like colors (hex or common color functions
+   such as `oklch()`, `rgb()`, …). These build a lookup table.
 3. **Semantic tokens** — custom properties whose names appear in Argot’s
    packaged vocabulary (core tier loaded by the rule). Values are resolved
    through `var(...)` chains into primitives or other semantics when possible.
-4. **`pairsWith` metadata** on each semantic token (from
-   [Browse tokens]({{ '/docs/tokens/' | url }})). Only listed partners are
-   compared.
+4. **`pairsWith` metadata** on each semantic token (from [Browse
+   tokens]({{ '/docs/tokens/' | url }})). Only listed partners are compared.
 
 If either side of a pair is missing, unresolved, or not a parseable color, that
 pair is skipped (no report).
@@ -104,8 +105,8 @@ values are skipped rather than false-failed when Color.js cannot parse them.
 
 Pairings live in token source (`tokens/*.json`) as `pairsWith` lists—typically
 text/icon colors paired with surface backgrounds they are meant to sit on. The
-browsable reference shows the same relationships under each token’s
-**Pairs with** section.
+browsable reference shows the same relationships under each token’s **Pairs
+with** section.
 
 Palette generation does **not** promise that mapped semantics will pass this
 rule; assign and lint after mapping.
