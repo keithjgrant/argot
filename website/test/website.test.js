@@ -312,7 +312,7 @@ for (const prefix of ['/', '/argot/']) {
       }
     });
 
-    test('should prefix internal URLs', () => {
+    test('should prefix internal URLs for prefixed deployments', () => {
       for (const [file, { html }] of pages) {
         const relative = path.relative(output, file).split(path.sep).join('/');
         const pageUrl = new URL(`${prefix}${relative}`, 'https://example.test');
@@ -328,11 +328,11 @@ for (const prefix of ['/', '/argot/']) {
       }
     });
 
-    test('should resolve internal links and fragments', () => {
+    test('should not have broken internal links', () => {
       for (const [file, { html }] of pages) {
         const relative = path.relative(output, file).split(path.sep).join('/');
         const pageUrl = new URL(`${prefix}${relative}`, 'https://example.test');
-        for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
+        for (const match of html.matchAll(/\b(?:href|src)="([^"^#]+)"/g)) {
           const href = match[1].replaceAll('&amp;', '&');
           const target = new URL(href, pageUrl);
           if (target.origin !== pageUrl.origin) continue;

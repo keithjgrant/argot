@@ -29,12 +29,13 @@ export default {
 If you wish to add more rules, including the Argot lint rules, do so by
 providing your own config. This can be done via the `--lint-config` CLI
 parameter, or by specifying a pathname in the `lintConfig` key of your
-`.argot.json` [configuration file](/docs/reference/configuration/).
+`.argot.json` configuration file.
 
 ## Argot Stylelint plugins
 
 Argot has three custom lint rules, each meant to enforce aspects of the
-three-tier [custom property structure](/docs/custom-property-structure/).
+three-tier [custom property
+structure]({{ '/docs/custom-property-structure/' | url }}).
 
 ## Shareable config
 
