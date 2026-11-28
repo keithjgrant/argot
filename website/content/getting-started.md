@@ -8,4 +8,5 @@ eleventyExcludeFromCollections: true
 
 # Getting started
 
-This page moved to [Docs → Getting started]({{ '/docs/getting-started/' | url }}).
+This page moved to [Docs → Getting
+started]({{ '/docs/getting-started/' | url }}).

@@ -1,7 +1,8 @@
 ---
 layout: docs.njk
 title: Palette generator
-description: Generate primitive color scales from numeric OKLCH seed definitions.
+description:
+  Generate primitive color scales from numeric OKLCH seed definitions.
 permalink: /docs/scaffold/palette-generator/
 ---
 
@@ -21,15 +22,15 @@ processor.
 argot palette <definition.json> [output.css] [--force] [--dry-run]
 ```
 
-| Argument / flag | Meaning |
-| --- | --- |
-| `definition.json` | Palette definition (required) |
-| `output.css` | Destination (default `./primitives.css`) |
-| `--force` | Allow replacing an existing output file |
-| `--dry-run` | Validate and render without writing (still needs `--force` if the path exists) |
+| Argument / flag   | Meaning                                                                        |
+| ----------------- | ------------------------------------------------------------------------------ |
+| `definition.json` | Palette definition (required)                                                  |
+| `output.css`      | Destination (default `./primitives.css`)                                       |
+| `--force`         | Allow replacing an existing output file                                        |
+| `--dry-run`       | Validate and render without writing (still needs `--force` if the path exists) |
 
-Input and output paths must differ. Parent directories are created on a real write.
-Output directories and unsafe paths are refused.
+Input and output paths must differ. Parent directories are created on a real
+write. Output directories and unsafe paths are refused.
 
 ```bash
 argot palette ./palette.json
@@ -60,48 +61,48 @@ argot palette ./palette.json ./styles/primitives.css --force
 
 Each entry in `seedColors`:
 
-| Field | Rules |
-| --- | --- |
+| Field  | Rules                                                                                               |
+| ------ | --------------------------------------------------------------------------------------------------- |
 | `name` | Lowercase ident: `^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$` (e.g. `blue`, `brand-primary`). No leading `--`. |
-| `l` | Finite lightness **0–1** (not 0–100) |
-| `c` | Finite, nonnegative chroma |
-| `h` | Finite hue degrees (not wrapped; negatives and values above 360 are kept) |
+| `l`    | Finite lightness **0–1** (not 0–100)                                                                |
+| `c`    | Finite, nonnegative chroma                                                                          |
+| `h`    | Finite hue degrees (not wrapped; negatives and values above 360 are kept)                           |
 
 Names must not collide with another seed’s reserved steps. For example, `blue`
 and `blue-1` cannot both be seed names because `blue` already emits `--blue-1`.
 
-Unknown fields and unsupported `version` values are **rejected**. Coordinates are
-not coerced from strings, clamped, or rounded at validation time.
+Unknown fields and unsupported `version` values are **rejected**. Coordinates
+are not coerced from strings, clamped, or rounded at validation time.
 
 ### Options
 
 All optional:
 
-| Option | Values | Default |
-| --- | --- | --- |
-| `lightnessCurve` | `uniform`, `inclusive`, `centered` | `uniform` |
-| `chromaCurve` | `centered`, `weighted` | `centered` |
-| `format` | `oklch`, `hex` | `oklch` |
-| `gamut` | `p3`, `srgb` | `p3` for OKLCH; `srgb` for hex |
+| Option           | Values                             | Default                        |
+| ---------------- | ---------------------------------- | ------------------------------ |
+| `lightnessCurve` | `uniform`, `inclusive`, `centered` | `uniform`                      |
+| `chromaCurve`    | `centered`, `weighted`             | `centered`                     |
+| `format`         | `oklch`, `hex`                     | `oklch`                        |
+| `gamut`          | `p3`, `srgb`                       | `p3` for OKLCH; `srgb` for hex |
 
 `format: "hex"` requires `gamut: "srgb"` (or the default that implies sRGB). Hex
 with `p3` throws.
 
 ### Curves (behavior)
 
-| Lightness | Behavior |
-| --- | --- |
-| **uniform** | Shared lightness ladder across hues; seed may shift slightly to the ladder |
+| Lightness     | Behavior                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **uniform**   | Shared lightness ladder across hues; seed may shift slightly to the ladder                    |
 | **inclusive** | Keeps the seed color in the scale; spaces other steps around it (good for exact brand colors) |
-| **centered** | Places the seed near the middle of the scale |
+| **centered**  | Places the seed near the middle of the scale                                                  |
 
-| Chroma | Behavior |
-| --- | --- |
-| **centered** | Highest chroma near the middle of the scale |
+| Chroma       | Behavior                                                        |
+| ------------ | --------------------------------------------------------------- |
+| **centered** | Highest chroma near the middle of the scale                     |
 | **weighted** | Highest chroma near the seed (useful for light/pastel palettes) |
 
-After calculation, colors are gamut-mapped and rounded for CSS output. **Contrast
-between semantic pairs is not guaranteed**—map semantics and run
+After calculation, colors are gamut-mapped and rounded for CSS output.
+**Contrast between semantic pairs is not guaranteed**—map semantics and run
 [color-contrast]({{ '/docs/processor/linting/color-contrast/' | url }}) if you
 need that check.
 
@@ -145,17 +146,20 @@ const css = generatePaletteCss({
 });
 ```
 
-Full signatures: package [`docs/api.md`](https://github.com/keithjgrant/argot/blob/main/docs/api.md).
+Full signatures: package
+[`docs/api.md`](https://github.com/keithjgrant/argot/blob/main/docs/api.md).
 
 ## Theme Machine
 
 Interactive palette authoring lives on
-[Theme Machine](https://tools.keithjgrant.com). Argot’s generator is the headless
-engine for the same family of curves. Export or hand-author a definition JSON,
-then generate CSS here—Argot does not embed the Theme Machine UI.
+[Theme Machine](https://tools.keithjgrant.com). Argot’s generator is the
+headless engine for the same family of curves. Export or hand-author a
+definition JSON, then generate CSS here—Argot does not embed the Theme Machine
+UI.
 
 ## Related
 
 - [Scaffold]({{ '/docs/scaffold/' | url }}) — where primitives sit in the tree
-- [Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}) — map scales to intent
+- [Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}) — map scales
+  to intent
 - [Custom property structure]({{ '/docs/custom-property-structure/' | url }})

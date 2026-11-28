@@ -1,7 +1,8 @@
 ---
 layout: docs.njk
 title: Semantic tokens
-description: Shared intent-based custom property vocabulary, templates, and reference.
+description:
+  Shared intent-based custom property vocabulary, templates, and reference.
 permalink: /docs/scaffold/semantic-tokens/
 ---
 
@@ -11,9 +12,9 @@ Argot ships a **shared vocabulary** of CSS custom property names for UI intent:
 surfaces, text, borders, type, space, motion, layout, and more. Names stay
 stable across projects; **values** are yours.
 
-The vocabulary is the second tier in
-[custom property structure]({{ '/docs/custom-property-structure/' | url }})
-(primitive → **semantic** → module).
+The vocabulary is the second tier in [custom property
+structure]({{ '/docs/custom-property-structure/' | url }}) (primitive →
+**semantic** → module).
 
 ## Browse the reference
 
@@ -32,9 +33,9 @@ argot semantics ./styles/semantics.css
 argot semantics --extended ./styles/semantics-extended.css
 ```
 
-| Option | Meaning |
-| --- | --- |
-| `[path]` | Output file (default `./semantics.css`) |
+| Option       | Meaning                                     |
+| ------------ | ------------------------------------------- |
+| `[path]`     | Output file (default `./semantics.css`)     |
 | `--extended` | Include extended-tier names as well as core |
 
 The file is a `:root { … }` block of empty (or starter) declarations, grouped
@@ -56,9 +57,9 @@ directory.
 
 ## Core vs extended
 
-| Tier | Intent |
-| --- | --- |
-| **Core** | Common UI needs most projects share |
+| Tier         | Intent                                               |
+| ------------ | ---------------------------------------------------- |
+| **Core**     | Common UI needs most projects share                  |
 | **Extended** | Optional extras (e.g. chart series, some icon roles) |
 
 Default CLI and library generation emit **core only**. Pass `--extended` or
@@ -79,12 +80,12 @@ Token JSON lives in the package under `tokens/*.json` (and is importable as
 
 ## Package entrypoints
 
-| Path | Role |
-| --- | --- |
-| `argot-css/semantics` | `generateCss`, `renderCss`, `writeTemplate` (Node) |
-| `argot-css/templates/semantics.css` | Static core template |
-| `argot-css/templates/semantics-extended.css` | Static core + extended |
-| `argot-css/tokens/*.json` | DTCG-shaped source records (names, metadata, tiers) |
+| Path                                         | Role                                                |
+| -------------------------------------------- | --------------------------------------------------- |
+| `argot-css/semantics`                        | `generateCss`, `renderCss`, `writeTemplate` (Node)  |
+| `argot-css/templates/semantics.css`          | Static core template                                |
+| `argot-css/templates/semantics-extended.css` | Static core + extended                              |
+| `argot-css/tokens/*.json`                    | DTCG-shaped source records (names, metadata, tiers) |
 
 There is no promise of full DTCG interchange compatibility—the JSON is Argot’s
 vocabulary source of truth shaped for tooling.
@@ -98,9 +99,10 @@ writeTemplate('./styles/semantics.css', { extended: false });
 ## Pairings and lint
 
 Many color tokens declare **`pairsWith`** partners (e.g. text on surfaces). The
-[color-contrast]({{ '/docs/processor/linting/color-contrast/' | url }}) rule uses
-those relationships when both sides resolve to concrete colors. Pair metadata is
-guidance plus lint fuel—not a guarantee that every theme assignment passes WCAG.
+[color-contrast]({{ '/docs/processor/linting/color-contrast/' | url }}) rule
+uses those relationships when both sides resolve to concrete colors. Pair
+metadata is guidance plus lint fuel—not a guarantee that every theme assignment
+passes WCAG.
 
 ## With the scaffold
 

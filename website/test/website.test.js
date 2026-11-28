@@ -295,7 +295,12 @@ for (const prefix of ['/', '/argot/']) {
 
     test('should include every token on its section page', () => {
       for (const section of reference.sections) {
-        const file = path.join(output, 'docs/tokens', section.slug, 'index.html');
+        const file = path.join(
+          output,
+          'docs/tokens',
+          section.slug,
+          'index.html',
+        );
         const { html, ids } = pages.get(file);
         for (const token of section.tokens) {
           assert.ok(ids.has(token.id), `Missing ${token.name} in ${file}`);
@@ -351,7 +356,9 @@ for (const prefix of ['/', '/argot/']) {
     });
 
     test('should list every token on the overview', () => {
-      const overview = pages.get(path.join(output, 'docs/tokens/index.html')).html;
+      const overview = pages.get(
+        path.join(output, 'docs/tokens/index.html'),
+      ).html;
       assert.equal(
         [...overview.matchAll(/data-token-entry\b/g)].length,
         reference.total,
@@ -359,7 +366,9 @@ for (const prefix of ['/', '/argot/']) {
     });
 
     test('should ship hidden filter markup and a module script', () => {
-      const overview = pages.get(path.join(output, 'docs/tokens/index.html')).html;
+      const overview = pages.get(
+        path.join(output, 'docs/tokens/index.html'),
+      ).html;
       assert.match(overview, /data-token-filters hidden/);
       assert.doesNotMatch(overview, /data-token-entry[^>]*\bhidden/);
       assert.match(overview, /type="module"/);

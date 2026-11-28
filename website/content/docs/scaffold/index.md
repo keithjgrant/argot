@@ -1,7 +1,9 @@
 ---
 layout: docs.njk
 title: Scaffold
-description: Starter CSS tree—layers, reset, base, primitives, semantics, and modules you own.
+description:
+  Starter CSS tree—layers, reset, base, primitives, semantics, and modules you
+  own.
 permalink: /docs/scaffold/
 ---
 
@@ -22,10 +24,10 @@ build step, or process CSS that never came from a scaffold.
 argot scaffold [directory]
 ```
 
-Default target is the current working directory (or a path you pass). The command
-refuses to overwrite existing project files unless you pass an explicit force
-flag; prefer a dry-run first when unsure. See
-[CLI reference]({{ '/docs/reference/' | url }}) for flags, and
+Default target is the current working directory (or a path you pass). The
+command refuses to overwrite existing project files unless you pass an explicit
+force flag; prefer a dry-run first when unsure. See [CLI
+reference]({{ '/docs/reference/' | url }}) for flags, and
 [Architecture]({{ '/docs/scaffold/architecture/' | url }}) for the file map
 (aligned with packaged `templates/` and this site’s `website/styles/`).
 
@@ -51,12 +53,12 @@ live example of the architecture.
 
 ## Ownership
 
-| Kind of file | Who owns it after scaffold |
-| --- | --- |
-| Entrypoint, reset, base, layout, modules | **You** — edit freely; scaffold does not reclaim them |
-| Semantic mappings (`semantics.css`) | **You** — fill and maintain values; regenerate only when you choose a fresh template |
-| Primitive palette CSS | **Generator-owned** when produced by `argot palette` — regenerate from the JSON definition with `--force` |
-| Build output (`dist/…`) | **Processor** — never confuses source with output |
+| Kind of file                             | Who owns it after scaffold                                                                                |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Entrypoint, reset, base, layout, modules | **You** — edit freely; scaffold does not reclaim them                                                     |
+| Semantic mappings (`semantics.css`)      | **You** — fill and maintain values; regenerate only when you choose a fresh template                      |
+| Primitive palette CSS                    | **Generator-owned** when produced by `argot palette` — regenerate from the JSON definition with `--force` |
+| Build output (`dist/…`)                  | **Processor** — never confuses source with output                                                         |
 
 Rules of thumb:
 
@@ -74,17 +76,17 @@ Rules of thumb:
 You do not have to take the whole tree:
 
 1. **Scaffold only** — get layers and file habits; assign token values yourself.
-2. **Semantics only** — `argot semantics` without a full scaffold (see
-   [Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }})).
-3. **Palette only** — `argot palette` into any primitives file (see
-   [Palette generator]({{ '/docs/scaffold/palette-generator/' | url }})).
+2. **Semantics only** — `argot semantics` without a full scaffold (see [Semantic
+   tokens]({{ '/docs/scaffold/semantic-tokens/' | url }})).
+3. **Palette only** — `argot palette` into any primitives file (see [Palette
+   generator]({{ '/docs/scaffold/palette-generator/' | url }})).
 4. **Full path** — scaffold → palette → fill semantics →
    `argot styles/styles.css dist/styles.css`.
 
 ## Next
 
-- [Architecture]({{ '/docs/scaffold/architecture/' | url }}) — cascade layers and
-  file responsibilities
+- [Architecture]({{ '/docs/scaffold/architecture/' | url }}) — cascade layers
+  and file responsibilities
 - [Custom property structure]({{ '/docs/custom-property-structure/' | url }}) —
   primitive → semantic → module
 - [Getting started]({{ '/docs/getting-started/' | url }})

@@ -1,7 +1,8 @@
 ---
 layout: docs.njk
 title: CLI
-description: argot command-line reference—process CSS, semantics, palette, scaffold, help.
+description:
+  argot command-line reference—process CSS, semantics, palette, scaffold, help.
 permalink: /docs/reference/
 ---
 
@@ -30,12 +31,12 @@ Dispatch rules:
 
 - `semantics`, `palette`, `scaffold`, and `help` / `--help` / `-h` are
   subcommands.
-- If the first argument ends with `.css`, the CLI runs the **processor**
-  (no `process` subcommand).
+- If the first argument ends with `.css`, the CLI runs the **processor** (no
+  `process` subcommand).
 
-Deep dives: [Processor]({{ '/docs/processor/' | url }}),
-[Semantic tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}),
-[Palette generator]({{ '/docs/scaffold/palette-generator/' | url }}),
+Deep dives: [Processor]({{ '/docs/processor/' | url }}), [Semantic
+tokens]({{ '/docs/scaffold/semantic-tokens/' | url }}), [Palette
+generator]({{ '/docs/scaffold/palette-generator/' | url }}),
 [Scaffold]({{ '/docs/scaffold/' | url }}).
 
 ---
@@ -50,10 +51,10 @@ argot styles/index.css dist/styles.css --lint-config=./stylelint.config.js
 argot styles/index.css dist/styles.css -c ./stylelint.config.js
 ```
 
-| Argument / flag | Meaning |
-| --- | --- |
-| `input.css` | Entry stylesheet (required) |
-| `output.css` | Destination (required). Parent directories are created. |
+| Argument / flag        | Meaning                                                                                       |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `input.css`            | Entry stylesheet (required)                                                                   |
+| `output.css`           | Destination (required). Parent directories are created.                                       |
 | `--lint-config` / `-c` | Stylelint config file. When omitted, built-in default (recommended + `argot/color-contrast`). |
 
 Paths resolve against the current working directory. Does not run palette,
@@ -72,10 +73,10 @@ argot semantics --extended
 argot semantics ./styles/semantics-extended.css --extended
 ```
 
-| Argument / flag | Meaning |
-| --- | --- |
-| `path` | Output file (default `./semantics.css`) |
-| `--extended` | Include extended-tier tokens (default: core only) |
+| Argument / flag | Meaning                                           |
+| --------------- | ------------------------------------------------- |
+| `path`          | Output file (default `./semantics.css`)           |
+| `--extended`    | Include extended-tier tokens (default: core only) |
 
 Creates parent directories as needed. **Overwrites** an existing file at the
 output path. Refuses if the path is a directory.
@@ -94,17 +95,18 @@ argot palette ./palette.json ./styles/primitives.css --force
 argot palette --help
 ```
 
-| Argument / flag | Meaning |
-| --- | --- |
-| `definition.json` | Palette definition (required) |
-| `output.css` | Destination (default `./primitives.css`) |
-| `--force` | Allow replacing an existing output file |
-| `--dry-run` | Validate and render without writing (still requires `--force` if the path exists) |
-| `--help` / `-h` | Palette-specific usage |
+| Argument / flag   | Meaning                                                                           |
+| ----------------- | --------------------------------------------------------------------------------- |
+| `definition.json` | Palette definition (required)                                                     |
+| `output.css`      | Destination (default `./primitives.css`)                                          |
+| `--force`         | Allow replacing an existing output file                                           |
+| `--dry-run`       | Validate and render without writing (still requires `--force` if the path exists) |
+| `--help` / `-h`   | Palette-specific usage                                                            |
 
 Input and output paths must differ. Existing files are refused without
-`--force`. See [Palette generator]({{ '/docs/scaffold/palette-generator/' | url }})
-for the definition schema (`seedColors`, curves, format, gamut).
+`--force`. See [Palette
+generator]({{ '/docs/scaffold/palette-generator/' | url }}) for the definition
+schema (`seedColors`, curves, format, gamut).
 
 ---
 
