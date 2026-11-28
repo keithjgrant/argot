@@ -1,7 +1,11 @@
 .page-footer {
+  --_prose-flow: var(--space-xs);
+
   color: var(--text-subtle);
-  padding-block: var(--space-lg) var(--space-xl);
+  padding-block: var(--space-xxl) var(--space-xl);
   border-block-start: 1px solid var(--border-color-subtle);
+  font-size: var(--font-size-sm);
+  text-align: end;
 
   & a:any-link {
     color: inherit;
